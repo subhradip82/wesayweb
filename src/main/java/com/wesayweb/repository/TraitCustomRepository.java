@@ -8,7 +8,7 @@ import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
 
 @Repository
-public interface TraitsCustomRepository {
+public interface TraitCustomRepository {
 
 	public List<Traits> getActiveTraits();
 

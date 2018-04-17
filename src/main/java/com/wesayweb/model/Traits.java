@@ -25,6 +25,11 @@ public class Traits implements Serializable {
 		super();
 	}
 
+	public Traits(Long id) {
+		super();
+		this.id = id;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

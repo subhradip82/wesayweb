@@ -21,6 +21,13 @@ public class User implements Serializable {
 	public User() {
 		super();
 	}
+	
+
+	public User(Long id) {
+		super();
+		this.id = id;
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

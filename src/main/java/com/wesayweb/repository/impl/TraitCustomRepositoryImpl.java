@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
-import com.wesayweb.repository.TraitsCustomRepository;
+import com.wesayweb.repository.TraitCustomRepository;
 @Service
-public class TraitsCustomRepositoryImpl implements TraitsCustomRepository {
+public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 
 	@PersistenceContext
 	private EntityManager em;
