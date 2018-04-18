@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.wesayweb.consatants.UserContants;
+import com.wesayweb.helper.OtpGenerator;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserRepository;
 
@@ -53,6 +54,13 @@ public class UserController {
 	@ResponseBody
 	public int validateemail(@RequestBody User user) {
 		return userRepository.getUserByEmailAddess(user.getEmailaddress()).size();
+	}
+
+	@RequestMapping(value = "/sendotptoemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public String sendotptoemail(@RequestBody User user) {
+		String otp = OtpGenerator.genrateOtp();
+		return otp;
 	}
 
 }
