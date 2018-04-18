@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.wesayweb.consatants.UserContants;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserRepository;
 
@@ -20,20 +21,28 @@ public class UserController {
 
 	@RequestMapping(value = "/mobileregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public void registerviamobile(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-		if (userRepository.getUserByEmailAddess(user.getEmailaddress()).size() == 0) {
+	public String registerviamobile(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+		String returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
+		if (userRepository.getUserByMobileNumber(user.getCountrycode().trim(), user.getMobilenumber().trim())
+				.size() == 0) {
 			userRepository.save(user);
+			returnValue = UserContants.CONST_MOBILE_ALREADY_EXISTS;
 		}
+		return returnValue;
 	}
 
 	@RequestMapping(value = "/emailregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+
 	@ResponseBody
-	public void emailregistration(@RequestBody User user) {
-		if (userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber()).size() == 0) {
+	public String registerviaemail(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+		String returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
+		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim()).size() == 0) {
 			userRepository.save(user);
+			returnValue = UserContants.CONST_EMAIL_ALREADY_EXISTS;
 		}
+		return returnValue;
 	}
-	
+
 	@RequestMapping(value = "/validatemobile/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public int validatebymobile(@RequestBody User user) {
@@ -46,5 +55,4 @@ public class UserController {
 		return userRepository.getUserByEmailAddess(user.getEmailaddress()).size();
 	}
 
-	
 }
