@@ -1,4 +1,4 @@
-package com.wesayweb.consatants;
+package com.wesayweb.constants;
 
 public class UserContants {
 

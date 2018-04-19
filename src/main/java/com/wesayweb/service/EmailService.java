@@ -1,0 +1,43 @@
+package com.wesayweb.service;
+
+import java.util.Properties;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmailService {
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	
+	
+	public void sendMail(String toEmail, String subject, String message) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(toEmail);
+		mailMessage.setSubject(subject);
+		mailMessage.setText(message);
+		mailMessage.setFrom("webwesay@gmail.com");
+		javaMailSender.send(mailMessage);
+	}
+
+	@Bean
+	public JavaMailSender getJavaMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		mailSender.setUsername("webwesay@gmail.com");
+		mailSender.setPassword("Subh19@*");
+		Properties props = mailSender.getJavaMailProperties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.debug", "true");
+		return mailSender;
+	}
+}

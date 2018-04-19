@@ -11,7 +11,7 @@ import com.wesayweb.repository.UserRepository;
 
 
 @SpringBootApplication()
-@ComponentScan({"com.wesayweb.controller"})
+@ComponentScan({"com.wesayweb.controller","com.wesayweb.conf"})
 @EntityScan("com.wesayweb.model")
 @EnableJpaRepositories("com.wesayweb.repository")
 public class WeSayWebApplication {
@@ -19,6 +19,8 @@ public class WeSayWebApplication {
 	@Autowired
 	UserRepository repository;
 
+	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(WeSayWebApplication.class, args);
 	} 

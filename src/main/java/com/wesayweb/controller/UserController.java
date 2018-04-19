@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wesayweb.consatants.UserContants;
+import com.wesayweb.constants.UserContants;
 import com.wesayweb.helper.OtpGenerator;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserRepository;
+import com.wesayweb.service.EmailService;
 
 @RestController
 @RequestMapping("/api")
@@ -19,6 +20,9 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	EmailService emailService;
 
 	@RequestMapping(value = "/mobileregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
@@ -40,6 +44,7 @@ public class UserController {
 		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim()).size() == 0) {
 			userRepository.save(user);
 			returnValue = UserContants.CONST_EMAIL_ALREADY_EXISTS;
+			sendotInemail(user);
 		}
 		return returnValue;
 	}
@@ -58,9 +63,16 @@ public class UserController {
 
 	@RequestMapping(value = "/sendotptoemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public String sendotptoemail(@RequestBody User user) {
+	public String sendotInemail(@RequestBody User user) {
 		String otp = OtpGenerator.genrateOtp();
+		String emailSubject = "Dear User,\n\n\nPlease use the OTP : " + otp
+				+ " to complete your registration.\nThe OTP is valid for 10 minutes";
+		sendotptoemail(user.getEmailaddress(), "OTP From WeSayWEB", emailSubject);
 		return otp;
+	}
+
+	public void sendotptoemail(String useremail, String subject, String message) {
+		emailService.sendMail(useremail, subject, message);
 	}
 
 }
