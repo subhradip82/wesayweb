@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.wesayweb.model.Traits;
 
-public  class CsvReader {
+public class CsvReader {
 
 	public static List<Traits> getTraits() {
 		List<Traits> returnList = new ArrayList<Traits>();
@@ -24,18 +24,18 @@ public  class CsvReader {
 
 			br = new BufferedReader(new FileReader(file));
 			while ((line = br.readLine()) != null) {
-				if(linecounter > 0) {
-				Traits traitObj = new Traits();
-				String[] trait = line.split(cvsSplitBy);
-				traitObj.setTrait_name(trait[0].trim());
-				if(trait[1].trim().equalsIgnoreCase("y")) {
-					traitObj.setIs_active(1);
-				}
-				else
-				{
-					traitObj.setIs_active(0);
-				}
-				returnList.add(traitObj);
+				if (linecounter > 0) {
+					Traits traitObj = new Traits();
+					String[] trait = line.split(cvsSplitBy);
+					traitObj.setTraitname(trait[0].trim());
+					if (trait[1].trim().equalsIgnoreCase("y")) {
+						traitObj.setActivestatus(1);
+					} else {
+						traitObj.setActivestatus(0);
+					}
+					traitObj.setTraitcreatedby(Long.valueOf(999999998));
+
+					returnList.add(traitObj);
 				}
 				linecounter++;
 			}

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import com.wesayweb.constants.UserContants;
 import com.wesayweb.helper.OtpGenerator;
 import com.wesayweb.model.User;
@@ -24,14 +23,15 @@ public class UserController {
 	@Autowired
 	EmailService emailService;
 
-	@RequestMapping(value = "/mobileregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/mobileregistration/", method = RequestMethod.POST,
+			produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public String registerviamobile(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-		String returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
+	public String registerviamobile(@RequestBody User user) {
+		String returnValue = UserContants.CONST_MOBILE_ALREADY_EXISTS;
 		if (userRepository.getUserByMobileNumber(user.getCountrycode().trim(), user.getMobilenumber().trim())
 				.size() == 0) {
 			userRepository.save(user);
-			returnValue = UserContants.CONST_MOBILE_ALREADY_EXISTS;
+			returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
 		}
 		return returnValue;
 	}
@@ -40,10 +40,10 @@ public class UserController {
 
 	@ResponseBody
 	public String registerviaemail(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-		String returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
+		String returnValue = UserContants.CONST_EMAIL_ALREADY_EXISTS;
 		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim()).size() == 0) {
 			userRepository.save(user);
-			returnValue = UserContants.CONST_EMAIL_ALREADY_EXISTS;
+			returnValue = UserContants.CONST_REGISTRATION_SUCCESSFUL;
 			sendotInemail(user);
 		}
 		return returnValue;
