@@ -16,7 +16,7 @@ import com.wesayweb.repository.UserRepository;
 public class WeSayWebApplication {
 
 	@Autowired
-	UserRepository repository;
+	UserRepository repository; 
 
 	public static void main(String[] args) {
 		SpringApplication.run(WeSayWebApplication.class, args);
