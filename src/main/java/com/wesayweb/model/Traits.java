@@ -36,6 +36,8 @@ public class Traits implements Serializable {
 	private String traitdescripion;
 	private String traiticonpath;
 	private int activestatus;
+	@Column(name = "deletestatus", nullable = false, columnDefinition = "int default 0")
+	private int deletestatus;
 	private Date creationdate = new Date();
 	private Date updateondate = new Date();
 	private Date approveddate;
@@ -45,6 +47,14 @@ public class Traits implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public int getDeletestatus() {
+		return deletestatus;
+	}
+
+	public void setDeletestatus(int deletestatus) {
+		this.deletestatus = deletestatus;
 	}
 
 	public void setId(Long id) {

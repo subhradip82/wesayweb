@@ -13,4 +13,7 @@ public interface TraitCustomRepository {
 
 	public boolean traitAlreadyExists(String traitName);
 	public boolean ifTraitIsUpdatable(Traits trailObj);
+	public boolean updateTrait(Traits traitObj);
+	public boolean deleteTrait(Long traitid );
+	boolean removeTrait(Traits traitObj);
 }

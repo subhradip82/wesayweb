@@ -16,25 +16,31 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "user_trait")
 @EntityListeners(AuditingEntityListener.class)
 public class UserTrait implements Serializable {
-
+	
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private long targetuserid;
+	private long traitid;
+	private Date creationdate = new Date();
+	private Date updationdate = new Date();
+	private int isactive;
+	private long givenbyuserid;
+	private int isannonymous;
 
 	public Long getId() {
 		return id;
 	}
 
-	 
 	public long getTargetuserid() {
 		return targetuserid;
 	}
 
-
 	public void setTargetuserid(long targetuserid) {
 		this.targetuserid = targetuserid;
 	}
-
 
 	public long getTraitid() {
 		return traitid;
@@ -88,13 +94,6 @@ public class UserTrait implements Serializable {
 		this.id = id;
 	}
 
-	private long targetuserid;
-	private long traitid;
-	private Date creationdate = new Date();
-	private Date updationdate = new Date();
-	private int isactive;
-	private long givenbyuserid;
-	private int isannonymous;
 	public UserTrait() {
 		super();
 	}
