@@ -39,7 +39,7 @@ public class TraitsController {
 		for (Traits traitobj : listOfTrait) {
 			if (!traitsRepository.traitAlreadyExists(traitobj.getTraitname().trim().toLowerCase())) {
 				traitsRepository.save(traitobj);
-				emailService.sendMail("subhradip.bose@gmail.com", "New Trait has been introduced in WeSayWeb",
+				emailService.sendMail("mcradha@gmail.com", "New Trait has been introduced in WeSayWeb",
 						traitobj.getTraitname().trim() + " has been created in WeSayWeb.");
 			} else {
 				returnValue.put(traitobj.getTraitname(), " already exists");
