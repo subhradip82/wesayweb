@@ -3,15 +3,18 @@ package com.wesayweb.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.wesayweb.helper.CsvReader;
 import com.wesayweb.model.Traits;
 import com.wesayweb.repository.TraitRepository;
+import com.wesayweb.service.EmailService;
 
 @RestController
 @RequestMapping("/traitapi")
@@ -19,6 +22,9 @@ public class TraitsController {
 
 	@Autowired
 	TraitRepository traitsRepository;
+
+	@Autowired
+	EmailService emailService;
 
 	@RequestMapping(value = "/uploadTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
@@ -33,6 +39,8 @@ public class TraitsController {
 		for (Traits traitobj : listOfTrait) {
 			if (!traitsRepository.traitAlreadyExists(traitobj.getTraitname().trim().toLowerCase())) {
 				traitsRepository.save(traitobj);
+				emailService.sendMail("subhradip.bose@gmail.com", "New Trait has been introduced in WeSayWeb",
+						traitobj.getTraitname().trim() + " has been created in WeSayWeb.");
 			} else {
 				returnValue.put(traitobj.getTraitname(), " already exists");
 			}
@@ -69,10 +77,7 @@ public class TraitsController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/deleteTrait/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/deleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> deleteTrait(@RequestBody Traits traitObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();

@@ -6,20 +6,37 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.wesayweb.repository.UserRepository;
 
 @SpringBootApplication()
+@EnableWebMvc
 @ComponentScan({ "com.wesayweb.controller", "com.wesayweb.conf" })
 @EntityScan("com.wesayweb.model")
 @EnableJpaRepositories("com.wesayweb.repository")
-public class WeSayWebApplication {
+public class WeSayWebApplication extends WebMvcConfigurerAdapter {
 
 	@Autowired
-	UserRepository repository; 
+	UserRepository repository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(WeSayWebApplication.class, args);
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+				.allowedOrigins("*")
+				.allowedMethods("GET", "POST", "OPTIONS", "PUT")
+				.allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
+						"Access-Control-Request-Headers")
+				.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+				.allowCredentials(true)
+				.maxAge(3600);
+
 	}
 
 }
