@@ -21,22 +21,12 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	private EntityManager em;
 
 	@Override
-	public List<UserTrait> getMySelfTraits(long giveuserid, long targetuserid) {
+	public List<UserTrait> getMyTraits(long giveuserid, long targetuserid) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
 		crit.add(Restrictions.eq("givenbyuserid", giveuserid));
 		crit.add(Restrictions.eq("targetuserid", targetuserid));
 		//crit.add(Restrictions.eq("isactive", 1));
 		return crit.list();
 	}
-
-	@Override
-	public List<UserTrait> getMyTraits(long tragetUerId) {
-		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
-		crit.add(Restrictions.eq("targetuserid", tragetUerId));
-		//crit.add(Restrictions.eq("isactive", 1));
-		return crit.list();
-	}
-	
-	
 
 }

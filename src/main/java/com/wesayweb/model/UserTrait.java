@@ -29,6 +29,15 @@ public class UserTrait implements Serializable {
 	private int isactive;
 	private long givenbyuserid;
 	private int isannonymous;
+	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral
+
+	public int getTypeofvote() {
+		return typeofvote;
+	}
+
+	public void setTypeofvote(int typeofvote) {
+		this.typeofvote = typeofvote;
+	}
 
 	public Long getId() {
 		return id;
