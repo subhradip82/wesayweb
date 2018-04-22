@@ -1,31 +1,30 @@
 package com.wesayweb.response.model;
 
-public class TraitsResponsePojo {
+import java.io.Serializable;
+
+
+public class TraitsResponsePojo implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Long traitid;
-	private Long userid;
+	
 	private String traitname;
+	
 	private String traitdescripion;
+	
 	private String traiticonpath;
-	private int annonimouststatus;
-	private int traitmarkstatus;
-	public int getTraitmarkstatus() {
-		return traitmarkstatus;
-	}
-	public void setTraitmarkstatus(int traitmarkstatus) {
-		this.traitmarkstatus = traitmarkstatus;
-	}
+	
+	private int positive;
+	private int negetive;
+	private int nutral;
+	
+	private int isannonymous;
 	public Long getTraitid() {
 		return traitid;
 	}
 	public void setTraitid(Long traitid) {
 		this.traitid = traitid;
-	}
-	public Long getUserid() {
-		return userid;
-	}
-	public void setUserid(Long userid) {
-		this.userid = userid;
 	}
 	public String getTraitname() {
 		return traitname;
@@ -45,13 +44,29 @@ public class TraitsResponsePojo {
 	public void setTraiticonpath(String traiticonpath) {
 		this.traiticonpath = traiticonpath;
 	}
-	public int getAnnonimouststatus() {
-		return annonimouststatus;
+	public int getPositive() {
+		return positive;
 	}
-	public void setAnnonimouststatus(int annonimouststatus) {
-		this.annonimouststatus = annonimouststatus;
+	public void setPositive(int positive) {
+		this.positive = positive;
 	}
-	
-	
-	
+	public int getNegetive() {
+		return negetive;
+	}
+	public void setNegetive(int negetive) {
+		this.negetive = negetive;
+	}
+	public int getNutral() {
+		return nutral;
+	}
+	public void setNutral(int nutral) {
+		this.nutral = nutral;
+	}
+	public int getIsannonymous() {
+		return isannonymous;
+	}
+	public void setIsannonymous(int isannonymous) {
+		this.isannonymous = isannonymous;
+	}
+	 	
 }

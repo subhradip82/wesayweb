@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.UserTraitCustomRepository;
+import com.wesayweb.response.model.TraitsResponsePojo;
 
 @Service
 public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
@@ -27,6 +28,12 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		crit.add(Restrictions.eq("targetuserid", targetuserid));
 		//crit.add(Restrictions.eq("isactive", 1));
 		return crit.list();
+	}
+
+	@Override
+	public List<Object[]> getMyTraits(long targetuserid) {
+		 return em.createNamedQuery("getmytraits").getResultList();
+		 
 	}
 
 }
