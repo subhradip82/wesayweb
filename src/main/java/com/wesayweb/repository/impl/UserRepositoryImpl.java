@@ -8,14 +8,17 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserCustomRepository;
+import com.wesayweb.repository.UserRepository;
 
 @Service
 public class UserRepositoryImpl implements UserCustomRepository {
 
+	 
 	@PersistenceContext
 	private EntityManager em;
 
@@ -26,7 +29,7 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		return crit.list();
 
 	}
-	
+
 	@Override
 	public List<User> getUserByMobileNumber(String countryCode, String mobileNumber) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
@@ -35,5 +38,7 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		return crit.list();
 
 	}
-	
+
+	 
+
 }

@@ -10,7 +10,7 @@ import com.wesayweb.model.User;
 public interface UserCustomRepository {
 
 	public List<User> getUserByEmailAddess(String emailaddress);
-
+	 
 	List<User> getUserByMobileNumber(String countryCode, String mobileNumber);
 
 }

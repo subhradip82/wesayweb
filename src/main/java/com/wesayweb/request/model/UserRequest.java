@@ -1,50 +1,21 @@
-package com.wesayweb.model;
+package com.wesayweb.request.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+public class UserRequest implements Serializable {
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-@Entity
-
-@Table(name = "user_master")
-@EntityListeners(AuditingEntityListener.class)
-
-public class User implements Serializable {
-
-	 
-	public User() {
+	public UserRequest() {
 		super();
 	}
 
-	public User(Long id) {
+	public UserRequest(Long id) {
 		super();
 		this.id = id;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	public User(String countrycode, String mobilenumber, int isregisteredbymobile, String dateofbirth, String gender) {
-		super();
-		this.countrycode = countrycode;
-		this.mobilenumber = mobilenumber;
-		this.isregisteredbymobile = isregisteredbymobile;
-		this.dateofbirth = dateofbirth;
-		this.gender = gender;
-	}
-
 	private String emailaddress;
-	
 	private String password;
 	private String countrycode;
 	private String mobilenumber;
@@ -57,6 +28,16 @@ public class User implements Serializable {
 	private String firstname;
 	private String middlename;
 	private String lastname;
+
+	public UserRequest(String countrycode, String mobilenumber, int isregisteredbymobile, String dateofbirth,
+			String gender) {
+		super();
+		this.countrycode = countrycode;
+		this.mobilenumber = mobilenumber;
+		this.isregisteredbymobile = isregisteredbymobile;
+		this.dateofbirth = dateofbirth;
+		this.gender = gender;
+	}
 
 	public String getTitle() {
 		return title;
@@ -97,8 +78,6 @@ public class User implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
-	 
 
 	@Override
 	public String toString() {
