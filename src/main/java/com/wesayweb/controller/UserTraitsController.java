@@ -26,7 +26,10 @@ public class UserTraitsController {
 	@Autowired
 	TraitRepository traitRepository;
 
-	@RequestMapping(value = "/addTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/addTraits/", 
+					method = RequestMethod.POST,
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public void addTraits(@RequestBody UserTrait userTrait) {
 		UserTrait userTraitObj = new UserTrait();

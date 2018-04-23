@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -46,7 +47,28 @@ public class UserOtp implements Serializable {
 	private Date validupto = addMinutesToDate(10, new Date());
 	private Date otpuseddate;
  
+	@Transient
+	private String password;
 	
+	@Transient
+	private String retypepassword;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getRetypepassword() {
+		return retypepassword;
+	}
+
+	public void setRetypepassword(String retypepassword) {
+		this.retypepassword = retypepassword;
+	}
+
 	public Long getUserid() {
 		return userid;
 	}

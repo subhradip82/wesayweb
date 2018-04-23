@@ -26,18 +26,24 @@ public class UserRepositoryImpl implements UserCustomRepository {
 	private EntityManager em;
 
 	@Override
-	public List<User> getUserByEmailAddess(String emailaddress) {
+	public List<User> getUserByEmailAddess(String emailaddress, int activestatus) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
 		crit.add(Restrictions.eq("emailaddress", emailaddress.toLowerCase().trim()));
+		if(activestatus==1) {
+		crit.add(Restrictions.eq("isactive", 1));
+		}
 		return crit.list();
 
 	}
 
 	@Override
-	public List<User> getUserByMobileNumber(String countryCode, String mobileNumber) {
+	public List<User> getUserByMobileNumber(String countryCode, String mobileNumber, int activestatus) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
 		crit.add(Restrictions.eq("countrycode", countryCode.toLowerCase().trim()));
 		crit.add(Restrictions.eq("mobilenumber", mobileNumber.toLowerCase().trim()));
+		if(activestatus==1) {
+			crit.add(Restrictions.eq("isactive", 1));
+			}
 		return crit.list();
 
 	}
@@ -50,6 +56,22 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		CriteriaUpdate<User> updateCriteria = cb.createCriteriaUpdate(User.class);
 		Root<User> userObj = updateCriteria.from(User.class);
 		updateCriteria.set(userObj.get("isactive"), 1);
+		updateCriteria.where(cb.equal(userObj.get("id"), userId));
+		int affected = em.createQuery(updateCriteria).executeUpdate();
+		if (affected > 0) {
+			returnValue = true;
+		}
+		return returnValue;
+	}
+
+	@Override
+	@Transactional 
+	public boolean changeUserPassword(Long userId, String password) {
+		boolean returnValue = false;
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<User> updateCriteria = cb.createCriteriaUpdate(User.class);
+		Root<User> userObj = updateCriteria.from(User.class);
+		updateCriteria.set(userObj.get("password"), password);
 		updateCriteria.where(cb.equal(userObj.get("id"), userId));
 		int affected = em.createQuery(updateCriteria).executeUpdate();
 		if (affected > 0) {

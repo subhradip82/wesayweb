@@ -26,7 +26,7 @@ import edu.vt.middleware.password.WhitespaceRule;
 
 public class EntityValidation {
 
-	final static String DATE_FORMAT = "dd-MM-yyyy";
+	final static String DATE_FORMAT = "yyyy-dd-MM";
 
 	public static boolean isValidName(String name) {
 		return name.matches("(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");

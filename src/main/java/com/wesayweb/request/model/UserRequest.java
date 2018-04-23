@@ -28,6 +28,15 @@ public class UserRequest implements Serializable {
 	private String firstname;
 	private String middlename;
 	private String lastname;
+	private String retypepassword;
+
+	public String getRetypepassword() {
+		return retypepassword;
+	}
+
+	public void setRetypepassword(String retypepassword) {
+		this.retypepassword = retypepassword;
+	}
 
 	public UserRequest(String countrycode, String mobilenumber, int isregisteredbymobile, String dateofbirth,
 			String gender) {
@@ -79,13 +88,23 @@ public class UserRequest implements Serializable {
 		return id;
 	}
 
+	 
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", emailaddress=" + emailaddress + ", password=" + password + ", countrycode="
+		return "UserRequest [id=" + id + ", emailaddress=" + emailaddress + ", password=" + password + ", countrycode="
 				+ countrycode + ", mobilenumber=" + mobilenumber + ", isregisteredbymobile=" + isregisteredbymobile
 				+ ", dateofbirth=" + dateofbirth + ", gender=" + gender + ", creationdate=" + creationdate
 				+ ", isactive=" + isactive + ", title=" + title + ", firstname=" + firstname + ", middlename="
-				+ middlename + ", lastname=" + lastname + "]";
+				+ middlename + ", lastname=" + lastname + ", retypepassword=" + retypepassword
+				+ ", getRetypepassword()=" + getRetypepassword() + ", getTitle()=" + getTitle() + ", getFirstname()="
+				+ getFirstname() + ", getMiddlename()=" + getMiddlename() + ", getLastname()=" + getLastname()
+				+ ", getId()=" + getId() + ", getEmailaddress()=" + getEmailaddress() + ", getPassword()="
+				+ getPassword() + ", getCountrycode()=" + getCountrycode() + ", getMobilenumber()=" + getMobilenumber()
+				+ ", getIsregisteredbymobile()=" + getIsregisteredbymobile() + ", getDateofbirth()=" + getDateofbirth()
+				+ ", getGender()=" + getGender() + ", getCreationdate()=" + getCreationdate() + ", getIsactive()="
+				+ getIsactive() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
+				+ super.toString() + "]";
 	}
 
 	public String getEmailaddress() {

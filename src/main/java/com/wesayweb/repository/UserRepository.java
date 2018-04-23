@@ -10,7 +10,6 @@ import com.wesayweb.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, UserCustomRepository {
 
-	public List<User> getUserByEmailAddess(String emailaddress);
-	public List<User> getUserByMobileNumber(String countryCode, String mobileNumber);
+ 
 
 }

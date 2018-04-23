@@ -1,14 +1,11 @@
 package com.wesayweb.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +20,8 @@ import com.wesayweb.repository.UserRepository;
 import com.wesayweb.request.model.UserRequest;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
+import com.wesayweb.util.PasswordEncrypterUtil;
+import com.wesayweb.validation.UserLoginByEmailValidation;
 import com.wesayweb.validation.UserRegistrationByEmailValidation;
 
 @RestController
@@ -40,87 +39,163 @@ public class UserController {
 
 	private JwtSecurityUtil tokenUtil = new JwtSecurityUtil();
 
-
 	@RequestMapping(value = "/emailregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-
 	@ResponseBody
 	public Map<String, String> registerviaemail(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(user);
 		Map<String, String> validationResult = validtionObj.validateUerRegistrationByEmail();
 		if (validationResult.size() == 0) {
-			if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim()).size() == 0) {
-				User insertedUserObj = userRepository.save(getMappedUserObject(user));
-				sendotpInemail(insertedUserObj.getEmailaddress(), insertedUserObj.getId());
-				String authToken = generateAuthToken(insertedUserObj);
-				returnValue.put("message", UserContants.CONST_REGISTRATION_SUCCESSFUL);
-				returnValue.put("authtoken", authToken); 
-				
+			returnValue.putAll(completeRegistartion(user));
+		} else {
+			returnValue.putAll(validationResult);
+		}
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/validateotpviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> validateOtpViaemail(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		String jToken = request.getHeader("X-Authorization").trim();
+		Map<String, String> token = tokenUtil.parseJWT(jToken);
+		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
+		if (otpObj.size() > 0) {
+			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+				returnValue.put(UserContants.CONST_MESSAGE, "OTP expired");
 			} else {
-				returnValue.put("message", UserContants.CONST_EMAIL_ALREADY_EXISTS);
+				userRepository.activateUser(Long.valueOf(token.get("userid")));
+				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
+				returnValue.put(UserContants.CONST_AUTH_TOKEN, jToken);
+
+			}
+
+		} else {
+			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+			returnValue.put(UserContants.CONST_MESSAGE, "Wrong OTP provided");
+		}
+		return returnValue;
+
+	}
+
+	@RequestMapping(value = "/forgotpasswordviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> forgotpasswordviaemail(@RequestBody UserRequest user) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(user);
+		Map<String, String> validationResult = validtionObj.forgotpasswordByEmail();
+		if (validationResult.size() == 0) {
+			List<User> userObj = userRepository.getUserByEmailAddess(user.getEmailaddress().trim().toLowerCase(), 0);
+			if (userObj.size() > 0) {
+				sendForgotPasswordotpInemail(userObj.get(0).getEmailaddress(), userObj.get(0).getId());
+				String authToken = generateAuthToken(userObj.get(0));
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
+				returnValue.put(UserContants.CONST_AUTH_TOKEN, authToken);
+				returnValue.put(UserContants.CONST_MESSAGE, "Otp sent");
+			} else {
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+				returnValue.put(UserContants.CONST_MESSAGE, "Email ID not found");
 			}
 		} else {
 			returnValue.putAll(validationResult);
 		}
 
 		return returnValue;
+
 	}
 
-	public String generateAuthToken(User userObj)
-	{
-		
-		return tokenUtil.createJWT(String.valueOf(userObj.getId()),userObj.getEmailaddress(), userObj.getCountrycode()+userObj.getMobilenumber() );
-		
-	}
-	
-	@RequestMapping(value = "/validateotp/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/loginviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> validatebymobile(HttpServletRequest request, 
-			@RequestBody UserOtp userOtpObj) {
+	public Map<String, String> loginviaemail(@RequestBody User user) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		UserLoginByEmailValidation validtionObj = new UserLoginByEmailValidation(user);
+		Map<String, String> validationResult = validtionObj.validateUerLoginByEmail();
+		if (validationResult.size() == 0) {
+			List<User> userObj = userRepository.getUserByEmailAddess(user.getEmailaddress().trim().toLowerCase(), 1);
+
+			if (PasswordEncrypterUtil.matches(user.getPassword().trim(), userObj.get(0).getPassword())) {
+				String authToken = generateAuthToken(userObj.get(0));
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
+				returnValue.put(UserContants.CONST_AUTH_TOKEN, authToken);
+
+			} else {
+				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+				returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_WRONG_USER_NAME_PASSWORD);
+			}
+		} else {
+			returnValue.putAll(validationResult);
+		}
+
+		return returnValue;
+
+	}
+
+	@RequestMapping(value = "/passwordretrivevalidateotp/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> passwordretrivevalidateotp(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		String jToken = request.getHeader("X-Authorization").trim();
-		Map<String, String> token =  tokenUtil.parseJWT(jToken);
+		Map<String, String> token = tokenUtil.parseJWT(jToken);
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
-		if(otpObj.size()>0)
-		{
-			if(UserOtp.addMinutesToDate(10, otpObj.get(0).getCreationdate()).compareTo(otpObj.get(0).getValidupto()) < 0) {
-				returnValue.put("message", "ÖTP is expired");
-			}
-			else
-			{
-				userRepository.activateUser(Long.valueOf(token.get("userid")));
-				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
-				returnValue.put("message", "User account has been activated");
-				returnValue.put("authtoken", jToken);
+		if (otpObj.size() > 0) {
 
+			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
+				returnValue.put(UserContants.CONST_MESSAGE, "OTP is expired");
+			} else {
+
+				UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(userOtpObj);
+				Map<String, String> validationResult = validtionObj.changepasswordByEmail();
+				;
+				if (validationResult.size() == 0) {
+					userRepository.changeUserPassword(Long.valueOf(token.get("userid")),
+							PasswordEncrypterUtil.encode(userOtpObj.getPassword()));
+					otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
+					returnValue.put("message", "User password changed successfully");
+					returnValue.put("authtoken", jToken);
+				} else {
+					returnValue.put("message", "Invalid password / retype password");
+				}
 			}
 
-		}
-		else
-		{
-			returnValue.put("message", "Wrong ÖTP provided");
+		} else {
+			returnValue.put("message", "Wrong OTP provided or OTP already used");
 		}
 		return returnValue;
 
 	}
-	
+
 	@RequestMapping(value = "/validatemobile/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public int validatebymobile(@RequestBody User user) {
-		return userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber()).size();
+		return userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber(), 0).size();
 	}
 
 	@RequestMapping(value = "/validateemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public int validateemail(@RequestBody User user) {
-		return userRepository.getUserByEmailAddess(user.getEmailaddress()).size();
+		return userRepository.getUserByEmailAddess(user.getEmailaddress(), 0).size();
 	}
 
 	public String sendotpInemail(String emailAddress, Long userId) {
 		String otp = OtpGenerator.genrateOtp();
-		
+
 		String emailSubject = "Dear User,\n\n\nPlease use the OTP : " + otp
 				+ " to complete your registration.\nThe OTP is valid for 10 minutes";
+		if (sendotpInemail(emailAddress, "OTP From WeSayWEB", emailSubject)) {
+			UserOtp userOtpObj = new UserOtp();
+			userOtpObj.setUserid(userId);
+			userOtpObj.setOtp(otp);
+			otpRepositoryService.save(userOtpObj);
+		}
+		return otp;
+	}
+
+	public String sendForgotPasswordotpInemail(String emailAddress, Long userId) {
+		String otp = OtpGenerator.genrateOtp();
+		String emailSubject = "Dear User,\n\n\nPlease use the OTP : " + otp
+				+ " to complete your password retrival.\nThe OTP is valid for 10 minutes";
 		if (sendotpInemail(emailAddress, "OTP From WeSayWEB", emailSubject)) {
 			UserOtp userOtpObj = new UserOtp();
 			userOtpObj.setUserid(userId);
@@ -135,7 +210,6 @@ public class UserController {
 	}
 
 	public User getMappedUserObject(UserRequest userReqObj) {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		User userObj = new User();
 		userObj.setCountrycode(userReqObj.getCountrycode());
 		userObj.setDateofbirth(userReqObj.getDateofbirth());
@@ -144,9 +218,37 @@ public class UserController {
 		userObj.setLastname(userReqObj.getLastname());
 		userObj.setGender(userReqObj.getGender());
 		userObj.setIsregisteredbymobile(userReqObj.getIsregisteredbymobile());
-		userObj.setPassword(passwordEncoder.encode(userReqObj.getPassword()));
+		userObj.setPassword(PasswordEncrypterUtil.encode(userReqObj.getPassword()));
 		userObj.setMobilenumber(userReqObj.getMobilenumber());
 		return userObj;
+	}
+
+	public String generateAuthToken(User userObj) {
+
+		return tokenUtil.createJWT(String.valueOf(userObj.getId()), userObj.getEmailaddress(),
+				userObj.getCountrycode() + userObj.getMobilenumber());
+
+	}
+
+	public Map<String, String> completeRegistartion(UserRequest user) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim(), 0).size() > 0) {
+			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_EMAIL_ALREADY_EXISTS);
+		}
+		if (userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber(), 0).size() > 0) {
+			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
+			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_MOBILE_ALREADY_EXISTS);
+		}
+		if (returnValue.size() == 0) {
+			User insertedUserObj = userRepository.save(getMappedUserObject(user));
+			sendotpInemail(insertedUserObj.getEmailaddress(), insertedUserObj.getId());
+			String authToken = generateAuthToken(insertedUserObj);
+			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
+			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_REGISTRATION_SUCCESSFUL);
+			returnValue.put("authtoken", authToken);
+		}
+		return returnValue;
 	}
 
 }

@@ -47,6 +47,8 @@ public class UserOtpCustomRepositoryImpl implements UserOtpCustomRepository {
 		Criteria crit = em.unwrap(Session.class).createCriteria(UserOtp.class);
 		crit.add(Restrictions.eq("otp", otp.toLowerCase().trim()));
 		crit.add(Restrictions.eq("userid", userid));
+		crit.add(Restrictions.isNull("otpuseddate"));
+		
 		return crit.list();
 	}
 	
@@ -57,9 +59,9 @@ public class UserOtpCustomRepositoryImpl implements UserOtpCustomRepository {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<UserOtp> updateCriteria = cb.createCriteriaUpdate(UserOtp.class);
 		Root<UserOtp> userObj = updateCriteria.from(UserOtp.class);
-		updateCriteria.set(userObj.get("userid"), userId);
-		updateCriteria.set(userObj.get("otp"), otp);
-		updateCriteria.where(cb.equal(userObj.get("otpuseddate"), new Date()));
+		updateCriteria.set(userObj.get("otpuseddate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("userid"), userId));
+		updateCriteria.where(cb.equal(userObj.get("otp"), otp));
 		int affected = em.createQuery(updateCriteria).executeUpdate();
 		if (affected > 0) {
 			returnValue = true;
