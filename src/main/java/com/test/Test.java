@@ -1,10 +1,11 @@
 package com.test;
 
-import com.wesayweb.validation.EntityValidation;
+import com.wesayweb.model.Traits;
 
 public class Test {
 	public static void main(String[] args) {
-
-		System.out.println(EntityValidation.isValidPassword("Subh19*%"));
+		Traits t = new Traits();
+		
+		System.out.println(t.toString());
 	}
 }

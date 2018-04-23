@@ -8,8 +8,14 @@ import java.util.concurrent.TimeUnit;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
+
 public class OtpGenerator {
 
+	@Inject
+	private static Logger logger;
+	
 	public static String genrateOtp() {
 		String generatedOtp = "";
 		try {
@@ -20,10 +26,10 @@ public class OtpGenerator {
 			Date later = new Date(new Date().getTime() + TimeUnit.SECONDS.toMillis(600));
 			generatedOtp = String.valueOf(totp.generateOneTimePassword(secretKey, later));
 		} catch (NoSuchAlgorithmException | InvalidKeyException e) {
-
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return generatedOtp;
 
 	}
 }
+ 

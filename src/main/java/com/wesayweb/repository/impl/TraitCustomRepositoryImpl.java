@@ -25,10 +25,23 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 	private EntityManager em;
 
 	@Override
-	public List<Traits> getActiveTraits() {
+	public List<Traits> getActiveTraits(int traitType) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Traits.class);
 		crit.add(Restrictions.eq("activestatus", 1));
 		crit.add(Restrictions.eq("deletestatus", 0));
+		if(traitType==1)
+		{
+			crit.add(Restrictions.eq("traittype", "negative"));
+		}
+		else if(traitType==2)
+		{
+			crit.add(Restrictions.eq("traittype", "positive"));
+		}
+		else if(traitType==3)
+		{
+			crit.add(Restrictions.eq("traittype", "neutral"));
+		}
+		
 		crit.addOrder(Order.asc("traitname"));
 		return crit.list();
 	}

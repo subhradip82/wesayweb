@@ -6,11 +6,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import org.apache.logging.log4j.Logger;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wesayweb.model.Traits;
 
 public class CsvReader {
+
+	@Inject
+	private static Logger logger;
 
 	public static List<Traits> getTraits() {
 		List<Traits> returnList = new ArrayList<Traits>();
@@ -33,23 +38,24 @@ public class CsvReader {
 					} else {
 						traitObj.setActivestatus(0);
 					}
-					traitObj.setTraitcreatedby(Long.valueOf(999999998));
-
+					traitObj.setTraittype(trait[2].trim().toLowerCase());
+					traitObj.setTraitcreatedby(Long.valueOf(999999999));
+					traitObj.setApproveddate(new Date());
 					returnList.add(traitObj);
 				}
 				linecounter++;
 			}
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			if (br != null) {
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error(e);
 				}
 			}
 		}

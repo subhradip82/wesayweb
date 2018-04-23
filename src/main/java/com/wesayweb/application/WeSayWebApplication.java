@@ -7,13 +7,12 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 import com.wesayweb.repository.UserRepository;
 
 @SpringBootApplication()
@@ -22,7 +21,7 @@ import com.wesayweb.repository.UserRepository;
 @EntityScan("com.wesayweb.model")
 @EnableJpaRepositories("com.wesayweb.repository")
 @EnableWebSecurity
-public class WeSayWebApplication  extends WebSecurityConfigurerAdapter  implements WebMvcConfigurer  {
+public class WeSayWebApplication extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
 	@Autowired
 	UserRepository repository;
@@ -40,14 +39,15 @@ public class WeSayWebApplication  extends WebSecurityConfigurerAdapter  implemen
 				.allowCredentials(true).maxAge(3600);
 
 	}
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http
-			.csrf().disable().authorizeRequests()
-						.antMatchers("/api/emailregistration").permitAll()
-						.antMatchers("/api/loginviaemail").permitAll()
-						.antMatchers("/api/forgotpasswordviaemail").permitAll();
-			
+		http.csrf().disable().authorizeRequests().antMatchers("/api/emailregistration").permitAll()
+				.antMatchers("/api/loginviaemail").permitAll().
+				antMatchers("/firstimpression/**").permitAll().
+				antMatchers("/api/forgotpasswordviaemail").permitAll().
+				antMatchers("/traitapi/**").permitAll();
+
 	}
 
 }

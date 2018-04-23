@@ -69,7 +69,6 @@ public class UserController {
 				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
 				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
 				returnValue.put(UserContants.CONST_AUTH_TOKEN, jToken);
-
 			}
 
 		} else {
@@ -101,7 +100,6 @@ public class UserController {
 		} else {
 			returnValue.putAll(validationResult);
 		}
-
 		return returnValue;
 
 	}
@@ -140,14 +138,11 @@ public class UserController {
 		Map<String, String> token = tokenUtil.parseJWT(jToken);
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
 		if (otpObj.size() > 0) {
-
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(UserContants.CONST_MESSAGE, "OTP is expired");
 			} else {
-
 				UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(userOtpObj);
 				Map<String, String> validationResult = validtionObj.changepasswordByEmail();
-				;
 				if (validationResult.size() == 0) {
 					userRepository.changeUserPassword(Long.valueOf(token.get("userid")),
 							PasswordEncrypterUtil.encode(userOtpObj.getPassword()));

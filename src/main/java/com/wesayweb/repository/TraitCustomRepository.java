@@ -9,7 +9,7 @@ import com.wesayweb.model.Traits;
 @Repository
 public interface TraitCustomRepository {
 
-	public List<Traits> getActiveTraits();
+	public List<Traits> getActiveTraits(int traittype);
 
 	public boolean traitAlreadyExists(String traitName);
 	public boolean ifTraitIsUpdatable(Traits trailObj);

@@ -2,7 +2,6 @@ package com.wesayweb.model;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -33,6 +32,7 @@ public class Traits implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String traitname;
+	private String traittype;
 	private String traitdescripion;
 	private String traiticonpath;
 	private int activestatus;
@@ -41,6 +41,14 @@ public class Traits implements Serializable {
 	private Date creationdate = new Date();
 	private Date updateondate = new Date();
 	private Date approveddate;
+
+	public String getTraittype() {
+		return traittype;
+	}
+
+	public void setTraittype(String traittype) {
+		this.traittype = traittype;
+	}
 
 	@Column(name = "traitcreatedby", nullable = false, columnDefinition = "int default 0")
 	private Long traitcreatedby;

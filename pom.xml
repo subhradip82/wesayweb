@@ -62,7 +62,7 @@
 			<version>0.9.0</version>
 		</dependency>
 
- 
+
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -75,11 +75,11 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.20</version>
-			<scope>provided</scope>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-ioc</artifactId>
+			<version>5.4.3</version>
 		</dependency>
+
 		<dependency>
 			<groupId>edu.vt.middleware</groupId>
 			<artifactId>vt-password</artifactId>
