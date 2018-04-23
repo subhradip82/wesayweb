@@ -15,13 +15,20 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	public void sendMail(String toEmail, String subject, String message) {
+	public boolean sendMail(String toEmail, String subject, String message) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(toEmail);
 		mailMessage.setSubject(subject);
 		mailMessage.setText(message);
 		mailMessage.setFrom("webwesay@gmail.com");
-		javaMailSender.send(mailMessage);
+		try
+
+		{
+			javaMailSender.send(mailMessage);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Bean

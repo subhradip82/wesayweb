@@ -113,6 +113,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.9.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>42.2.2</version>
@@ -134,6 +140,12 @@
       <groupId>edu.vt.middleware</groupId>
       <artifactId>vt-password</artifactId>
       <version>3.1.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.libphonenumber</groupId>
+      <artifactId>libphonenumber</artifactId>
+      <version>8.9.4</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

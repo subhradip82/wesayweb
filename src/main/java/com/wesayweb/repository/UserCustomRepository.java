@@ -13,4 +13,6 @@ public interface UserCustomRepository {
 	 
 	List<User> getUserByMobileNumber(String countryCode, String mobileNumber);
 
+	boolean activateUser(Long userId);
+
 }

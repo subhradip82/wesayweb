@@ -4,16 +4,19 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserCustomRepository;
-import com.wesayweb.repository.UserRepository;
 
 @Service
 public class UserRepositoryImpl implements UserCustomRepository {
@@ -39,6 +42,20 @@ public class UserRepositoryImpl implements UserCustomRepository {
 
 	}
 
-	 
+	@Override
+	@Transactional
+	public boolean activateUser(Long userId) {
+		boolean returnValue = false;
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<User> updateCriteria = cb.createCriteriaUpdate(User.class);
+		Root<User> userObj = updateCriteria.from(User.class);
+		updateCriteria.set(userObj.get("isactive"), 1);
+		updateCriteria.where(cb.equal(userObj.get("id"), userId));
+		int affected = em.createQuery(updateCriteria).executeUpdate();
+		if (affected > 0) {
+			returnValue = true;
+		}
+		return returnValue;
+	}
 
 }
