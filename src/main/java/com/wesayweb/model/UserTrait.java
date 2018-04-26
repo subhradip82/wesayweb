@@ -38,8 +38,13 @@ public class UserTrait implements Serializable {
 	@Column(name = "ishidden", nullable = false, columnDefinition = "int default 0")
 	private int ishidden;
 
-	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral
+	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral 
 
+	@Column(name = "subtypeofvote", nullable = false, columnDefinition = "int default 0")
+	private int subtypeofvote ; 
+	
+	private String comment;
+	
 	public Long getId() {
 		return id;
 	}
@@ -120,4 +125,21 @@ public class UserTrait implements Serializable {
 		this.typeofvote = typeofvote;
 	}
 
+	public int getSubtypeofvote() {
+		return subtypeofvote;
+	}
+
+	public void setSubtypeofvote(int subtypeofvote) {
+		this.subtypeofvote = subtypeofvote;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	
 }

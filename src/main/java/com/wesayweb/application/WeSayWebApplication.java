@@ -1,5 +1,6 @@
 package com.wesayweb.application;
 
+ 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +22,7 @@ import com.wesayweb.repository.UserRepository;
 @EntityScan("com.wesayweb.model")
 @EnableJpaRepositories("com.wesayweb.repository")
 @EnableWebSecurity
+ 
 public class WeSayWebApplication extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
 	@Autowired
@@ -44,10 +46,12 @@ public class WeSayWebApplication extends WebSecurityConfigurerAdapter implements
 	public void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests().antMatchers("/api/emailregistration").permitAll()
 				.antMatchers("/api/loginviaemail").permitAll().
+				
 				antMatchers("/firstimpression/**").permitAll().
 				antMatchers("/api/forgotpasswordviaemail").permitAll().
 				antMatchers("/traitapi/**").permitAll();
 
 	}
 
+	
 }
