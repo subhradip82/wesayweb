@@ -1,6 +1,6 @@
 package com.wesayweb.constants;
 
-public class UserContants {
+public class WeSayContants {
 
 	public static String CONST_EMAIL_ALREADY_EXISTS="Email is already registered."; 
 	public static String CONST_REGISTRATION_SUCCESSFUL="Success"; 

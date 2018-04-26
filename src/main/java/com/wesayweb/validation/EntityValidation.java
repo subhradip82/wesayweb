@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -26,9 +27,9 @@ import edu.vt.middleware.password.WhitespaceRule;
 
 public class EntityValidation {
 
-	final static String DATE_FORMAT = "yyyy-dd-MM";
+	final static String DATE_FORMAT = "dd/MM/yyyy";
 
-	public static boolean isValidName(String name) {
+	public static boolean isValidPartOfName(String name) {
 		return name.matches("(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");
 	}
 
@@ -47,6 +48,14 @@ public class EntityValidation {
 		} catch (NumberParseException e) {
 			return false;
 		}
+	}
+
+	public static boolean isValidFullName(String fullname) {
+		Pattern pattern = Pattern.compile(
+				"^(?!(?:.*?\\.){2})(?!(?:.*?'){2})(?!(?:.*?,){2})(?!(?:.*?-){2})[a-zA-Z .',-]+$",
+				Pattern.CASE_INSENSITIVE);
+		return pattern.matcher(fullname).find();
+
 	}
 
 	public static boolean isValidGender(String gender) {

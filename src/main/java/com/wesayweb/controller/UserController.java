@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.wesayweb.constants.UserContants;
+import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.OtpGenerator;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserOtp;
@@ -62,18 +62,18 @@ public class UserController {
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-				returnValue.put(UserContants.CONST_MESSAGE, "OTP expired");
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, "OTP expired");
 			} else {
 				userRepository.activateUser(Long.valueOf(token.get("userid")));
 				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
-				returnValue.put(UserContants.CONST_AUTH_TOKEN, jToken);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, jToken);
 			}
 
 		} else {
-			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-			returnValue.put(UserContants.CONST_MESSAGE, "Wrong OTP provided");
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+			returnValue.put(WeSayContants.CONST_MESSAGE, "Wrong OTP provided");
 		}
 		return returnValue;
 
@@ -90,12 +90,12 @@ public class UserController {
 			if (userObj.size() > 0) {
 				sendForgotPasswordotpInemail(userObj.get(0).getEmailaddress(), userObj.get(0).getId());
 				String authToken = generateAuthToken(userObj.get(0));
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
-				returnValue.put(UserContants.CONST_AUTH_TOKEN, authToken);
-				returnValue.put(UserContants.CONST_MESSAGE, "Otp sent");
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, authToken);
+				returnValue.put(WeSayContants.CONST_MESSAGE, "Otp sent");
 			} else {
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-				returnValue.put(UserContants.CONST_MESSAGE, "Email ID not found");
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, "Email ID not found");
 			}
 		} else {
 			returnValue.putAll(validationResult);
@@ -115,14 +115,15 @@ public class UserController {
 
 			if (PasswordEncrypterUtil.matches(user.getPassword().trim(), userObj.get(0).getPassword())) {
 				String authToken = generateAuthToken(userObj.get(0));
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
-				returnValue.put(UserContants.CONST_AUTH_TOKEN, authToken);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, authToken);
 
 			} else {
-				returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-				returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_WRONG_USER_NAME_PASSWORD);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_WRONG_USER_NAME_PASSWORD);
 			}
 		} else {
+
 			returnValue.putAll(validationResult);
 		}
 
@@ -139,7 +140,7 @@ public class UserController {
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
-				returnValue.put(UserContants.CONST_MESSAGE, "OTP is expired");
+				returnValue.put(WeSayContants.CONST_MESSAGE, "OTP is expired");
 			} else {
 				UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(userOtpObj);
 				Map<String, String> validationResult = validtionObj.changepasswordByEmail();
@@ -209,8 +210,7 @@ public class UserController {
 		userObj.setCountrycode(userReqObj.getCountrycode());
 		userObj.setDateofbirth(userReqObj.getDateofbirth());
 		userObj.setEmailaddress(userReqObj.getEmailaddress());
-		userObj.setFirstname(userReqObj.getFirstname());
-		userObj.setLastname(userReqObj.getLastname());
+		userObj.setFullname(userReqObj.getFullname());
 		userObj.setGender(userReqObj.getGender());
 		userObj.setIsregisteredbymobile(userReqObj.getIsregisteredbymobile());
 		userObj.setPassword(PasswordEncrypterUtil.encode(userReqObj.getPassword()));
@@ -228,19 +228,19 @@ public class UserController {
 	public Map<String, String> completeRegistartion(UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim(), 0).size() > 0) {
-			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_EMAIL_ALREADY_EXISTS);
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+			returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_EMAIL_ALREADY_EXISTS);
 		}
 		if (userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber(), 0).size() > 0) {
-			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_ERROR);
-			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_MOBILE_ALREADY_EXISTS);
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+			returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_MOBILE_ALREADY_EXISTS);
 		}
 		if (returnValue.size() == 0) {
 			User insertedUserObj = userRepository.save(getMappedUserObject(user));
 			sendotpInemail(insertedUserObj.getEmailaddress(), insertedUserObj.getId());
 			String authToken = generateAuthToken(insertedUserObj);
-			returnValue.put(UserContants.CONST_STATUS, UserContants.CONST_SUCCESS);
-			returnValue.put(UserContants.CONST_MESSAGE, UserContants.CONST_REGISTRATION_SUCCESSFUL);
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+			returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_REGISTRATION_SUCCESSFUL);
 			returnValue.put("authtoken", authToken);
 		}
 		return returnValue;

@@ -32,20 +32,15 @@ public class UserTraitsController {
 					consumes = "application/json")
 	@ResponseBody
 	public void addTraits(@RequestBody UserTrait userTrait) {
-		UserTrait userTraitObj = new UserTrait();
-		userTraitObj.setTargetuserid(userTrait.getTargetuserid());
-		userTraitObj.setTraitid(userTrait.getTraitid());
-		userTraitObj.setGivenbyuserid(userTrait.getGivenbyuserid());
-		userTraitObj.setIsannonymous(userTrait.getIsannonymous());
-		userTraitObj.setTypeofvote(userTrait.getTypeofvote());
-		userTraitsRepository.save(userTraitObj);
+		userTraitsRepository.save(userTrait);
 	}
 
 	@RequestMapping(value = "/getMyTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<TraitsResponsePojo> getMyTraits(@RequestBody UserTrait userTrait) {
 		List<TraitsResponsePojo> returnResult = new ArrayList<TraitsResponsePojo>();
-		List<Object[]> resultSet = userTraitsRepository.getMyTraits(userTrait.getTargetuserid());
+		List<Object[]> resultSet = userTraitsRepository.
+				getMyTraits(userTrait.getTraitgivenfor());
 		for (Object[] object : resultSet) {
 
 			TraitsResponsePojo traitsResponseObj = new TraitsResponsePojo();

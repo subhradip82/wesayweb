@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.repository.TraitCustomRepository;
 
@@ -29,32 +30,16 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Traits.class);
 		crit.add(Restrictions.eq("activestatus", 1));
 		crit.add(Restrictions.eq("deletestatus", 0));
-		if(traitType==1)
-		{
+		if (traitType == 1) {
 			crit.add(Restrictions.eq("traittype", "negative"));
-		}
-		else if(traitType==2)
-		{
+		} else if (traitType == 2) {
 			crit.add(Restrictions.eq("traittype", "positive"));
-		}
-		else if(traitType==3)
-		{
+		} else if (traitType == 3) {
 			crit.add(Restrictions.eq("traittype", "neutral"));
 		}
-		
+
 		crit.addOrder(Order.asc("traitname"));
 		return crit.list();
-	}
-
-	@Override
-	public boolean traitAlreadyExists(String traitName) {
-		boolean returnValue = false;
-		Criteria crit = em.unwrap(Session.class).createCriteria(Traits.class);
-		crit.add(Restrictions.eq("traitname", traitName.trim()).ignoreCase());
-		if (crit.list().size() > 0) {
-			returnValue = false;
-		}
-		return returnValue;
 	}
 
 	@Override
@@ -100,6 +85,20 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 			returnValue = true;
 		}
 		return returnValue;
+	}
+
+	@Override
+	@Transactional
+	public boolean saveCustomTrait(CustomTraits customTrait) {
+		customTrait.setActivestatus(1);
+		em.persist(customTrait);
+		return false;
+	}
+
+	@Override
+	public boolean traitAlreadyExists(String traitname, long traitgivenby, long traitgivenfor) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

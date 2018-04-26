@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -20,7 +19,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 public class User implements Serializable {
 
-	 
 	public User() {
 		super();
 	}
@@ -44,7 +42,6 @@ public class User implements Serializable {
 	}
 
 	private String emailaddress;
-	
 	private String password;
 	private String countrycode;
 	private String mobilenumber;
@@ -53,41 +50,14 @@ public class User implements Serializable {
 	private String gender;
 	private Date creationdate = new Date();
 	private int isactive;
-	private String title;
-	private String firstname;
-	private String middlename;
-	private String lastname;
+	private String fullname;
 
-	public String getTitle() {
-		return title;
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getMiddlename() {
-		return middlename;
-	}
-
-	public void setMiddlename(String middlename) {
-		this.middlename = middlename;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	public void setId(Long id) {
@@ -96,17 +66,6 @@ public class User implements Serializable {
 
 	public Long getId() {
 		return id;
-	}
-
-	 
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", emailaddress=" + emailaddress + ", password=" + password + ", countrycode="
-				+ countrycode + ", mobilenumber=" + mobilenumber + ", isregisteredbymobile=" + isregisteredbymobile
-				+ ", dateofbirth=" + dateofbirth + ", gender=" + gender + ", creationdate=" + creationdate
-				+ ", isactive=" + isactive + ", title=" + title + ", firstname=" + firstname + ", middlename="
-				+ middlename + ", lastname=" + lastname + "]";
 	}
 
 	public String getEmailaddress() {

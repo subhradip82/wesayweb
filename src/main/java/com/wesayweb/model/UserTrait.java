@@ -3,6 +3,7 @@ package com.wesayweb.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -16,39 +17,35 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "user_trait")
 @EntityListeners(AuditingEntityListener.class)
 public class UserTrait implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private long targetuserid;
+
 	private long traitid;
 	private Date creationdate = new Date();
 	private Date updationdate = new Date();
+
+	@Column(name = "isactive", nullable = false, columnDefinition = "int default 0")
 	private int isactive;
-	private long givenbyuserid;
+	private long traitgivenby;
+	private int traitgivenfor;
+	@Column(name = "isannonymous", nullable = false, columnDefinition = "int default 0")
 	private int isannonymous;
+
+	@Column(name = "ishidden", nullable = false, columnDefinition = "int default 0")
+	private int ishidden;
+
 	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral
-
-	public int getTypeofvote() {
-		return typeofvote;
-	}
-
-	public void setTypeofvote(int typeofvote) {
-		this.typeofvote = typeofvote;
-	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public long getTargetuserid() {
-		return targetuserid;
-	}
-
-	public void setTargetuserid(long targetuserid) {
-		this.targetuserid = targetuserid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public long getTraitid() {
@@ -79,12 +76,24 @@ public class UserTrait implements Serializable {
 		return isactive;
 	}
 
-	public long getGivenbyuserid() {
-		return givenbyuserid;
+	public void setIsactive(int isactive) {
+		this.isactive = isactive;
 	}
 
-	public void setGivenbyuserid(long givenbyuserid) {
-		this.givenbyuserid = givenbyuserid;
+	public long getTraitgivenby() {
+		return traitgivenby;
+	}
+
+	public void setTraitgivenby(long traitgivenby) {
+		this.traitgivenby = traitgivenby;
+	}
+
+	public int getTraitgivenfor() {
+		return traitgivenfor;
+	}
+
+	public void setTraitgivenfor(int traitgivenfor) {
+		this.traitgivenfor = traitgivenfor;
 	}
 
 	public int getIsannonymous() {
@@ -95,16 +104,20 @@ public class UserTrait implements Serializable {
 		this.isannonymous = isannonymous;
 	}
 
-	public void setIsactive(int isactive) {
-		this.isactive = isactive;
+	public int getIshidden() {
+		return ishidden;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setIshidden(int ishidden) {
+		this.ishidden = ishidden;
 	}
 
-	public UserTrait() {
-		super();
+	public int getTypeofvote() {
+		return typeofvote;
+	}
+
+	public void setTypeofvote(int typeofvote) {
+		this.typeofvote = typeofvote;
 	}
 
 }

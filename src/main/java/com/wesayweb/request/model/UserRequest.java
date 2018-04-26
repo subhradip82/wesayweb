@@ -15,6 +15,7 @@ public class UserRequest implements Serializable {
 	}
 
 	private Long id;
+	private String fullname;
 	private String emailaddress;
 	private String password;
 	private String countrycode;
@@ -24,10 +25,6 @@ public class UserRequest implements Serializable {
 	private String gender;
 	private Date creationdate = new Date();
 	private int isactive;
-	private String title;
-	private String firstname;
-	private String middlename;
-	private String lastname;
 	private String retypepassword;
 
 	public String getRetypepassword() {
@@ -48,63 +45,12 @@ public class UserRequest implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getMiddlename() {
-		return middlename;
-	}
-
-	public void setMiddlename(String middlename) {
-		this.middlename = middlename;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	 
-
-	@Override
-	public String toString() {
-		return "UserRequest [id=" + id + ", emailaddress=" + emailaddress + ", password=" + password + ", countrycode="
-				+ countrycode + ", mobilenumber=" + mobilenumber + ", isregisteredbymobile=" + isregisteredbymobile
-				+ ", dateofbirth=" + dateofbirth + ", gender=" + gender + ", creationdate=" + creationdate
-				+ ", isactive=" + isactive + ", title=" + title + ", firstname=" + firstname + ", middlename="
-				+ middlename + ", lastname=" + lastname + ", retypepassword=" + retypepassword
-				+ ", getRetypepassword()=" + getRetypepassword() + ", getTitle()=" + getTitle() + ", getFirstname()="
-				+ getFirstname() + ", getMiddlename()=" + getMiddlename() + ", getLastname()=" + getLastname()
-				+ ", getId()=" + getId() + ", getEmailaddress()=" + getEmailaddress() + ", getPassword()="
-				+ getPassword() + ", getCountrycode()=" + getCountrycode() + ", getMobilenumber()=" + getMobilenumber()
-				+ ", getIsregisteredbymobile()=" + getIsregisteredbymobile() + ", getDateofbirth()=" + getDateofbirth()
-				+ ", getGender()=" + getGender() + ", getCreationdate()=" + getCreationdate() + ", getIsactive()="
-				+ getIsactive() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
 	}
 
 	public String getEmailaddress() {
@@ -177,6 +123,14 @@ public class UserRequest implements Serializable {
 
 	public void setIsactive(int isactive) {
 		this.isactive = isactive;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 }

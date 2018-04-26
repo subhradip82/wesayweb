@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.CsvReader;
+import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.service.EmailService;
@@ -33,19 +34,21 @@ public class TraitsController {
 		traitsRepository.saveAll(CsvReader.getTraits());
 	}
 
-	@RequestMapping(value = "/addTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/addCustomTrait/", method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> addTraitByAdmin(@RequestBody List<Traits> listOfTrait) {
+	public Map<String, String> addCustomTrait(@RequestBody CustomTraits customTraitObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		for (Traits traitobj : listOfTrait) {
-			if (!traitsRepository.traitAlreadyExists(traitobj.getTraitname().trim().toLowerCase())) {
-				traitsRepository.save(traitobj);
-				emailService.sendMail("mcradha@gmail.com", "New Trait has been introduced in WeSayWeb",
-						traitobj.getTraitname().trim() + " has been created in WeSayWeb.");
-			} else {
-				returnValue.put(traitobj.getTraitname(), " already exists");
+			if (!traitsRepository.traitAlreadyExists(customTraitObj.getTraitname(), 1L, 1L)) {
+				traitsRepository.saveCustomTrait(customTraitObj);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 			}
-		}
+			else
+			{
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE,"Trait already exists.");
+			}
 		return returnValue;
 	}
 
@@ -62,7 +65,7 @@ public class TraitsController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST,produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<Traits> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
 		return traitsRepository.getActiveTraits(traityype.get("traittype"));

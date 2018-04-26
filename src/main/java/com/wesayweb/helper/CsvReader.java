@@ -39,7 +39,8 @@ public class CsvReader {
 						traitObj.setActivestatus(0);
 					}
 					traitObj.setTraittype(trait[2].trim().toLowerCase());
-					traitObj.setTraitcreatedby(Long.valueOf(999999999));
+					traitObj.setTraitcreatedby(Long.valueOf(0));
+					traitObj.setTraitidentifier(10000);
 					traitObj.setApproveddate(new Date());
 					returnList.add(traitObj);
 				}
