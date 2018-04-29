@@ -63,9 +63,22 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 	@Override
 	@Transactional
 	public List<String> traitAlreadyExists(String traitname, long traitgivenby, long traitgivenfor) {
-
 		return em.createNamedQuery("traitAlreadyExists").getResultList();
 
 	}
+
+	@Override
+	public List<String> customTraitAlreadyExists(String traitname, long traitgivenby, long traitgivenfor) {
+		return em.createNamedQuery("customTraitAlreadyExists").getResultList();
+	}
+
+	@Override
+	public List<Traits> definedTraitAlreadyExists(String traitname) {
+		List<Traits> resultList = em.createNamedQuery("definedTraitAlreadyExists").getResultList();
+		
+		return null;
+	}
+
+	 
 
 }

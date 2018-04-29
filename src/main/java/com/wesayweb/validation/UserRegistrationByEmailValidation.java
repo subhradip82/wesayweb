@@ -27,9 +27,9 @@ public class UserRegistrationByEmailValidation {
 		if (!EntityValidation.isValidFullName(user.getFullname().trim())) {
 			validationResult.put("firstname", "Please enter a valid full name.");
 		}
-		/*if (!EntityValidation.isValidDate(user.getDateofbirth())) {
+		if ( (user.getDateofbirth().trim().length()>2) && (!EntityValidation.isValidDate(user.getDateofbirth()))) {
 			validationResult.put("dob", "Please enter a valid Date of Birth.");
-		}*/
+		}
 		if (!EntityValidation.isValidEmail(user.getEmailaddress())) {
 			validationResult.put("email", "Please enter a valid Email Address.");
 		}

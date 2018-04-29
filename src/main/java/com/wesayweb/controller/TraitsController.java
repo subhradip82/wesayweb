@@ -19,7 +19,6 @@ import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
-import com.wesayweb.repository.UserTraitCustomRepository;
 import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.TraitListResponse;
 
@@ -39,29 +38,39 @@ public class TraitsController {
 		traitsRepository.saveAll(CsvReader.getTraits());
 	}
 
-	@RequestMapping(value = "/addCustomTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> addCustomTrait(@RequestBody CustomTraits customTraitObj) {
+	public Map<String, String> addTrait(@RequestBody CustomTraits customTraitObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		 
-		if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname(), 
-					1L, 1L).size()==0) {
-			CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
+		if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), 1L, 1L)
+				.size() == 0) {
+
+			List<Traits> definedTraits = traitsRepository
+					.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
 			UserTrait userTraitObj = new UserTrait();
-			userTraitObj.setTraitid(returnCustomTraitObj.getId());
-			userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
-			userTraitObj.setTraitgivenby(1L);
-			userTraitObj.setTraitgivenfor(1L);
+			if (definedTraits.size() > 0) {
+				userTraitObj.setTraitid(definedTraits.get(0).getId());
+				userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
+				userTraitObj.setTraitgivenby(1L);
+				userTraitObj.setTraitgivenfor(1L);
+			} else {
+				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
+				userTraitObj.setTraitid(returnCustomTraitObj.getId());
+				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
+				userTraitObj.setTraitgivenby(1L);
+				userTraitObj.setTraitgivenfor(1L);
+			}
 			userTraitsRepository.saveUserTraits(userTraitObj);
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-			} else {
+		}
+
+		else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 			returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
-		} 
+		}
 		return returnValue;
 	}
 
-	 
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, List<TraitListResponse>> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
@@ -116,20 +125,14 @@ public class TraitsController {
 
 	}
 
-	@RequestMapping(value = "/updateusertraitstatus/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/updateusertraitstatus/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> updateusertraitstatus(@RequestBody List<UserTrait> 
-	listOfUserTrait) {
+	public Map<String, String> updateusertraitstatus(@RequestBody List<UserTrait> listOfUserTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		for (UserTrait traitobj : listOfUserTrait) {
 			userTraitsRepository.updateUserTrait(traitobj);
 		}
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		return returnValue; 
+		return returnValue;
 	}
-	
-
 }
