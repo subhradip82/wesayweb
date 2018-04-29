@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.repository.UserTraitRepository;
-import com.wesayweb.response.model.TraitsResponsePojo;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 
 @RestController
 @RequestMapping("/userTraits")
@@ -37,13 +37,13 @@ public class UserTraitsController {
 
 	@RequestMapping(value = "/getMyTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public List<TraitsResponsePojo> getMyTraits(@RequestBody UserTrait userTrait) {
-		List<TraitsResponsePojo> returnResult = new ArrayList<TraitsResponsePojo>();
+	public List<UserTraitsResponsePojo> getMyTraits(@RequestBody UserTrait userTrait) {
+		List<UserTraitsResponsePojo> returnResult = new ArrayList<UserTraitsResponsePojo>();
 		List<Object[]> resultSet = userTraitsRepository.
 				getMyTraits(userTrait.getTraitgivenfor());
 		for (Object[] object : resultSet) {
 
-			TraitsResponsePojo traitsResponseObj = new TraitsResponsePojo();
+			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
 			traitsResponseObj.setTraitid(((BigInteger) object[0]).longValue());
 			traitsResponseObj.setTraitname((String) object[1]);
 			traitsResponseObj.setTraitdescripion((String) object[2]);

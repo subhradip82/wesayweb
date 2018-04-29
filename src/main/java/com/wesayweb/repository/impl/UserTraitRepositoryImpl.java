@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.UserTraitCustomRepository;
-import com.wesayweb.response.model.TraitsResponsePojo;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 
 @Service
 public class UserTraitRepositoryImpl implements UserTraitCustomRepository {

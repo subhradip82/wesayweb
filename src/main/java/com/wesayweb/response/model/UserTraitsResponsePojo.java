@@ -3,7 +3,7 @@ package com.wesayweb.response.model;
 import java.io.Serializable;
 
 
-public class TraitsResponsePojo implements Serializable {
+public class UserTraitsResponsePojo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

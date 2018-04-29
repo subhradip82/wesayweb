@@ -1,6 +1,8 @@
 package com.wesayweb.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import com.wesayweb.helper.CsvReader;
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.repository.TraitRepository;
+import com.wesayweb.response.model.TraitListResponse;
 import com.wesayweb.service.EmailService;
 
 @RestController
@@ -67,10 +70,38 @@ public class TraitsController {
 
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public List<Traits> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
-		return traitsRepository.getActiveTraits(traityype.get("traittype"));
+	public Map<String,List<TraitListResponse>> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
+		Map<String,List<TraitListResponse>> listOfTraits = new LinkedHashMap<String,List<TraitListResponse>>();
+		List<Traits> traitList = traitsRepository.getActiveTraits(0);
+		List<String> availableCategory = new ArrayList<String>();
+		availableCategory.add("negative");
+		availableCategory.add("neutral");
+		availableCategory.add("positive");
+		for(String traitName : availableCategory) {
+			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
+			for(Traits traitobj : traitList) {
+				if(traitName.trim().equalsIgnoreCase(traitobj.getTraitname().trim())) {
+					TraitListResponse responseObj = new TraitListResponse();
+					responseObj.setTraitid(traitobj.getId());
+					responseObj.setTraitname(traitobj.getTraitname().trim());
+					responseObj.setTraiticonpath(traitobj.getTraitdescripion());
+					responseList.add(responseObj);
+				}
+			}
+			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
+		}
+		
+		
+		
+		return listOfTraits;
+		
+		
 	}
 
+	
+	
+	
+	
 	@RequestMapping(value = "/hardDeleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> hardDeleteTrait(@RequestBody List<Traits> listOfTrait) {
