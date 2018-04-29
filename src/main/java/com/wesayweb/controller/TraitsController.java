@@ -80,7 +80,7 @@ public class TraitsController {
 		for(String traitName : availableCategory) {
 			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
 			for(Traits traitobj : traitList) {
-				if(traitName.trim().equalsIgnoreCase(traitobj.getTraitname().trim())) {
+				if(traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
 					TraitListResponse responseObj = new TraitListResponse();
 					responseObj.setTraitid(traitobj.getId());
 					responseObj.setTraitname(traitobj.getTraitname().trim());
