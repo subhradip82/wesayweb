@@ -2,6 +2,7 @@ package com.wesayweb.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -44,9 +45,18 @@ public class Traits implements Serializable {
 	private Date approveddate;
 	@Column(name = "traitidentifier", nullable = false, columnDefinition = "int default 100")
 	private int traitidentifier;
-	
+	private String traituniqueid;
+
 	public String getTraittype() {
 		return traittype;
+	}
+
+	public String getTraituniqueid() {
+		return traituniqueid;
+	}
+
+	public void setTraituniqueid(String traituniqueid) {
+		this.traituniqueid = traituniqueid;
 	}
 
 	public int getTraitidentifier() {

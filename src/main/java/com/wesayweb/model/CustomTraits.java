@@ -34,6 +34,14 @@ public class CustomTraits implements Serializable {
 	private Date approveddate;
 	@Column(name = "traitidentifier", nullable = false, columnDefinition = "int default 100")
 	private int traitidentifier;
+	
+	private String traituniqueid;
+	public String getTraituniqueid() {
+		return traituniqueid;
+	}
+	public void setTraituniqueid(String traituniqueid) {
+		this.traituniqueid = traituniqueid;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -99,6 +107,14 @@ public class CustomTraits implements Serializable {
 	}
 	public void setTraitidentifier(int traitidentifier) {
 		this.traitidentifier = traitidentifier;
+	}
+	@Override
+	public String toString() {
+		return "CustomTraits [id=" + id + ", traitname=" + traitname + ", traittype=" + traittype + ", traitdescripion="
+				+ traitdescripion + ", traiticonpath=" + traiticonpath + ", activestatus=" + activestatus
+				+ ", deletestatus=" + deletestatus + ", creationdate=" + creationdate + ", updateondate=" + updateondate
+				+ ", approveddate=" + approveddate + ", traitidentifier=" + traitidentifier + ", traituniqueid="
+				+ traituniqueid + "]";
 	}
 
 }

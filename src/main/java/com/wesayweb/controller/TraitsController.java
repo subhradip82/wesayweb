@@ -17,9 +17,11 @@ import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.CsvReader;
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
+import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
+import com.wesayweb.repository.UserTraitCustomRepository;
+import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.TraitListResponse;
-import com.wesayweb.service.EmailService;
 
 @RestController
 @RequestMapping("/traitapi")
@@ -29,7 +31,7 @@ public class TraitsController {
 	TraitRepository traitsRepository;
 
 	@Autowired
-	EmailService emailService;
+	UserTraitRepository userTraitsRepository;
 
 	@RequestMapping(value = "/uploadTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
@@ -37,87 +39,97 @@ public class TraitsController {
 		traitsRepository.saveAll(CsvReader.getTraits());
 	}
 
-	@RequestMapping(value = "/addCustomTrait/", method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/addCustomTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addCustomTrait(@RequestBody CustomTraits customTraitObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-			if (!traitsRepository.traitAlreadyExists(customTraitObj.getTraitname(), 1L, 1L)) {
-				traitsRepository.saveCustomTrait(customTraitObj);
-				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-			}
-			else
-			{
-				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
-				returnValue.put(WeSayContants.CONST_MESSAGE,"Trait already exists.");
-			}
+		 
+		if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname(), 
+					1L, 1L).size()==0) {
+			CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
+			UserTrait userTraitObj = new UserTrait();
+			userTraitObj.setTraitid(returnCustomTraitObj.getId());
+			userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
+			userTraitObj.setTraitgivenby(1L);
+			userTraitObj.setTraitgivenfor(1L);
+			userTraitsRepository.saveUserTraits(userTraitObj);
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+			} else {
+			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+			returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
+		} 
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/updateTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	@ResponseBody
-	public Map<String, String> updateTrait(@RequestBody Traits traitObject) {
-		Map<String, String> returnValue = new HashMap<String, String>();
-		if (!traitsRepository.ifTraitIsUpdatable(traitObject)) {
-			traitsRepository.updateTrait(traitObject);
-			returnValue.put(traitObject.getTraitname(), " has been updated successfully");
-		} else {
-			returnValue.put(traitObject.getTraitname(), " can not be updated");
-		}
-		return returnValue;
-	}
-
+	 
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String,List<TraitListResponse>> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
-		Map<String,List<TraitListResponse>> listOfTraits = new LinkedHashMap<String,List<TraitListResponse>>();
-		List<Traits> traitList = traitsRepository.getActiveTraits(0);
+	public Map<String, List<TraitListResponse>> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
+		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
+		List<Traits> traitList = traitsRepository.getActiveTraits(0, 0);
 		List<String> availableCategory = new ArrayList<String>();
 		availableCategory.add("negative");
 		availableCategory.add("neutral");
 		availableCategory.add("positive");
-		for(String traitName : availableCategory) {
+		for (String traitName : availableCategory) {
 			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
-			for(Traits traitobj : traitList) {
-				if(traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
+			for (Traits traitobj : traitList) {
+				if (traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
 					TraitListResponse responseObj = new TraitListResponse();
-					responseObj.setTraitid(traitobj.getId());
 					responseObj.setTraitname(traitobj.getTraitname().trim());
 					responseObj.setTraiticonpath(traitobj.getTraitdescripion());
+					responseObj.setTraituniqueid(traitobj.getTraituniqueid());
 					responseList.add(responseObj);
 				}
 			}
 			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
 		}
-		
-		
-		
+
 		return listOfTraits;
-		
-		
+
 	}
 
-	
-	
-	
-	
-	@RequestMapping(value = "/hardDeleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/getListOfPoulerTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> hardDeleteTrait(@RequestBody List<Traits> listOfTrait) {
-		Map<String, String> returnValue = new HashMap<String, String>();
-		for (Traits traitobj : listOfTrait) {
-			traitsRepository.delete(traitobj);
+	public Map<String, List<TraitListResponse>> getListOfPoulerTraits() {
+		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
+		List<Traits> traitList = traitsRepository.getActiveTraits(2, 20);
+		List<String> availableCategory = new ArrayList<String>();
+		availableCategory.add("negative");
+		availableCategory.add("neutral");
+		availableCategory.add("positive");
+		for (String traitName : availableCategory) {
+			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
+			for (Traits traitobj : traitList) {
+				if (traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
+					TraitListResponse responseObj = new TraitListResponse();
+					responseObj.setTraitname(traitobj.getTraitname().trim());
+					responseObj.setTraiticonpath(traitobj.getTraitdescripion());
+					responseObj.setTraituniqueid(traitobj.getTraituniqueid());
+					responseList.add(responseObj);
+				}
+			}
+			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
 		}
-		return returnValue;
+
+		return listOfTraits;
+
 	}
 
-	@RequestMapping(value = "/deleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/updateusertraitstatus/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> deleteTrait(@RequestBody Traits traitObj) {
+	public Map<String, String> updateusertraitstatus(@RequestBody List<UserTrait> 
+	listOfUserTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		traitsRepository.deleteTrait(traitObj.getId());
-		return returnValue;
+		for (UserTrait traitobj : listOfUserTrait) {
+			userTraitsRepository.updateUserTrait(traitobj);
+		}
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue; 
 	}
+	
 
 }

@@ -26,14 +26,24 @@ public class UserTrait implements Serializable {
 
 	private long traitid;
 	private Date creationdate = new Date();
-	private Date updationdate = new Date();
+	private Date updationdate;
 
 	@Column(name = "isactive", nullable = false, columnDefinition = "int default 0")
 	private int isactive;
 	private long traitgivenby;
-	private int traitgivenfor;
+	private long traitgivenfor;
 	@Column(name = "isannonymous", nullable = false, columnDefinition = "int default 0")
 	private int isannonymous;
+
+	private String traituniqueid;
+	
+	public String getTraituniqueid() {
+		return traituniqueid;
+	}
+
+	public void setTraituniqueid(String traituniqueid) {
+		this.traituniqueid = traituniqueid;
+	}
 
 	@Column(name = "ishidden", nullable = false, columnDefinition = "int default 0")
 	private int ishidden;
@@ -93,11 +103,11 @@ public class UserTrait implements Serializable {
 		this.traitgivenby = traitgivenby;
 	}
 
-	public int getTraitgivenfor() {
+	public Long getTraitgivenfor() {
 		return traitgivenfor;
 	}
 
-	public void setTraitgivenfor(int traitgivenfor) {
+	public void setTraitgivenfor(Long traitgivenfor) {
 		this.traitgivenfor = traitgivenfor;
 	}
 

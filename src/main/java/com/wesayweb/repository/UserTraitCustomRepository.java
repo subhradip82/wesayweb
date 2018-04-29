@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.UserTrait;
 
 @Repository
@@ -27,5 +28,7 @@ public interface UserTraitCustomRepository {
 			+ " ORDER BY traitname", nativeQuery = true, name = "getmytraits")
 
 	List<Object[]> getMyTraits(@Param("targetuserid") long targetuserid);
-
+	void saveUserTraits(UserTrait userTraitObj);
+	void updateUserTrait(UserTrait userTraitObj);
+ 
 }

@@ -2,17 +2,17 @@ package com.wesayweb.response.model;
 
 public class TraitListResponse {
 
-	private Long traitid;
 	private String traitname;
 	private String traitdescription;
 	private String traiticonpath;
+	private String traituniqueid;
 
-	public Long getTraitid() {
-		return traitid;
+	public String getTraituniqueid() {
+		return traituniqueid;
 	}
 
-	public void setTraitid(Long traitid) {
-		this.traitid = traitid;
+	public void setTraituniqueid(String traituniqueid) {
+		this.traituniqueid = traituniqueid;
 	}
 
 	public String getTraitname() {

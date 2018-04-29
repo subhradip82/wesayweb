@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.tapestry5.ioc.annotations.Inject;
+
+import com.wesayweb.application.WeSayWebApplication;
 import com.wesayweb.model.Traits;
 
 public class CsvReader {
@@ -42,6 +44,7 @@ public class CsvReader {
 					traitObj.setTraitcreatedby(Long.valueOf(0));
 					traitObj.setTraitidentifier(10000);
 					traitObj.setApproveddate(new Date());
+					traitObj.setTraituniqueid(WesayStringUtil.generateRandomNumber());
 					returnList.add(traitObj);
 				}
 				linecounter++;
