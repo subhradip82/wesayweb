@@ -59,7 +59,7 @@ public class UserRegistrationByEmailValidation {
 		Map<String, String> validationResult = new HashMap<String, String>();
 
 		if (EntityValidation.isValidPassword(userOtpObj.getPassword()).trim().length() > 1) {
-			validationResult.put("passowrd", EntityValidation.isValidPassword(userOtpObj.getPassword()));
+			validationResult.put("password", EntityValidation.isValidPassword(userOtpObj.getPassword()));
 		}
 		if (!userOtpObj.getPassword().trim().equals(userOtpObj.getRetypepassword().trim())) {
 			validationResult.put("retype", "Password and Retype password should match");
