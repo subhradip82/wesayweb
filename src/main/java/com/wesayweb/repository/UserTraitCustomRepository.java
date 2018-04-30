@@ -11,9 +11,7 @@ import com.wesayweb.model.UserTrait;
 
 @Repository
 public interface UserTraitCustomRepository {
-
-	public List<UserTrait> getMyTraits(long givenby, long tragetUerId);
-
+ 
 	@Query(value = "WITH TRAIT AS " + "("
 			+ "select id as trait_id, traitname , traitdescripion,traiticonpath  from   trait_master " + ")"
 			+ ",USER_DATA AS ( SELECT traitid,typeofvote,isannonymous FROM user_trait"
@@ -23,7 +21,12 @@ public interface UserTraitCustomRepository {
 			+ "    CASE WHEN B.typeofvote = 2 THEN 1 ELSE 0 END AS nutral," + "    A.traitdescripion,"
 			+ "    A.traiticonpath," + "    B.isannonymous " + "    from TRAIT A LEFT OUTER JOIN  USER_DATA  B "
 			+ "	ON A.trait_id = B.traitid " + "  ) "
-			+ " SELECT trait_id, traitname, traitdescripion,traiticonpath, SUM(positive) AS positive ,SUM(negetive) AS negetive ,SUM(nutral) AS nutral ,SUM(isannonymous) AS isannonymous   from CONSOLIDATED_DATA "
+			+ " SELECT trait_id, traitname, "
+			+ " traitdescripion,"
+			+ " traiticonpath,"
+			+ " SUM(positive) AS positive ,"
+			+ " SUM(negetive) AS negetive ,SUM(nutral) AS nutral ,"
+			+ " SUM(isannonymous) AS isannonymous   from CONSOLIDATED_DATA "
 			+ " GROUP BY  trait_id, traitname, traitdescripion,traiticonpath "
 			+ " ORDER BY traitname", nativeQuery = true, name = "getmytraits")
 

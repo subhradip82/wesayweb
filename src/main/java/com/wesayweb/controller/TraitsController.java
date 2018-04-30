@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +19,10 @@ import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.CsvReader;
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
+import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
+import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.TraitListResponse;
 
@@ -31,6 +35,10 @@ public class TraitsController {
 
 	@Autowired
 	UserTraitRepository userTraitsRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+	
 
 	@RequestMapping(value = "/uploadTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
@@ -38,27 +46,30 @@ public class TraitsController {
 		traitsRepository.saveAll(CsvReader.getTraits());
 	}
 
-	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/addTrait/",
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> addTrait(@RequestBody CustomTraits customTraitObj) {
+	public Map<String, String> addTrait(@RequestBody CustomTraits customTraitObj, @RequestParam Long traitgivenfor) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), 1L, 1L)
+		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		 if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), logedinUserObj.getId(), 1L)
 				.size() == 0) {
-
-			List<Traits> definedTraits = traitsRepository
+			 List<Traits> definedTraits = traitsRepository
 					.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
 			UserTrait userTraitObj = new UserTrait();
 			if (definedTraits.size() > 0) {
 				userTraitObj.setTraitid(definedTraits.get(0).getId());
 				userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
-				userTraitObj.setTraitgivenby(1L);
-				userTraitObj.setTraitgivenfor(1L);
+				userTraitObj.setTraitgivenby(logedinUserObj.getId());
+				userTraitObj.setTraitgivenfor(traitgivenfor);
 			} else {
 				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
 				userTraitObj.setTraitid(returnCustomTraitObj.getId());
 				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
-				userTraitObj.setTraitgivenby(1L);
-				userTraitObj.setTraitgivenfor(1L);
+				userTraitObj.setTraitgivenby(logedinUserObj.getId());
+				userTraitObj.setTraitgivenfor(traitgivenfor);
 			}
 			userTraitsRepository.saveUserTraits(userTraitObj);
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -132,6 +143,15 @@ public class TraitsController {
 		for (UserTrait traitobj : listOfUserTrait) {
 			userTraitsRepository.updateUserTrait(traitobj);
 		}
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/getmytraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> getmytraits() {
+		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		Map<String, String> returnValue = new HashMap<String, String>();
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}

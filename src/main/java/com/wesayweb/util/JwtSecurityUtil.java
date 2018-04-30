@@ -12,16 +12,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
+import static com.wesayweb.constants.SecurityConstants.SECRET;
 public class JwtSecurityUtil {
 
-	private static String apiKey = "MIIBIjANBgkqhkiG9w";
-
+ 
 	public String createJWT(String id, String subject,String issuer) {
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 		long nowMillis = System.currentTimeMillis();
 		Date now = new Date(nowMillis);
-		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(apiKey);
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject)
 				.setIssuer(issuer).signWith(signatureAlgorithm, signingKey);
@@ -31,7 +30,7 @@ public class JwtSecurityUtil {
 	public Map<String, String> parseJWT(String jwt) {
 		Map<String, String> returnMap = new HashMap<String, String>(); 
 	    Claims claims = Jwts.parser()         
-	       .setSigningKey(DatatypeConverter.parseBase64Binary(apiKey))
+	       .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET))
 	       .parseClaimsJws(jwt).getBody();
 	    returnMap.put("userid", claims.getId());
 	    returnMap.put("email", claims.getSubject());

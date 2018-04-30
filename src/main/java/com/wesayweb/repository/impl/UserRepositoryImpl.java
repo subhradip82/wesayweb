@@ -14,14 +14,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserCustomRepository;
 
 @Service
 public class UserRepositoryImpl implements UserCustomRepository {
 
-	 
 	@PersistenceContext
 	private EntityManager em;
 
@@ -29,8 +27,8 @@ public class UserRepositoryImpl implements UserCustomRepository {
 	public List<User> getUserByEmailAddess(String emailaddress, int activestatus) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
 		crit.add(Restrictions.eq("emailaddress", emailaddress.toLowerCase().trim()));
-		if(activestatus==1) {
-		crit.add(Restrictions.eq("isactive", 1));
+		if (activestatus == 1) {
+			crit.add(Restrictions.eq("isactive", 1));
 		}
 		return crit.list();
 
@@ -41,9 +39,9 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
 		crit.add(Restrictions.eq("countrycode", countryCode.toLowerCase().trim()));
 		crit.add(Restrictions.eq("mobilenumber", mobileNumber.toLowerCase().trim()));
-		if(activestatus==1) {
+		if (activestatus == 1) {
 			crit.add(Restrictions.eq("isactive", 1));
-			}
+		}
 		return crit.list();
 
 	}
@@ -65,7 +63,7 @@ public class UserRepositoryImpl implements UserCustomRepository {
 	}
 
 	@Override
-	@Transactional 
+	@Transactional
 	public boolean changeUserPassword(Long userId, String password) {
 		boolean returnValue = false;
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -80,4 +78,17 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		return returnValue;
 	}
 
+	@Override
+	public User findByUsername(String emailaddress) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
+		crit.add(Restrictions.eq("emailaddress", emailaddress.toLowerCase().trim()));
+		List<User> resultSet = crit.list();
+		if (resultSet.size() > 0) {
+			return resultSet.get(0);
+		} else {
+			return new User();
+		}
+	}
+
+	 
 }

@@ -9,9 +9,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +20,6 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	@Override
-	public List<UserTrait> getMyTraits(long giveuserid, long targetuserid) {
-		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
-		crit.add(Restrictions.eq("givenbyuserid", giveuserid));
-		crit.add(Restrictions.eq("targetuserid", targetuserid));
-		// crit.add(Restrictions.eq("isactive", 1));
-		return crit.list();
-	}
 
 	@Override
 	public List<Object[]> getMyTraits(long targetuserid) {
