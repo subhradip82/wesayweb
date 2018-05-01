@@ -35,6 +35,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.POST, "/emailregistration/").permitAll()
 	    .antMatchers(HttpMethod.POST, "/api/loginviaemail/").permitAll()
+	    .antMatchers(HttpMethod.POST, "/api/resendactivationcode/").permitAll()
+	    
+	    
 		
 		//.antMatchers(HttpMethod.POST, "/**").permitAll()
 				.anyRequest().authenticated().and().addFilter(new JWTAuthenticationFilter(authenticationManager()))

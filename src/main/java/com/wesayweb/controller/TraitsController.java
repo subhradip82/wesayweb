@@ -51,10 +51,12 @@ public class TraitsController {
 					produces = "application/json", 
 					consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> addTrait(@RequestBody CustomTraits customTraitObj, @RequestParam Long traitgivenfor) {
+	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
+		
 		Map<String, String> returnValue = new HashMap<String, String>();
+		for(CustomTraits customTraitObj : listOfCustomTraitObj) {
 		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		 if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), logedinUserObj.getId(), 1L)
+		 if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), logedinUserObj.getId(), customTraitObj.getTraitgivenfor())
 				.size() == 0) {
 			 List<Traits> definedTraits = traitsRepository
 					.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
@@ -63,13 +65,13 @@ public class TraitsController {
 				userTraitObj.setTraitid(definedTraits.get(0).getId());
 				userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
-				userTraitObj.setTraitgivenfor(traitgivenfor);
+				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
 			} else {
 				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
 				userTraitObj.setTraitid(returnCustomTraitObj.getId());
 				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
-				userTraitObj.setTraitgivenfor(traitgivenfor);
+				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
 			}
 			userTraitsRepository.saveUserTraits(userTraitObj);
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -78,6 +80,7 @@ public class TraitsController {
 		else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 			returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
+		}
 		}
 		return returnValue;
 	}

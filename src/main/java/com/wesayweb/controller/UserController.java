@@ -56,6 +56,20 @@ public class UserController {
 		return returnValue;
 	}
 
+	@RequestMapping(value = "/resendactivationcode/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> resendactivationcode(@RequestBody UserRequest user) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		User logedinUserObj = userRepository.findByUsername(user.getEmailaddress().trim().toLowerCase());
+		String userOtp = otpRepositoryService.resendOtp(logedinUserObj.getId());
+		sendotpInemail(user.getEmailaddress().trim().toLowerCase(), logedinUserObj.getId(), userOtp);
+		String authToken = generateAuthToken(logedinUserObj);
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		returnValue.put(WeSayContants.CONST_AUTH_TOKEN, authToken);
+		returnValue.put(WeSayContants.CONST_MESSAGE, "Otp sent");
+		return returnValue;
+	}
+
 	@RequestMapping(value = "/validateotpviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> validateOtpViaemail(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
@@ -78,7 +92,7 @@ public class UserController {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 			returnValue.put(WeSayContants.CONST_MESSAGE, "Wrong OTP provided");
 		}
-		return returnValue; 
+		return returnValue;
 
 	}
 
@@ -180,6 +194,18 @@ public class UserController {
 	public String sendotpInemail(String emailAddress, Long userId) {
 		String otp = OtpGenerator.genrateOtp();
 
+		String emailSubject = "Dear User,\n\n\nPlease use the OTP : " + otp
+				+ " to complete your registration.\nThe OTP is valid for 10 minutes";
+		if (sendotpInemail(emailAddress, "OTP From WeSayWEB", emailSubject)) {
+			UserOtp userOtpObj = new UserOtp();
+			userOtpObj.setUserid(userId);
+			userOtpObj.setOtp(otp);
+			otpRepositoryService.save(userOtpObj);
+		}
+		return otp;
+	}
+
+	public String sendotpInemail(String emailAddress, Long userId, String otp) {
 		String emailSubject = "Dear User,\n\n\nPlease use the OTP : " + otp
 				+ " to complete your registration.\nThe OTP is valid for 10 minutes";
 		if (sendotpInemail(emailAddress, "OTP From WeSayWEB", emailSubject)) {

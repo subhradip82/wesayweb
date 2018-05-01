@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,6 +37,17 @@ public class CustomTraits implements Serializable {
 	private int traitidentifier;
 	
 	private String traituniqueid;
+	
+	@Transient
+	private Long traitgivenfor;
+	
+	
+	public Long getTraitgivenfor() {
+		return traitgivenfor;
+	}
+	public void setTraitgivenfor(Long traitgivenfor) { 
+		this.traitgivenfor = traitgivenfor;
+	}
 	public String getTraituniqueid() {
 		return traituniqueid;
 	}

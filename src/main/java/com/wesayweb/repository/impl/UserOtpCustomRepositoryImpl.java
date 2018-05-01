@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wesayweb.helper.OtpGenerator;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserOtp;
@@ -67,6 +68,40 @@ public class UserOtpCustomRepositoryImpl implements UserOtpCustomRepository {
 			returnValue = true;
 		}
 		return returnValue;
+	}
+	@Transactional
+	@Override
+	public String resendOtp(Long userid) {
+		String returnValue = "";
+		Criteria crit = em.unwrap(Session.class).createCriteria(UserOtp.class);
+		crit.add(Restrictions.eq("userid", userid));
+		crit.add(Restrictions.isNull("otpuseddate"));
+		crit.add(Restrictions.ge("validupto", new Date()));
+		List<UserOtp> existingOtp = crit.list();
+		 
+		if(existingOtp.size()>0) {
+			if(new Date().compareTo(existingOtp.get(existingOtp.size()-1).getValidupto()) < 0 ) {
+				returnValue = existingOtp.get(existingOtp.size()-1).getOtp();
+			}
+			else
+			{
+				returnValue = OtpGenerator.genrateOtp();
+				UserOtp userOtpObj = new UserOtp();
+				userOtpObj.setUserid(userid);
+				userOtpObj.setOtp(returnValue);
+				em.persist(userOtpObj);
+			}
+		}
+		else
+		{
+			returnValue = OtpGenerator.genrateOtp();
+			UserOtp userOtpObj = new UserOtp();
+			userOtpObj.setUserid(userid);
+			userOtpObj.setOtp(returnValue);
+			em.persist(userOtpObj);
+		}
+		return returnValue;
+
 	}
 
 }

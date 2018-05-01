@@ -15,6 +15,8 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
+	
+	
 	public boolean sendMail(String toEmail, String subject, String message) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(toEmail);
@@ -27,6 +29,7 @@ public class EmailService {
 			javaMailSender.send(mailMessage);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -37,7 +40,7 @@ public class EmailService {
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
 		mailSender.setUsername("webwesay@gmail.com");
-		mailSender.setPassword("Subh19@*");
+		mailSender.setPassword("x7cry8ha");
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", "true");
