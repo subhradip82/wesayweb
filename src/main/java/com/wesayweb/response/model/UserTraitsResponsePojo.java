@@ -10,7 +10,7 @@ public class UserTraitsResponsePojo implements Serializable {
 	private Long traitid;
 	
 	private String traitname;
-	
+	private String traituniqid;
 	private String traitdescripion;
 	
 	private String traiticonpath;
@@ -18,8 +18,22 @@ public class UserTraitsResponsePojo implements Serializable {
 	private int positive;
 	private int negetive;
 	private int nutral;
-	
+	private String traittype;
 	private int isannonymous;
+	
+	
+	public String getTraittype() {
+		return traittype;
+	}
+	public void setTraittype(String traittype) {
+		this.traittype = traittype;
+	}
+	public String getTraituniqid() {
+		return traituniqid;
+	}
+	public void setTraituniqid(String traituniqid) {
+		this.traituniqid = traituniqid;
+	}
 	public Long getTraitid() {
 		return traitid;
 	}
