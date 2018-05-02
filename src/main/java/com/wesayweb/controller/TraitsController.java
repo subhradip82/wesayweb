@@ -68,10 +68,12 @@ public class TraitsController {
 				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
 			} else {
 				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
+				returnCustomTraitObj.setTraittype("nutral");
 				userTraitObj.setTraitid(returnCustomTraitObj.getId());
 				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
 				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
+				
 			}
 			userTraitsRepository.saveUserTraits(userTraitObj);
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -150,12 +152,5 @@ public class TraitsController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/getmytraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	@ResponseBody
-	public Map<String, String> getmytraits() {
-		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		Map<String, String> returnValue = new HashMap<String, String>();
-		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		return returnValue;
-	}
+	 
 }
