@@ -40,7 +40,10 @@ public class TraitsController {
 	UserRepository userRepository;
 	
 
-	@RequestMapping(value = "/uploadTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/uploadTraits/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public void uploadTraits() {
 		traitsRepository.saveAll(CsvReader.getTraits());
@@ -68,7 +71,7 @@ public class TraitsController {
 				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
 			} else {
 				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
-				returnCustomTraitObj.setTraittype("nutral");
+				returnCustomTraitObj.setTraittype("neutral");
 				userTraitObj.setTraitid(returnCustomTraitObj.getId());
 				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
@@ -141,7 +144,10 @@ public class TraitsController {
 
 	}
 
-	@RequestMapping(value = "/updateusertraitstatus/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/updateusertraitstatus/",
+					method = RequestMethod.POST, 
+					produces = "application/json",
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> updateusertraitstatus(@RequestBody List<UserTrait> listOfUserTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();

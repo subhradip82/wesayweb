@@ -56,7 +56,10 @@ public class UserController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/resendactivationcode/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/resendactivationcode/",
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> resendactivationcode(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -65,18 +68,22 @@ public class UserController {
 		sendotpInemail(user.getEmailaddress().trim().toLowerCase(), logedinUserObj.getId(), userOtp);
 		String authToken = generateAuthToken(logedinUserObj);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_OTP_SENT);
 		returnValue.put(WeSayContants.CONST_AUTH_TOKEN, authToken);
-		returnValue.put(WeSayContants.CONST_MESSAGE, "Otp sent");
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/validateotpviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/validateotpviaemail/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> validateOtpViaemail(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		String jToken = request.getHeader("X-Authorization").trim();
 		Map<String, String> token = tokenUtil.parseJWT(jToken);
-		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
+		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), 
+								Long.valueOf(token.get("userid")));
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
@@ -87,7 +94,6 @@ public class UserController {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, jToken);
 			}
-
 		} else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 			returnValue.put(WeSayContants.CONST_MESSAGE, "Wrong OTP provided");
@@ -96,7 +102,10 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/forgotpasswordviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/forgotpasswordviaemail/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> forgotpasswordviaemail(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -121,7 +130,11 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/loginviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	
+	@RequestMapping(value = "/loginviaemail/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> loginviaemail(@RequestBody User user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -129,8 +142,10 @@ public class UserController {
 		Map<String, String> validationResult = validtionObj.validateUerLoginByEmail();
 		if (validationResult.size() == 0) {
 			List<User> userObj = userRepository.getUserByEmailAddess(user.getEmailaddress().trim().toLowerCase(), 1);
-
-			if (PasswordEncrypterUtil.matches(user.getPassword().trim(), userObj.get(0).getPassword())) {
+			if (userObj.size() == 0) {
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_USER_NOT_ACTIVATED);
+			} else if (PasswordEncrypterUtil.matches(user.getPassword().trim(), userObj.get(0).getPassword())) {
 				String authToken = generateAuthToken(userObj.get(0));
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, authToken);
@@ -140,12 +155,10 @@ public class UserController {
 				returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_WRONG_USER_NAME_PASSWORD);
 			}
 		} else {
-
 			returnValue.putAll(validationResult);
 		}
 
 		return returnValue;
-
 	}
 
 	@RequestMapping(value = "/passwordretrivevalidateotp/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -179,7 +192,10 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/validatemobile/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/validatemobile/",
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
 	public int validatebymobile(@RequestBody User user) {
 		return userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber(), 0).size();
@@ -254,6 +270,7 @@ public class UserController {
 
 	}
 
+	
 	public Map<String, String> completeRegistartion(UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim(), 0).size() > 0) {
