@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wesayweb.application.WeSayWebApplication;
+import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.Traits;
 
 public class CsvReader {
@@ -46,6 +47,47 @@ public class CsvReader {
 					traitObj.setApproveddate(new Date());
 					traitObj.setTraituniqueid(WesayStringUtil.generateRandomNumber());
 					returnList.add(traitObj);
+				}
+				linecounter++;
+			}
+
+		} catch (FileNotFoundException e) {
+			logger.error(e);
+		} catch (IOException e) {
+			logger.error(e);
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					logger.error(e);
+				}
+			}
+		}
+		return returnList;
+	}
+	
+	public static List<SettingsCategory> getSettings() {
+		List<SettingsCategory> returnList = new ArrayList<SettingsCategory>();
+		ClassLoader classLoader = CsvReader.class.getClassLoader();
+		File file = new File(classLoader.getResource("supported_stuff/user_settings.csv").getFile());
+		BufferedReader br = null;
+		int linecounter = 0;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+
+			br = new BufferedReader(new FileReader(file));
+			while ((line = br.readLine()) != null) {
+				if (linecounter > 0) {
+					SettingsCategory categoryObj = new SettingsCategory();
+					String[] rows = line.split(cvsSplitBy);
+					categoryObj.setCategoryname(rows[0].trim());
+					categoryObj.setCategorydescription(rows[1].trim());
+					categoryObj.setAllowedmultiplevalue(Integer.valueOf(rows[2].trim()));
+					categoryObj.setDefaultvalue(Integer.valueOf(rows[3].trim()));
+					categoryObj.setUniqueid(rows[4].trim());
+					returnList.add(categoryObj);
 				}
 				linecounter++;
 			}

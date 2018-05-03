@@ -23,8 +23,10 @@ import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.repository.UserRepository;
+import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.TraitListResponse;
+import com.wesayweb.util.SettingsUtil;
 
 @RestController
 @RequestMapping("/traitapi")
@@ -39,15 +41,9 @@ public class TraitsController {
 	@Autowired
 	UserRepository userRepository;
 	
-
-	@RequestMapping(value = "/uploadTraits/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
-	@ResponseBody
-	public void uploadTraits() {
-		traitsRepository.saveAll(CsvReader.getTraits());
-	}
+	@Autowired
+	UserSettingRepository userSettingRepository;
+	
 
 	@RequestMapping(value = "/addTrait/",
 					method = RequestMethod.POST, 
@@ -55,9 +51,10 @@ public class TraitsController {
 					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
-		
+		SettingsUtil settingsUtil = new SettingsUtil();
 		Map<String, String> returnValue = new HashMap<String, String>();
 		for(CustomTraits customTraitObj : listOfCustomTraitObj) {
+		
 		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 		 if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), logedinUserObj.getId(), customTraitObj.getTraitgivenfor())
 				.size() == 0) {
@@ -69,6 +66,14 @@ public class TraitsController {
 				userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
 				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
+				if(logedinUserObj.getId()!=userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()), "c25bfc6a4ef111e89c2dfa7ae01bbebc")  )
+				{
+					userTraitObj.setIswaitingforapproval(1);
+				}
+				else
+				{
+					userTraitObj.setIswaitingforapproval(0);
+				}
 			} else {
 				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
 				returnCustomTraitObj.setTraittype("neutral");
@@ -76,7 +81,14 @@ public class TraitsController {
 				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
 				userTraitObj.setTraitgivenby(logedinUserObj.getId());
 				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
-				
+				if(logedinUserObj.getId()!=userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()), "c25bfc6a4ef111e89c2dfa7ae01bbebc")  )
+				{
+					userTraitObj.setIswaitingforapproval(1);
+				}
+				else
+				{
+					userTraitObj.setIswaitingforapproval(0);
+				}
 			}
 			userTraitsRepository.saveUserTraits(userTraitObj);
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -144,19 +156,52 @@ public class TraitsController {
 
 	}
 
-	@RequestMapping(value = "/updateusertraitstatus/",
+	@RequestMapping(value = "/deleteTrait/",
 					method = RequestMethod.POST, 
 					produces = "application/json",
 					consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> updateusertraitstatus(@RequestBody List<UserTrait> listOfUserTrait) {
+	public Map<String, String> deleteTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		for (UserTrait traitobj : listOfUserTrait) {
-			userTraitsRepository.updateUserTrait(traitobj);
-		}
+		userTraitsRepository.deleteTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 
-	 
+	@RequestMapping(value = "/hideTrait/",
+			method = RequestMethod.POST, 
+			produces = "application/json",
+			consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> hideTrait(@RequestBody UserTrait userTrait) {
+	Map<String, String> returnValue = new HashMap<String, String>();
+	userTraitsRepository.hideTrait(userTrait);
+	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+	return returnValue;
+	}
+	
+	@RequestMapping(value = "/unhideTrait/",
+			method = RequestMethod.POST, 
+			produces = "application/json",
+			consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> unHideTrait(@RequestBody UserTrait userTrait) {
+	Map<String, String> returnValue = new HashMap<String, String>();
+	userTraitsRepository.unHideTrait(userTrait);
+	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+	return returnValue;
+	}
+	
+	@RequestMapping(value = "/approvecustomtrait/",
+			method = RequestMethod.POST, 
+			produces = "application/json",
+			consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> approveCustomTrait(@RequestBody UserTrait userTrait) {
+	Map<String, String> returnValue = new HashMap<String, String>();
+	userTraitsRepository.approveCustomTrait(userTrait);
+	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+	return returnValue;
+	}
+	
 }

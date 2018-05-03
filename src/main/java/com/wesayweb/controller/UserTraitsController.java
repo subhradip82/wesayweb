@@ -14,15 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
-import com.wesayweb.model.UserOtp;
-import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.repository.UserRepository;
+import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
-import com.wesayweb.response.model.TraitListResponse;
 import com.wesayweb.response.model.UserTraitsResponsePojo;
+import com.wesayweb.util.SettingsUtil;
 
 @RestController
 @RequestMapping("/userTraits")
@@ -33,23 +31,37 @@ public class UserTraitsController {
 
 	@Autowired
 	TraitRepository traitRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
 	
- 
-	@RequestMapping(value = "/getMyTraits/", 
+	@Autowired
+	UserSettingRepository userSettingRepository;
+
+	@RequestMapping(value = "/getMyTraits/",
 					method = RequestMethod.POST, 
 					produces = "application/json", 
 					consumes = "application/json")
 	@ResponseBody
-	public Map<String, List<UserTraitsResponsePojo>> getMyTraits() {
-		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		List<UserTraitsResponsePojo> returnResult = new ArrayList<UserTraitsResponsePojo>();
-		List<Object[]> resultSet = userTraitsRepository.
-				getMyTraits(logedinUserObj.getId());
+	public Map<String, List<UserTraitsResponsePojo>> getMyTraits(
+			@RequestBody(required = false) User traitsgivenforUser) {
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		Long traitsgivenfor = 0L;
+		boolean ismyowntrait = true;
+		try {
+			// Need to check if the user is friend or not
+			traitsgivenfor = traitsgivenforUser.getId();
+			ismyowntrait = false;
+		} catch (Exception e) {
+			traitsgivenfor = logedinUserObj.getId();
+		}
+		if (traitsgivenfor == logedinUserObj.getId()) {
+			ismyowntrait = true;
+		}
+		List<Object[]> resultSet = userTraitsRepository.getMyTraits(traitsgivenfor);
 		Map<String, List<UserTraitsResponsePojo>> listOfTraits = new LinkedHashMap<String, List<UserTraitsResponsePojo>>();
-		 
+		SettingsUtil settingsUtl = new SettingsUtil();
 		List<String> availableCategory = new ArrayList<String>();
 		availableCategory.add("negative");
 		availableCategory.add("neutral");
@@ -57,27 +69,35 @@ public class UserTraitsController {
 		for (String traitName : availableCategory) {
 			List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 			for (Object[] object : resultSet) {
-			if (traitName.trim().equalsIgnoreCase(((String) object[7]).trim())) {
-				
+				if (traitName.trim().equalsIgnoreCase(((String) object[7]).trim())) {
+					UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
+					traitsResponseObj.setTraituniqid((String) object[0]);
+					traitsResponseObj.setTraitname((String) object[1]);
+					traitsResponseObj.setTraitdescripion((String) object[2]);
+					traitsResponseObj.setTraiticonpath((String) object[3]);
+					if (ismyowntrait || settingsUtl.isRuleAppliable(
+							userSettingRepository.getUserSettings(traitsgivenfor),
+							"c25bf9724ef111e89c2dfa7ae01bbebc")) {
+						traitsResponseObj.setPositive(((BigInteger) object[4]).intValue());
+						traitsResponseObj.setNegetive(((BigInteger) object[5]).intValue());
+						traitsResponseObj.setNutral(((BigInteger) object[6]).intValue());
+					} else {
+						traitsResponseObj.setPositive(9999999);
+						traitsResponseObj.setNegetive(9999999);
+						traitsResponseObj.setNutral(9999999);
+					}
 
-				UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
-				traitsResponseObj.setTraituniqid((String) object[0]); 
-				traitsResponseObj.setTraitname((String) object[1]);
-				traitsResponseObj.setTraitdescripion((String) object[2]);
-				traitsResponseObj.setTraiticonpath((String) object[3]);
-				traitsResponseObj.setPositive(((BigInteger) object[4]).intValue());
-				traitsResponseObj.setNegetive(((BigInteger) object[5]).intValue());
-				traitsResponseObj.setNutral(((BigInteger) object[6]).intValue());
-				traitsResponseObj.setIsannonymous(((BigInteger) object[6]).intValue());
-				traitsResponseObj.setTraittype((String) object[7]); 
-				responseList.add(traitsResponseObj);
-			}
-			
+					traitsResponseObj.setTraittype((String) object[7]);
+					responseList.add(traitsResponseObj);
+				}
+
 			}
 			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
 		}
-		
-		return listOfTraits; 
+
+		return listOfTraits;
 	}
 
+	
+	
 }

@@ -1,0 +1,5 @@
+categoryname,categorydescription,allowedmultiplevalue,default_value,uniquevalue
+Only allow my contacts to give me feedback,,0,1,c25bf7064ef111e89c2dfa7ae01bbebc
+Show my traits without showing counts,,0,0,c25bf9724ef111e89c2dfa7ae01bbebc
+Ask me before publishing a new trait on my page,,0,0,c25bfc6a4ef111e89c2dfa7ae01bbebc
+Control who can see my page,,1,1,c25bfdb44ef111e89c2dfa7ae01bbebc

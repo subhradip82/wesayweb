@@ -40,5 +40,10 @@ public interface UserTraitCustomRepository {
 	List<Object[]> getMyTraits(@Param("traitgivenfor") long traitgivenfor);
 	void saveUserTraits(UserTrait userTraitObj);
 	void updateUserTrait(UserTrait userTraitObj);
+	
+	void deleteTrait(UserTrait userTraitObj);
+	void hideTrait(UserTrait userTraitObj);
+	void approveCustomTrait(UserTrait userTraitObj);
+	void unHideTrait(UserTrait userTraitObj);
  
 }

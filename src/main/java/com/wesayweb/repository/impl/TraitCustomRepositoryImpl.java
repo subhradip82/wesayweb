@@ -79,6 +79,12 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 		return null;
 	}
 
+	@Transactional
+	@Override
+	public void removealltraits() {
+		em.createNativeQuery("TRUNCATE trait_master;").executeUpdate();
+	}
+
 	 
 
 }

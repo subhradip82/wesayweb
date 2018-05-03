@@ -28,15 +28,24 @@ public class UserTrait implements Serializable {
 	private Date creationdate = new Date();
 	private Date updationdate;
 
-	@Column(name = "isactive", nullable = false, columnDefinition = "int default 0")
+	@Column(name = "isactive", nullable = false, columnDefinition = "int default 1")
 	private int isactive;
 	private long traitgivenby;
 	private long traitgivenfor;
 	@Column(name = "isannonymous", nullable = false, columnDefinition = "int default 0")
 	private int isannonymous;
-
+	@Column(name = "iswaitingforapproval", nullable = false, columnDefinition = "int default 0")
+    private int iswaitingforapproval;
 	private String traituniqueid;
 	
+	public int getIswaitingforapproval() {
+		return iswaitingforapproval;
+	}
+
+	public void setIswaitingforapproval(int iswaitingforapproval) {
+		this.iswaitingforapproval = iswaitingforapproval;
+	}
+
 	public String getTraituniqueid() {
 		return traituniqueid;
 	}

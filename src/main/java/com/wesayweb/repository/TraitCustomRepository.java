@@ -46,9 +46,7 @@ public interface TraitCustomRepository {
 			name = "definedTraitAlreadyExists")
 
 	public List<Traits> definedTraitAlreadyExists(@Param("traitname") String traitname);
-
-	
-	
 	public CustomTraits saveCustomTrait(CustomTraits customTrait);
 	boolean removeTrait(Traits traitObj);
+	void removealltraits();
 }

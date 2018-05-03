@@ -45,6 +45,7 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		updateCriteria.set(userObj.get("ishidden"), userTraitObj.getIshidden());
 		updateCriteria.set(userObj.get("isactive"), userTraitObj.getIsactive());
 		updateCriteria.set(userObj.get("isannonymous"), userTraitObj.getIsannonymous());
+		updateCriteria.set(userObj.get("iswaitingforapproval"), userTraitObj.getIswaitingforapproval());
 		updateCriteria.set(userObj.get("updationdate"), new Date());
 		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
 		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
@@ -52,4 +53,62 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 
 	}
 
+	@Override
+	@Transactional
+	public void approveCustomTrait(UserTrait userTraitObj) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("iswaitingforapproval"), 0);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
+		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
+		em.createQuery(updateCriteria).executeUpdate();
+
+	}
+	
+	@Override
+	@Transactional
+	public void hideTrait(UserTrait userTraitObj) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("ishidden"),1);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
+		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
+		em.createQuery(updateCriteria).executeUpdate();
+
+	}
+	@Override
+	@Transactional
+	public void unHideTrait(UserTrait userTraitObj) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("ishidden"),0);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
+		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
+		em.createQuery(updateCriteria).executeUpdate();
+
+	}
+	
+	@Override
+	@Transactional
+	public void deleteTrait(UserTrait userTraitObj) {
+
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("isactive"), 0);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
+		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
+		em.createQuery(updateCriteria).executeUpdate();
+		
+	}
+	 
 }
