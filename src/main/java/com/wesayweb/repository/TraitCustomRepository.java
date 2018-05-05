@@ -13,6 +13,7 @@ import com.wesayweb.model.Traits;
 public interface TraitCustomRepository {
 
 	public List<Traits> getActiveTraits(int traittype, int limit);
+	public List<Traits> getActiveTraits(int traittype, int limit, int isdefault);
 
 	
 	@Query(value = "select  a.traituniqueid from user_trait a \r\n" + 
@@ -23,12 +24,13 @@ public interface TraitCustomRepository {
 			+ "select  a.traituniqueid from user_trait a \r\n" + 
 			"JOIN  trait_master b ON a.traituniqueid = b.traituniqueid "
 			+ " WHERE a.traitgivenby = :traitgivenby and a.traitgivenfor = :traitgivenfor and "
-			+ " lower(trim(b.traitname))= :traitname "
+			+ " lower(trim(b.traitname))= :traitname  "
 			+ "", nativeQuery = true, name = "traitAlreadyExists")
 
 	public List<String> traitAlreadyExists(@Param("traitname") String traitname,
 						@Param("traitgivenby") long traitgivenby,
-						@Param("traitgivenfor") long traitgivenfor);
+						@Param("traitgivenfor") long traitgivenfor
+			);
 
 	
 	@Query(value = "select  a.traituniqueid from user_trait a \r\n" + 

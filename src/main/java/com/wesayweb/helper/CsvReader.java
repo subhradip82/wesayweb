@@ -33,8 +33,10 @@ public class CsvReader {
 			br = new BufferedReader(new FileReader(file));
 			while ((line = br.readLine()) != null) {
 				if (linecounter > 0) {
+					
 					Traits traitObj = new Traits();
 					String[] trait = line.split(cvsSplitBy);
+					traitObj.setIsdefault(Integer.valueOf(trait[3]));
 					traitObj.setTraitname(trait[0].trim());
 					if (trait[1].trim().equalsIgnoreCase("y")) {
 						traitObj.setActivestatus(1);
@@ -46,7 +48,10 @@ public class CsvReader {
 					traitObj.setTraitidentifier(10000);
 					traitObj.setApproveddate(new Date());
 					traitObj.setTraituniqueid(WesayStringUtil.generateRandomNumber());
+					
+					
 					returnList.add(traitObj);
+					
 				}
 				linecounter++;
 			}

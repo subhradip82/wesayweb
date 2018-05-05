@@ -46,6 +46,17 @@ public class Traits implements Serializable {
 	@Column(name = "traitidentifier", nullable = false, columnDefinition = "int default 100")
 	private int traitidentifier;
 	private String traituniqueid;
+	@Column(name = "isdefault", nullable = false, columnDefinition = "int default 0")
+	private int isdefault;
+	
+	
+	public int getIsdefault() {
+		return isdefault;
+	}
+
+	public void setIsdefault(int isdefault) {
+		this.isdefault = isdefault;
+	}
 
 	public String getTraittype() {
 		return traittype;

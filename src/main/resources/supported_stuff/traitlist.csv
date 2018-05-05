@@ -1,592 +1,603 @@
-trait_name,is_active,type
-Abrasive,Y,Negative
-Agonizing,Y,Negative
-Aimless,Y,Negative
-Aloof,Y,Negative
-Angry,Y,Negative
-Anxious,Y,Negative
-Arbitrary,Y,Negative
-Argumentative,Y,Negative
-Arrogant,Y,Negative
-Artificial,Y,Negative
-Asocial,Y,Negative
-Assertive,Y,Negative
-Astigmatic,Y,Negative
-Barbaric,Y,Negative
-Bewildered,Y,Negative
-Bizarre,Y,Negative
-Blunt,Y,Negative
-Biosterous,Y,Negative
-Brutal,Y,Negative
-Calculating,Y,Negative
-Callous,Y,Negative
-Careless,Y,Negative
-Cautious,Y,Negative
-Childish,Y,Negative
-Clumsy,Y,Negative
-Coarse,Y,Negative
-Cold,Y,Negative
-Colorless,Y,Negative
-Complacent,Y,Negative
-Complaining,Y,Negative
-Compulsive,Y,Negative
-Conceited,Y,Negative
-Conformist,Y,Negative
-Confused,Y,Negative
-Conventional,Y,Negative
-Cowardly,Y,Negative
-Crafty,Y,Negative
-Crass,Y,Negative
-Crazy,Y,Negative
-Criminal,Y,Negative
-Critical,Y,Negative
-Crude,Y,Negative
-Cruel,Y,Negative
-Cynical,Y,Negative
-Deceitful,Y,Negative
-Delicate,Y,Negative
-Demanding,Y,Negative
-Dependent,Y,Negative
-Desperate,Y,Negative
-Destructive,Y,Negative
-Devious,Y,Negative
-Difficult,Y,Negative
-Dirty,Y,Negative
-Discontented,Y,Negative
-Discouraging,Y,Negative
-Discourteous,Y,Negative
-Dishonest,Y,Negative
-Disloyal,Y,Negative
-Disobedient,Y,Negative
-Disorderly,Y,Negative
-Disorganized,Y,Negative
-Disrespectful,Y,Negative
-Disruptive,Y,Negative
-Disturbing,Y,Negative
-Dogmatic,Y,Negative
-Dominating,Y,Negative
-Dull,Y,Negative
-Easily Discouraged,Y,Negative
-Egocentric,Y,Negative
-Envious,Y,Negative
-Erratic,Y,Negative
-Escapist,Y,Negative
-Excitable,Y,Negative
-Extravagant,Y,Negative
-Extreme,Y,Negative
-Faithless,Y,Negative
-False,Y,Negative
-Fanatical,Y,Negative
-Fanciful,Y,Negative
-Fatalistic,Y,Negative
-Fearful,Y,Negative
-Fickle,Y,Negative
-Fiery,Y,Negative
-Fixed Mindset,Y,Negative
-Flamboyant,Y,Negative
-Foolish,Y,Negative
-Forgetful,Y,Negative
-Fraudulent,Y,Negative
-Frightening,Y,Negative
-Frivolous,Y,Negative
-Gloomy,Y,Negative
-Grand,Y,Negative
-Greedy,Y,Negative
-Grim,Y,Negative
-Gullible,Y,Negative
-Hateful,Y,Negative
-Haughty,Y,Negative
-Hedonistic,Y,Negative
-Hesitant,Y,Negative
-High-handed,Y,Negative
-Hostile,Y,Negative
-Ignorant,Y,Negative
-Imitative,Y,Negative
-Impatient,Y,Negative
-Impractical,Y,Negative
-Impulsive,Y,Negative
-Inconsiderate,Y,Negative
-Indecisive,Y,Negative
-Indulgent,Y,Negative
-Inert,Y,Negative
-Inhibited,Y,Negative
-Insecure,Y,Negative
-Insensitive,Y,Negative
-Insincere,Y,Negative
-Insulting,Y,Negative
-Intolerant,Y,Negative
-Irrational,Y,Negative
-Irresponsible,Y,Negative
-Irritable,Y,Negative
-Lazy,Y,Negative
-Loquacious,Y,Negative
-Malicious,Y,Negative
-Mannered,Y,Negative
-Mannerless,Y,Negative
-Mechanical,Y,Negative
-Meddlesome,Y,Negative
-Melancholic,Y,Negative
-Messy,Y,Negative
-Miserable,Y,Negative
-Miserly,Y,Negative
-Misguided,Y,Negative
-Mistaken,Y,Negative
-Money-minded,Y,Negative
-Monstrous,Y,Negative
-Moody,Y,Negative
-Morbid,Y,Negative
-Muddle-headed,Y,Negative
-Naive,Y,Negative
-Narcissistic,Y,Negative
-Narrow,Y,Negative
-Narrow-minded,Y,Negative
-Negativistic,Y,Negative
-Neglectful,Y,Negative
-Neurotic,Y,Negative
-Obnoxious,Y,Negative
-Obsessive,Y,Negative
-Obvious,Y,Negative
-Odd,Y,Negative
-Offhand,Y,Negative
-One-dimensional,Y,Negative
-One-sided,Y,Negative
-Opinionated,Y,Negative
-Opportunistic,Y,Negative
-Oppressed,Y,Negative
-Outrageous,Y,Negative
-Overimaginative,Y,Negative
-Paranoid,Y,Negative
-Passive,Y,Negative
-Pedantic,Y,Negative
-Perverse,Y,Negative
-Petty,Y,Negative
-Probing,Y,Negative
-Pompous,Y,Negative
-Possessive,Y,Negative
-Power-hungry,Y,Negative
-Prejudiced,Y,Negative
-Presumptuous,Y,Negative
-Pretentious,Y,Negative
-Procrastinating,Y,Negative
-Provocative,Y,Negative
-Puritanical,Y,Negative
-Quirky,Y,Negative
-Reactionary,Y,Negative
-Reactive,Y,Negative
-Regimental,Y,Negative
-Regretful,Y,Negative
-Repentant,Y,Negative
-Repressed,Y,Negative
-Resentful,Y,Negative
-Ridiculous,Y,Negative
-Rigid,Y,Negative
-Ritualistic,Y,Negative
-Rowdy,Y,Negative
-Ruined,Y,Negative
-Sadistic,Y,Negative
-Sanctimonious,Y,Negative
-Scheming,Y,Negative
-Scornful,Y,Negative
-Secretive,Y,Negative
-Sedentary,Y,Negative
-Selfish,Y,Negative
-Self-centered,Y,Negative
-Shallow,Y,Negative
-Shortsighted,Y,Negative
-Shy,Y,Negative
-Silly,Y,Negative
-Single-minded,Y,Negative
-Sloppy,Y,Negative
-Slow,Y,Negative
-Sly,Y,Negative
-Small-thinking,Y,Negative
-Softheaded,Y,Negative
-Sordid,Y,Negative
-Steely,Y,Negative
-Stiff,Y,Negative
-Strong-willed,Y,Negative
-Stupid,Y,Negative
-Submissive,Y,Negative
-Superficial,Y,Negative
-Superstitious,Y,Negative
-Suspicious,Y,Negative
-Tactless,Y,Negative
-Tasteless,Y,Negative
-Tense,Y,Negative
-Thievish,Y,Negative
-Thoughtless,Y,Negative
-Timid,Y,Negative
-Transparent,Y,Negative
-Treacherous,Y,Negative
-Trendy,Y,Negative
-Troublesome,Y,Negative
-Unappreciative,Y,Negative
-Uncaring,Y,Negative
-Uncharitable,Y,Negative
-Unconvincing,Y,Negative
-Uncooperative,Y,Negative
-Uncreative,Y,Negative
-Uncritical,Y,Negative
-Unctuous,Y,Negative
-Undisciplined,Y,Negative
-Unfriendly,Y,Negative
-Ungrateful,Y,Negative
-Unhealthy,Y,Negative
-Unimaginative,Y,Negative
-Unimpressive,Y,Negative
-Unlovable,Y,Negative
-Unpolished,Y,Negative
-Unprincipled,Y,Negative
-Unrealistic,Y,Negative
-Unreflective,Y,Negative
-Unreliable,Y,Negative
-Unrestrained,Y,Negative
-Unself-critical,Y,Negative
-Unstable,Y,Negative
-Vacuous,Y,Negative
-Vague,Y,Negative
-Venal,Y,Negative
-Venomous,Y,Negative
-Vindictive,Y,Negative
-Vulnerable,Y,Negative
-Weak,Y,Negative
-Weak-willed,Y,Negative
-Well-meaning,Y,Negative
-Willful,Y,Negative
-Wishful,Y,Negative
-Zany,Y,Negative
-Active,Y,Positive
-Adaptable,Y,Positive
-Admirable,Y,Positive
-Adventurous,Y,Positive
-Agreeable,Y,Positive
-Amiable,Y,Positive
-Appreciative,Y,Positive
-Articulate,Y,Positive
-Athletic,Y,Positive
-Attractive,Y,Positive
-Balanced,Y,Positive
-Benevolent,Y,Positive
-Brave,Y,Positive
-Brilliant,Y,Positive
-Calm,Y,Positive
-Capable,Y,Positive
-Captivating,Y,Positive
-Caring,Y,Positive
-Challenging,Y,Positive
-Charismatic,Y,Positive
-Charming,Y,Positive
-Cheerful,Y,Positive
-Clean,Y,Positive
-Clear-headed,Y,Positive
-Clever,Y,Positive
-Colorful,Y,Positive
-Compassionate,Y,Positive
-Confident,Y,Positive
-Conscientious,Y,Positive
-Considerate,Y,Positive
-Constant,Y,Positive
-Contemplative,Y,Positive
-Cooperative,Y,Positive
-Courageous,Y,Positive
-Courteous,Y,Positive
-Creative,Y,Positive
-Cultured,Y,Positive
-Curious,Y,Positive
-Daring,Y,Positive
-Debonair,Y,Positive
-Decent,Y,Positive
-Decisive,Y,Positive
-Dedicated,Y,Positive
-Deep,Y,Positive
-Dignified,Y,Positive
-Directed,Y,Positive
-Disciplined,Y,Positive
-Discreet,Y,Positive
-Dramatic,Y,Positive
-Dutiful,Y,Positive
-Dynamic,Y,Positive
-Ebullient,Y,Positive
-Educated,Y,Positive
-Efficient,Y,Positive
-Elegant,Y,Positive
-Eloquent,Y,Positive
-Empathetic,Y,Positive
-Energetic,Y,Positive
-Enthusiastic,Y,Positive
-Esthetic,Y,Positive
-Exciting,Y,Positive
-Extraordinary,Y,Positive
-Fair,Y,Positive
-Faithful,Y,Positive
-Farsighted,Y,Positive
-Firm,Y,Positive
-Flexible,Y,Positive
-Focused,Y,Positive
-Forecful,Y,Positive
-Forgiving,Y,Positive
-Forthright,Y,Positive
-Freethinking,Y,Positive
-Friendly,Y,Positive
-Fun-loving,Y,Positive
-Gallant,Y,Positive
-Generous,Y,Positive
-Gentle,Y,Positive
-Genuine,Y,Positive
-Good-natured,Y,Positive
-Gracious,Y,Positive
-Hardworking,Y,Positive
-Healthy,Y,Positive
-Hearty,Y,Positive
-Helpful,Y,Positive
-Heroic,Y,Positive
-High-handed,Y,Positive
-Honest,Y,Positive
-Honorable,Y,Positive
-Humble,Y,Positive
-Humorous,Y,Positive
-Idealistic,Y,Positive
-Imaginative,Y,Positive
-Impressive,Y,Positive
-Incisive,Y,Positive
-Incorruptible,Y,Positive
-Independent,Y,Positive
-Individualistic,Y,Positive
-Innovative,Y,Positive
-Inoffensive,Y,Positive
-Insightful,Y,Positive
-Insouciant,Y,Positive
-Intelligent,Y,Positive
-Intuitive,Y,Positive
-Kind,Y,Positive
-Knowledgeable,Y,Positive
-Leader,Y,Positive
-Leisurely,Y,Positive
-Liberal,Y,Positive
-Logical,Y,Positive
-Lovable,Y,Positive
-Loyal,Y,Positive
-Lyrical,Y,Positive
-Magnanimous,Y,Positive
-Many-sided,Y,Positive
-Masculine  (Manly),Y,Positive
-Mature,Y,Positive
-Methodical,Y,Positive
-Maticulous,Y,Positive
-Moderate,Y,Positive
-Modest,Y,Positive
-Multi-talented,Y,Positive
-Neat,Y,Positive
-Nonauthoritarian,Y,Positive
-Objective,Y,Positive
-Observant,Y,Positive
-Open,Y,Positive
-Optimistic,Y,Positive
-Orderly,Y,Positive
-Organized,Y,Positive
-Original,Y,Positive
-Painstaking,Y,Positive
-Passionate,Y,Positive
-Patient,Y,Positive
-Patriotic,Y,Positive
-Peaceful,Y,Positive
-Perceptive,Y,Positive
-Perfectionist,Y,Positive
-Personable,Y,Positive
-Persuasive,Y,Positive
-Planful,Y,Positive
-Playful,Y,Positive
-Polished,Y,Positive
-Popular,Y,Positive
-Practical,Y,Positive
-Precise,Y,Positive
-Principled,Y,Positive
-Profound,Y,Positive
-Protean,Y,Positive
-Protective,Y,Positive
-Providential,Y,Positive
-Prudent,Y,Positive
-Punctual,Y,Positive
-Purposeful,Y,Positive
-Rational,Y,Positive
-Realistic,Y,Positive
-Reflective,Y,Positive
-Relaxed,Y,Positive
-Reliable,Y,Positive
-Resourceful,Y,Positive
-Respectful,Y,Positive
-Responsible,Y,Positive
-Responsive,Y,Positive
-Reverential,Y,Positive
-Romantic,Y,Positive
-Rustic,Y,Positive
-Sagely,Y,Positive
-Sane,Y,Positive
-Scholarly,Y,Positive
-Scrupulous,Y,Positive
-Secure,Y,Positive
-Selfless,Y,Positive
-Self-critical,Y,Positive
-Self-defacing,Y,Positive
-Self-denying,Y,Positive
-Self-reliant,Y,Positive
-Self-sufficent,Y,Positive
-Sensitive,Y,Positive
-Sentimental,Y,Positive
-Serious,Y,Positive
-Sexy,Y,Positive
-Shrewd,Y,Positive
-Simple,Y,Positive
-Skillful,Y,Positive
-Sober,Y,Positive
-Sociable,Y,Positive
-Solid,Y,Positive
-Sophisticated,Y,Positive
-Spontaneous,Y,Positive
-Sporting,Y,Positive
-Stable,Y,Positive
-Steadfast,Y,Positive
-Steady,Y,Positive
-Stoic,Y,Positive
-Strong,Y,Positive
-Studious,Y,Positive
-Suave,Y,Positive
-Subtle,Y,Positive
-Sweet,Y,Positive
-Sympathetic,Y,Positive
-Systematic,Y,Positive
-Tasteful,Y,Positive
-Teacherly,Y,Positive
-Thorough,Y,Positive
-Tidy,Y,Positive
-Tolerant,Y,Positive
-Tractable,Y,Positive
-Trusting,Y,Positive
-Uncomplaining,Y,Positive
-Understanding,Y,Positive
-Undogmatic,Y,Positive
-Unfoolable,Y,Positive
-Upright,Y,Positive
-Urbane,Y,Positive
-Venturesome,Y,Positive
-Vivacious,Y,Positive
-Warm,Y,Positive
-Well-bred,Y,Positive
-Well-read,Y,Positive
-Well-rounded,Y,Positive
-Winning,Y,Positive
-Wise,Y,Positive
-Witty,Y,Positive
-Youthful,Y,Positive
- Absentminded,Y,Neutral
- Aggressive,Y,Neutral
- Ambitious,Y,Neutral
- Amusing,Y,Neutral
- Artful,Y,Neutral
- Ascetic,Y,Neutral
- Authoritarian,Y,Neutral
- Big-thinking,Y,Neutral
- Boyish,Y,Neutral
- Breezy,Y,Neutral
- Businesslike,Y,Neutral
- Busy,Y,Neutral
- Casual,Y,Neutral
- Crebral,Y,Neutral
- Chummy,Y,Neutral
- Circumspect,Y,Neutral
- Competitive,Y,Neutral
- Complex,Y,Neutral
- Confidential,Y,Neutral
- Conservative,Y,Neutral
- Contradictory,Y,Neutral
- Crisp,Y,Neutral
- Cute,Y,Neutral
- Deceptive,Y,Neutral
- Determined,Y,Neutral
- Dominating,Y,Neutral
- Dreamy,Y,Neutral
- Driving,Y,Neutral
- Droll,Y,Neutral
- Dry,Y,Neutral
- Earthy,Y,Neutral
- Effeminate,Y,Neutral
- Emotional,Y,Neutral
- Enigmatic,Y,Neutral
- Experimental,Y,Neutral
- Familial,Y,Neutral
- Folksy,Y,Neutral
- Formal,Y,Neutral
- Freewheeling,Y,Neutral
- Frugal,Y,Neutral
- Glamorous,Y,Neutral
- Guileless,Y,Neutral
- High-spirited,Y,Neutral
- Huried,Y,Neutral
- Hypnotic,Y,Neutral
- Iconoclastic,Y,Neutral
- Idiosyncratic,Y,Neutral
- Impassive,Y,Neutral
- Impersonal,Y,Neutral
- Impressionable,Y,Neutral
- Intense,Y,Neutral
- Invisible,Y,Neutral
- Irreligious,Y,Neutral
- Irreverent,Y,Neutral
- Maternal,Y,Neutral
- Mellow,Y,Neutral
- Modern,Y,Neutral
- Moralistic,Y,Neutral
- Mystical,Y,Neutral
- Neutral,Y,Neutral
- Noncommittal,Y,Neutral
- Noncompetitive,Y,Neutral
- Obedient,Y,Neutral
- Old-fashined,Y,Neutral
- Ordinary,Y,Neutral
- Outspoken,Y,Neutral
- Paternalistic,Y,Neutral
- Physical,Y,Neutral
- Placid,Y,Neutral
- Political,Y,Neutral
- Predictable,Y,Neutral
- Preoccupied,Y,Neutral
- Private,Y,Neutral
- Progressive,Y,Neutral
- Proud,Y,Neutral
- Pure,Y,Neutral
- Questioning,Y,Neutral
- Quiet,Y,Neutral
- Religious,Y,Neutral
- Reserved,Y,Neutral
- Restrained,Y,Neutral
- Retiring,Y,Neutral
- Sarcastic,Y,Neutral
- Self-conscious,Y,Neutral
- Sensual,Y,Neutral
- Skeptical,Y,Neutral
- Smooth,Y,Neutral
- Soft,Y,Neutral
- Solemn,Y,Neutral
- Solitary,Y,Neutral
- Stern,Y,Neutral
- Stoiid,Y,Neutral
- Strict,Y,Neutral
- Stubborn,Y,Neutral
- Stylish,Y,Neutral
- Subjective,Y,Neutral
- Surprising,Y,Neutral
- Soft,Y,Neutral
- Tough,Y,Neutral
- Unaggressive,Y,Neutral
- Unambitious,Y,Neutral
- Unceremonious,Y,Neutral
- Unchanging,Y,Neutral
- Undemanding,Y,Neutral
- Unfathomable,Y,Neutral
- Unhurried,Y,Neutral
- Uninhibited,Y,Neutral
- Unpatriotic,Y,Neutral
- Unpredicatable,Y,Neutral
- Unreligious,Y,Neutral
- Unsentimental,Y,Neutral
- Whimsical,Y,Neutral
+trait_name,is_active,type,isdefault
+Abrasive,Y,Negative,0
+Agonizing,Y,Negative,0
+Aimless,Y,Negative,0
+Aloof,Y,Negative,0
+Angry,Y,Negative,0
+Anxious,Y,Negative,0
+Arbitrary,Y,Negative,0
+Argumentative,Y,Negative,0
+Arrogant,Y,Negative,0
+Artificial,Y,Negative,0
+Asocial,Y,Negative,0
+Assertive,Y,Negative,0
+Astigmatic,Y,Negative,0
+Barbaric,Y,Negative,0
+Bewildered,Y,Negative,0
+Bizarre,Y,Negative,0
+Blunt,Y,Negative,0
+Biosterous,Y,Negative,0
+Brutal,Y,Negative,0
+Calculating,Y,Negative,0
+Callous,Y,Negative,0
+Careless,Y,Negative,0
+Cautious,Y,Negative,0
+Childish,Y,Negative,0
+Clumsy,Y,Negative,0
+Coarse,Y,Negative,0
+Cold,Y,Negative,0
+Colorless,Y,Negative,0
+Complacent,Y,Negative,0
+Complaining,Y,Negative,0
+Compulsive,Y,Negative,0
+Conceited,Y,Negative,0
+Conformist,Y,Negative,0
+Confused,Y,Negative,0
+Conventional,Y,Negative,0
+Cowardly,Y,Negative,0
+Crafty,Y,Negative,0
+Crass,Y,Negative,0
+Crazy,Y,Negative,0
+Criminal,Y,Negative,0
+Critical,Y,Negative,0
+Crude,Y,Negative,0
+Cruel,Y,Negative,0
+Cynical,Y,Negative,0
+Deceitful,Y,Negative,0
+Delicate,Y,Negative,0
+Demanding,Y,Negative,0
+Dependent,Y,Negative,0
+Desperate,Y,Negative,0
+Destructive,Y,Negative,0
+Devious,Y,Negative,0
+Difficult,Y,Negative,0
+Dirty,Y,Negative,0
+Discontented,Y,Negative,0
+Discouraging,Y,Negative,0
+Discourteous,Y,Negative,0
+Dishonest,Y,Negative,0
+Disloyal,Y,Negative,0
+Disobedient,Y,Negative,0
+Disorderly,Y,Negative,0
+Disorganized,Y,Negative,0
+Disrespectful,Y,Negative,0
+Disruptive,Y,Negative,0
+Disturbing,Y,Negative,0
+Dogmatic,Y,Negative,0
+Dominating,Y,Negative,0
+Dull,Y,Negative,0
+Easily Discouraged,Y,Negative,0
+Egocentric,Y,Negative,0
+Envious,Y,Negative,0
+Erratic,Y,Negative,0
+Escapist,Y,Negative,0
+Excitable,Y,Negative,0
+Extravagant,Y,Negative,0
+Extreme,Y,Negative,0
+Faithless,Y,Negative,0
+False,Y,Negative,0
+Fanatical,Y,Negative,0
+Fanciful,Y,Negative,0
+Fatalistic,Y,Negative,0
+Fearful,Y,Negative,0
+Fickle,Y,Negative,0
+Fiery,Y,Negative,0
+Fixed Mindset,Y,Negative,0
+Flamboyant,Y,Negative,0
+Foolish,Y,Negative,0
+Forgetful,Y,Negative,0
+Fraudulent,Y,Negative,0
+Frightening,Y,Negative,0
+Frivolous,Y,Negative,0
+Gloomy,Y,Negative,0
+Grand,Y,Negative,0
+Greedy,Y,Negative,0
+Grim,Y,Negative,0
+Gullible,Y,Negative,0
+Hateful,Y,Negative,0
+Haughty,Y,Negative,0
+Hedonistic,Y,Negative,0
+Hesitant,Y,Negative,0
+High-handed,Y,Negative,0
+Hostile,Y,Negative,0
+Ignorant,Y,Negative,0
+Imitative,Y,Negative,0
+Impatient,Y,Negative,0
+Impractical,Y,Negative,0
+Impulsive,Y,Negative,0
+Inconsiderate,Y,Negative,0
+Indecisive,Y,Negative,0
+Indulgent,Y,Negative,0
+Inert,Y,Negative,0
+Inhibited,Y,Negative,0
+Insecure,Y,Negative,0
+Insensitive,Y,Negative,0
+Insincere,Y,Negative,0
+Insulting,Y,Negative,0
+Intolerant,Y,Negative,0
+Irrational,Y,Negative,0
+Irresponsible,Y,Negative,0
+Irritable,Y,Negative,0
+Lazy,Y,Negative,0
+Loquacious,Y,Negative,0
+Malicious,Y,Negative,0
+Mannered,Y,Negative,0
+Mannerless,Y,Negative,0
+Mechanical,Y,Negative,0
+Meddlesome,Y,Negative,0
+Melancholic,Y,Negative,0
+Messy,Y,Negative,0
+Miserable,Y,Negative,0
+Miserly,Y,Negative,0
+Misguided,Y,Negative,0
+Mistaken,Y,Negative,0
+Money-minded,Y,Negative,0
+Monstrous,Y,Negative,0
+Moody,Y,Negative,0
+Morbid,Y,Negative,0
+Muddle-headed,Y,Negative,0
+Naive,Y,Negative,0
+Narcissistic,Y,Negative,0
+Narrow,Y,Negative,0
+Narrow-minded,Y,Negative,0
+Negativistic,Y,Negative,0
+Neglectful,Y,Negative,0
+Neurotic,Y,Negative,0
+Obnoxious,Y,Negative,0
+Obsessive,Y,Negative,0
+Obvious,Y,Negative,0
+Odd,Y,Negative,0
+Offhand,Y,Negative,0
+One-dimensional,Y,Negative,0
+One-sided,Y,Negative,0
+Opinionated,Y,Negative,0
+Opportunistic,Y,Negative,0
+Oppressed,Y,Negative,0
+Outrageous,Y,Negative,0
+Overimaginative,Y,Negative,0
+Paranoid,Y,Negative,0
+Passive,Y,Negative,0
+Pedantic,Y,Negative,0
+Perverse,Y,Negative,0
+Petty,Y,Negative,0
+Probing,Y,Negative,0
+Pompous,Y,Negative,0
+Possessive,Y,Negative,0
+Power-hungry,Y,Negative,0
+Prejudiced,Y,Negative,0
+Presumptuous,Y,Negative,0
+Pretentious,Y,Negative,0
+Procrastinating,Y,Negative,0
+Provocative,Y,Negative,0
+Puritanical,Y,Negative,0
+Quirky,Y,Negative,0
+Reactionary,Y,Negative,0
+Reactive,Y,Negative,0
+Regimental,Y,Negative,0
+Regretful,Y,Negative,0
+Repentant,Y,Negative,0
+Repressed,Y,Negative,0
+Resentful,Y,Negative,0
+Ridiculous,Y,Negative,0
+Rigid,Y,Negative,0
+Ritualistic,Y,Negative,0
+Rowdy,Y,Negative,0
+Ruined,Y,Negative,0
+Sadistic,Y,Negative,0
+Sanctimonious,Y,Negative,0
+Scheming,Y,Negative,0
+Scornful,Y,Negative,0
+Secretive,Y,Negative,0
+Sedentary,Y,Negative,0
+Selfish,Y,Negative,0
+Self-centered,Y,Negative,0
+Shallow,Y,Negative,0
+Shortsighted,Y,Negative,0
+Shy,Y,Negative,0
+Silly,Y,Negative,0
+Single-minded,Y,Negative,0
+Sloppy,Y,Negative,0
+Slow,Y,Negative,0
+Sly,Y,Negative,0
+Small-thinking,Y,Negative,0
+Softheaded,Y,Negative,0
+Sordid,Y,Negative,0
+Steely,Y,Negative,0
+Stiff,Y,Negative,0
+Strong-willed,Y,Negative,0
+Stupid,Y,Negative,0
+Submissive,Y,Negative,0
+Superficial,Y,Negative,0
+Superstitious,Y,Negative,0
+Suspicious,Y,Negative,0
+Tactless,Y,Negative,0
+Tasteless,Y,Negative,0
+Tense,Y,Negative,0
+Thievish,Y,Negative,0
+Thoughtless,Y,Negative,0
+Timid,Y,Negative,0
+Transparent,Y,Negative,0
+Treacherous,Y,Negative,0
+Trendy,Y,Negative,0
+Troublesome,Y,Negative,0
+Unappreciative,Y,Negative,0
+Uncaring,Y,Negative,0
+Uncharitable,Y,Negative,0
+Unconvincing,Y,Negative,0
+Uncooperative,Y,Negative,0
+Uncreative,Y,Negative,0
+Uncritical,Y,Negative,0
+Unctuous,Y,Negative,0
+Undisciplined,Y,Negative,0
+Unfriendly,Y,Negative,0
+Ungrateful,Y,Negative,0
+Unhealthy,Y,Negative,0
+Unimaginative,Y,Negative,0
+Unimpressive,Y,Negative,0
+Unlovable,Y,Negative,0
+Unpolished,Y,Negative,0
+Unprincipled,Y,Negative,0
+Unrealistic,Y,Negative,0
+Unreflective,Y,Negative,0
+Unreliable,Y,Negative,0
+Unrestrained,Y,Negative,0
+Unself-critical,Y,Negative,0
+Unstable,Y,Negative,0
+Vacuous,Y,Negative,0
+Vague,Y,Negative,0
+Venal,Y,Negative,0
+Venomous,Y,Negative,0
+Vindictive,Y,Negative,0
+Vulnerable,Y,Negative,0
+Weak,Y,Negative,0
+Weak-willed,Y,Negative,0
+Well-meaning,Y,Negative,0
+Willful,Y,Negative,0
+Wishful,Y,Negative,0
+Zany,Y,Negative,0
+Active,Y,Positive,0
+Adaptable,Y,Positive,0
+Admirable,Y,Positive,0
+Adventurous,Y,Positive,0
+Agreeable,Y,Positive,0
+Amiable,Y,Positive,0
+Appreciative,Y,Positive,0
+Articulate,Y,Positive,0
+Athletic,Y,Positive,0
+Attractive,Y,Positive,1
+Cool,Y,Positive,1
+Respected,Y,Positive,1
+Strong-headed,Y,Positive,1
+Balanced,Y,Positive,0
+Benevolent,Y,Positive,0
+Brave,Y,Positive,0
+Brilliant,Y,Positive,0
+Calm,Y,Positive,0
+Capable,Y,Positive,0
+Captivating,Y,Positive,0
+Caring,Y,Positive,0
+Challenging,Y,Positive,0
+Charismatic,Y,Positive,0
+Charming,Y,Positive,0
+Cheerful,Y,Positive,0
+Clean,Y,Positive,0
+Clear-headed,Y,Positive,0
+Clever,Y,Positive,0
+Colorful,Y,Positive,0
+Compassionate,Y,Positive,0
+Confident,Y,Positive,1
+Truthful,Y,Positive,1
+Introverted,Y,Positive,1
+Extroverted,Y,Positive,1
+Conscientious,Y,Positive,0
+Considerate,Y,Positive,0
+Constant,Y,Positive,0
+Contemplative,Y,Positive,0
+Cooperative,Y,Positive,0
+Courageous,Y,Positive,0
+Courteous,Y,Positive,0
+Creative,Y,Positive,0
+Cultured,Y,Positive,0
+Curious,Y,Positive,0
+Daring,Y,Positive,0
+Debonair,Y,Positive,0
+Decent,Y,Positive,0
+Decisive,Y,Positive,0
+Dedicated,Y,Positive,0
+Deep,Y,Positive,0
+Dignified,Y,Positive,0
+Directed,Y,Positive,0
+Disciplined,Y,Positive,0
+Discreet,Y,Positive,0
+Dramatic,Y,Positive,0
+Dutiful,Y,Positive,0
+Dynamic,Y,Positive,0
+Ebullient,Y,Positive,0
+Educated,Y,Positive,0
+Efficient,Y,Positive,0
+Elegant,Y,Positive,0
+Eloquent,Y,Positive,0
+Empathetic,Y,Positive,0
+Energetic,Y,Positive,0
+Enthusiastic,Y,Positive,0
+Esthetic,Y,Positive,0
+Exciting,Y,Positive,0
+Extraordinary,Y,Positive,0
+Fair,Y,Positive,0
+Faithful,Y,Positive,0
+Farsighted,Y,Positive,0
+Firm,Y,Positive,0
+Flexible,Y,Positive,0
+Focused,Y,Positive,0
+Forecful,Y,Positive,0
+Forgiving,Y,Positive,0
+Forthright,Y,Positive,0
+Freethinking,Y,Positive,0
+Friendly,Y,Positive,1
+Fun-loving,Y,Positive,0
+Gallant,Y,Positive,0
+Generous,Y,Positive,0
+Gentle,Y,Positive,0
+Genuine,Y,Positive,0
+Good-natured,Y,Positive,0
+Gracious,Y,Positive,0
+Hardworking,Y,Positive,1
+Healthy,Y,Positive,0
+Hearty,Y,Positive,0
+Helpful,Y,Positive,1
+Heroic,Y,Positive,0
+High-handed,Y,Positive,0
+Honest,Y,Positive,0
+Honorable,Y,Positive,0
+Humble,Y,Positive,0
+Talkative,Y,Positive,1
+Humorous,Y,Positive,1
+Idealistic,Y,Positive,0
+Imaginative,Y,Positive,0
+Impressive,Y,Positive,0
+Incisive,Y,Positive,0
+Incorruptible,Y,Positive,0
+Independent,Y,Positive,0
+Individualistic,Y,Positive,0
+Innovative,Y,Positive,0
+Inoffensive,Y,Positive,0
+Insightful,Y,Positive,0
+Insouciant,Y,Positive,0
+Intelligent,Y,Positive,1
+Intuitive,Y,Positive,0
+Kind,Y,Positive,0
+Knowledgeable,Y,Positive,1
+Leader,Y,Positive,0
+Leisurely,Y,Positive,0
+Liberal,Y,Positive,0
+Logical,Y,Positive,0
+Lovable,Y,Positive,0
+Loyal,Y,Positive,0
+Lyrical,Y,Positive,0
+Magnanimous,Y,Positive,0
+Many-sided,Y,Positive,0
+Masculine  (Manly),Y,Positive,0
+Mature,Y,Positive,0
+Methodical,Y,Positive,0
+Maticulous,Y,Positive,0
+Moderate,Y,Positive,0
+Modest,Y,Positive,0
+Multi-talented,Y,Positive,0
+Neat,Y,Positive,0
+Nonauthoritarian,Y,Positive,0
+Objective,Y,Positive,0
+Observant,Y,Positive,0
+Open,Y,Positive,0
+Optimistic,Y,Positive,0
+Orderly,Y,Positive,0
+Organized,Y,Positive,0
+Original,Y,Positive,0
+Painstaking,Y,Positive,0
+Passionate,Y,Positive,0
+Patient,Y,Positive,0
+Patriotic,Y,Positive,0
+Peaceful,Y,Positive,0
+Perceptive,Y,Positive,0
+Perfectionist,Y,Positive,0
+Personable,Y,Positive,0
+Persuasive,Y,Positive,0
+Planful,Y,Positive,0
+Playful,Y,Positive,0
+Polished,Y,Positive,0
+Popular,Y,Positive,0
+Practical,Y,Positive,0
+Precise,Y,Positive,0
+Principled,Y,Positive,0
+Profound,Y,Positive,0
+Protean,Y,Positive,0
+Protective,Y,Positive,0
+Providential,Y,Positive,0
+Prudent,Y,Positive,0
+Punctual,Y,Positive,0
+Purposeful,Y,Positive,0
+Rational,Y,Positive,0
+Realistic,Y,Positive,0
+Reflective,Y,Positive,0
+Relaxed,Y,Positive,0
+Reliable,Y,Positive,0
+Resourceful,Y,Positive,0
+Respectful,Y,Positive,0
+Responsible,Y,Positive,0
+Responsive,Y,Positive,0
+Reverential,Y,Positive,0
+Romantic,Y,Positive,0
+Rustic,Y,Positive,0
+Sagely,Y,Positive,0
+Sane,Y,Positive,0
+Scholarly,Y,Positive,0
+Scrupulous,Y,Positive,0
+Secure,Y,Positive,0
+Selfless,Y,Positive,0
+Self-critical,Y,Positive,0
+Self-defacing,Y,Positive,0
+Self-denying,Y,Positive,0
+Self-reliant,Y,Positive,0
+Self-sufficent,Y,Positive,0
+Sensitive,Y,Positive,0
+Sentimental,Y,Positive,0
+Serious,Y,Positive,0
+Sexy,Y,Positive,0
+Shrewd,Y,Positive,0
+Simple,Y,Positive,0
+Skillful,Y,Positive,0
+Sober,Y,Positive,0
+Sociable,Y,Positive,0
+Solid,Y,Positive,0
+Sophisticated,Y,Positive,0
+Spontaneous,Y,Positive,0
+Sporting,Y,Positive,0
+Stable,Y,Positive,0
+Steadfast,Y,Positive,0
+Steady,Y,Positive,0
+Stoic,Y,Positive,0
+Strong,Y,Positive,0
+Studious,Y,Positive,0
+Suave,Y,Positive,0
+Subtle,Y,Positive,0
+Sweet,Y,Positive,0
+Sympathetic,Y,Positive,0
+Systematic,Y,Positive,0
+Tasteful,Y,Positive,0
+Teacherly,Y,Positive,0
+Thorough,Y,Positive,0
+Tidy,Y,Positive,0
+Tolerant,Y,Positive,0
+Tractable,Y,Positive,0
+Trusting,Y,Positive,0
+Uncomplaining,Y,Positive,0
+Understanding,Y,Positive,0
+Good Looking,Y,Positive,1
+Trustworthy,Y,Positive,1
+Undogmatic,Y,Positive,0
+Unfoolable,Y,Positive,0
+Upright,Y,Positive,0
+Urbane,Y,Positive,0
+Smart,Y,Positive,1
+Successful,Y,Positive,1
+Venturesome,Y,Positive,0
+Vivacious,Y,Positive,0
+Warm,Y,Positive,0
+Well-bred,Y,Positive,0
+Well-read,Y,Positive,0
+Well-rounded,Y,Positive,0
+Winning,Y,Positive,0
+Wise,Y,Positive,0
+Witty,Y,Positive,0
+Youthful,Y,Positive,0
+ Absentminded,Y,Neutral,0
+ Aggressive,Y,Neutral,0
+ Ambitious,Y,Neutral,0
+ Amusing,Y,Neutral,0
+ Artful,Y,Neutral,0
+ Ascetic,Y,Neutral,0
+ Authoritarian,Y,Neutral,0
+ Big-thinking,Y,Neutral,0
+ Boyish,Y,Neutral,0
+ Breezy,Y,Neutral,0
+ Businesslike,Y,Neutral,0
+ Busy,Y,Neutral,0
+ Casual,Y,Neutral,0
+ Crebral,Y,Neutral,0
+ Chummy,Y,Neutral,0
+ Circumspect,Y,Neutral,0
+ Competitive,Y,Neutral,0
+ Complex,Y,Neutral,0
+ Confidential,Y,Neutral,0
+ Conservative,Y,Neutral,0
+ Contradictory,Y,Neutral,0
+ Crisp,Y,Neutral,0
+ Cute,Y,Neutral,0
+ Deceptive,Y,Neutral,0
+ Determined,Y,Neutral,0
+ Dominating,Y,Neutral,0
+ Dreamy,Y,Neutral,0
+ Driving,Y,Neutral,0
+ Droll,Y,Neutral,0
+ Dry,Y,Neutral,0
+ Earthy,Y,Neutral,0
+ Effeminate,Y,Neutral,0
+ Emotional,Y,Neutral,0
+ Enigmatic,Y,Neutral,0
+ Experimental,Y,Neutral,0
+ Familial,Y,Neutral,0
+ Folksy,Y,Neutral,0
+ Formal,Y,Neutral,0
+ Freewheeling,Y,Neutral,0
+ Frugal,Y,Neutral,0
+ Glamorous,Y,Neutral,0
+ Guileless,Y,Neutral,0
+ High-spirited,Y,Neutral,0
+ Huried,Y,Neutral,0
+ Hypnotic,Y,Neutral,0
+ Iconoclastic,Y,Neutral,0
+ Idiosyncratic,Y,Neutral,0
+ Impassive,Y,Neutral,0
+ Impersonal,Y,Neutral,0
+ Impressionable,Y,Neutral,0
+ Intense,Y,Neutral,0
+ Invisible,Y,Neutral,0
+ Irreligious,Y,Neutral,0
+ Irreverent,Y,Neutral,0
+ Maternal,Y,Neutral,0
+ Mellow,Y,Neutral,0
+ Modern,Y,Neutral,0
+ Moralistic,Y,Neutral,0
+ Mystical,Y,Neutral,0
+ Neutral,Y,Neutral,0
+ Noncommittal,Y,Neutral,0
+ Noncompetitive,Y,Neutral,0
+ Obedient,Y,Neutral,0
+ Old-fashined,Y,Neutral,0
+ Ordinary,Y,Neutral,0
+ Outspoken,Y,Neutral,0
+ Paternalistic,Y,Neutral,0
+ Physical,Y,Neutral,0
+ Placid,Y,Neutral,0
+ Political,Y,Neutral,0
+ Predictable,Y,Neutral,0
+ Preoccupied,Y,Neutral,0
+ Private,Y,Neutral,0
+ Progressive,Y,Neutral,0
+ Proud,Y,Neutral,0
+ Pure,Y,Neutral,0
+ Questioning,Y,Neutral,0
+ Quiet,Y,Neutral,1
+ Religious,Y,Neutral,0
+ Reserved,Y,Neutral,0
+ Restrained,Y,Neutral,0
+ Retiring,Y,Neutral,0
+ Sarcastic,Y,Neutral,0
+ Self-conscious,Y,Neutral,0
+ Sensual,Y,Neutral,0
+ Skeptical,Y,Neutral,0
+ Smooth,Y,Neutral,0
+ Soft,Y,Neutral,0
+ Solemn,Y,Neutral,0
+ Solitary,Y,Neutral,0
+ Stern,Y,Neutral,0
+ Stoiid,Y,Neutral,0
+ Strict,Y,Neutral,0
+ Stubborn,Y,Neutral,0
+ Stylish,Y,Neutral,0
+ Subjective,Y,Neutral,0
+ Surprising,Y,Neutral,0
+ Soft,Y,Neutral,0
+ Tough,Y,Neutral,0
+ Unaggressive,Y,Neutral,0
+ Unambitious,Y,Neutral,0
+ Unceremonious,Y,Neutral,0
+ Unchanging,Y,Neutral,0
+ Undemanding,Y,Neutral,0
+ Unfathomable,Y,Neutral,0
+ Unhurried,Y,Neutral,0
+ Uninhibited,Y,Neutral,0
+ Unpatriotic,Y,Neutral,0
+ Unpredicatable,Y,Neutral,0
+ Unreligious,Y,Neutral,0
+ Unsentimental,Y,Neutral,0
+ Whimsical,Y,Neutral,0

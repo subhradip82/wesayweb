@@ -35,7 +35,7 @@ public class AdminController {
 			consumes = "application/json")
 	@ResponseBody
 	public void uploadTraits() {
-		//traitsRepository.removealltraits();
+		traitsRepository.removealltraits();
 		traitsRepository.saveAll(CsvReader.getTraits());
 	}
 

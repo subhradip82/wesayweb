@@ -133,7 +133,7 @@ public class TraitsController {
 	@ResponseBody
 	public Map<String, List<TraitListResponse>> getListOfPoulerTraits() {
 		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
-		List<Traits> traitList = traitsRepository.getActiveTraits(2, 20);
+		List<Traits> traitList = traitsRepository.getActiveTraits(0, 20, 1);
 		List<String> availableCategory = new ArrayList<String>();
 		availableCategory.add("negative");
 		availableCategory.add("neutral");
