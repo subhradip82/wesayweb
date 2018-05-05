@@ -1,5 +1,6 @@
 package com.wesayweb.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.UserSettingsCategoryMapping;
 import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.response.model.UserSettingResponse;
 import com.wesayweb.util.JwtSecurityUtil;
 
 @RestController
@@ -51,4 +53,22 @@ public class UserActivityController {
 		return returnValue;
 	}
 
+
+	@RequestMapping(value = "/mysettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public List<UserSettingResponse> mysettings(HttpServletRequest request) {
+		List<UserSettingResponse> responseObj = new ArrayList<UserSettingResponse>();
+		String jToken = request.getHeader("X-Authorization").trim();
+		Map<String, String> token = tokenUtil.parseJWT(jToken);
+		Long userid = Long.valueOf(token.get("userid"));
+		List<Object[]> resultSet =  userSettingRepositoryService.getMySettings(userid);
+		for (Object[] object : resultSet) {
+			UserSettingResponse userSettingResponse = new UserSettingResponse();
+			userSettingResponse.setCategoryname(object[0].toString().trim());
+			userSettingResponse.setCategoryvalue(Integer.valueOf(object[1].toString().trim()));
+			userSettingResponse.setUniqueid(object[2].toString().trim());
+			responseObj.add(userSettingResponse);
+		}
+		return responseObj;
+	}
 }

@@ -84,6 +84,7 @@ public class UserController {
 		Map<String, String> token = tokenUtil.parseJWT(jToken);
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), 
 								Long.valueOf(token.get("userid")));
+		 
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);

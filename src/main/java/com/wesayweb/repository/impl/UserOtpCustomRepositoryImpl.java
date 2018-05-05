@@ -61,6 +61,7 @@ public class UserOtpCustomRepositoryImpl implements UserOtpCustomRepository {
 		CriteriaUpdate<UserOtp> updateCriteria = cb.createCriteriaUpdate(UserOtp.class);
 		Root<UserOtp> userObj = updateCriteria.from(UserOtp.class);
 		updateCriteria.set(userObj.get("otpuseddate"), new Date());
+		updateCriteria.set(userObj.get("otpusedstatus"), 1);
 		updateCriteria.where(cb.equal(userObj.get("userid"), userId));
 		updateCriteria.where(cb.equal(userObj.get("otp"), otp));
 		int affected = em.createQuery(updateCriteria).executeUpdate();

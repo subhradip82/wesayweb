@@ -1,5 +1,6 @@
 package com.wesayweb.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.wesayweb.model.UserSettingsCategoryMapping;
 import com.wesayweb.repository.UserSettingCustomRepository;
+import com.wesayweb.response.model.UserSettingResponse;
 
 @Service
 public class UserSettingRepositoryImpl implements UserSettingCustomRepository {
@@ -29,6 +31,13 @@ public class UserSettingRepositoryImpl implements UserSettingCustomRepository {
 
 		return crit.list();
 
+	}
+
+	@Override
+	
+	public List<Object[]> getMySettings(long userid) {
+		return em.createNamedQuery("getmysettings").getResultList();
+		
 	}
 
 }
