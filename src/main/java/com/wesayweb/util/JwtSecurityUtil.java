@@ -41,6 +41,15 @@ public class JwtSecurityUtil {
 				.setIssuer(issuer).signWith(signatureAlgorithm, signingKey);
 		return builder.compact();
 	}
+	public Map<String, String> parseInvitationJWT(String jwt) {
+		Map<String, String> returnMap = new HashMap<String, String>(); 
+	    Claims claims = Jwts.parser()         
+	       .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET))
+	       .parseClaimsJws(jwt).getBody();
+	    returnMap.put("sendersid", claims.getId());
+	    returnMap.put("recieversemail", claims.getSubject());
+	    return returnMap; 
+	}
 	
 	public Map<String, String> parseJWT(String jwt) {
 		Map<String, String> returnMap = new HashMap<String, String>(); 

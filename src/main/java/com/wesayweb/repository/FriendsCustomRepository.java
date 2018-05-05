@@ -10,5 +10,6 @@ import com.wesayweb.model.Friends;
 public interface FriendsCustomRepository {
 
 	List<Friends> getMyFriendRequest(Long userid);
+	List<Friends> getMyFriendRequest(Long userid, Long requestid);
 
 }

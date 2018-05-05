@@ -110,6 +110,7 @@ public class UserActivityController {
 				requestFriendObj.setAddeddate(new Date());
 				requestFriendObj.setInvitationacceptstatus(0);
 				requestFriendObj.setActivestatus(0);
+				requestFriendObj.setUserid(Long.valueOf(token.get("userid")));
 				requestFriendObj.setInvitedby(Long.valueOf(token.get("userid")));
 				requestFriendObj.setFriendsid(friends.getFriendsid());
 				requestFriendObj
@@ -137,8 +138,7 @@ public class UserActivityController {
 		Map<String, String> token = tokenUtil.parseJWT(jToken);
 		List<Friends> friendsRequest =  friendsRepositoryService.getMyFriendRequest(Long.valueOf(token.get("userid")));
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		returnValue.put(WeSayContants.CONST_AUTH_TOKEN, String.valueOf(friendsRequest.size()));
-		
+		returnValue.put(WeSayContants.CONST_NEW_FRIENDS_REQUEST, String.valueOf(friendsRequest.size()));
 		return returnValue;
 	}
 	
@@ -148,23 +148,28 @@ public class UserActivityController {
 			produces = "application/json", 
 			consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> acceptfriendrequest(HttpServletRequest request) {
+	public Map<String, String> acceptfriendrequest(HttpServletRequest request , @RequestBody List<Friends> requestid) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		String jToken = request.getHeader("X-Authorization").trim();
 		Map<String, String> token = tokenUtil.parseJWT(jToken);
-		List<Friends> friendsRequest =  friendsRepositoryService.getMyFriendRequest(Long.valueOf(token.get("userid")));
-		for(Friends friendobj : friendsRequest) {
+		for(Friends friendsrequestid : requestid) {
+			List<Friends> friendsRequest = friendsRepositoryService.getMyFriendRequest(Long.valueOf(token.get("userid")), friendsrequestid.getId());
+			Friends friendobj = new Friends();
+			if(friendsRequest.size()>0) {
+			friendobj = friendsRequest.get(0);
+			Map<String, String> requesttoken = tokenUtil.parseInvitationJWT(friendobj.getRequestuniueid());
+			if(token.get("email").trim().equalsIgnoreCase(requesttoken.get("recieversemail")) && (friendobj.getUserid()== Long.valueOf((requesttoken.get("sendersid")) ))) {
 			friendobj.setActivestatus(1);
 			friendobj.setInvitationacceptdate(new Date());
 			friendobj.setInvitationacceptstatus(1);
 			friendsRepositoryService.save(friendobj);
+			}
+			}
 		}
-		
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		returnValue.put(WeSayContants.CONST_AUTH_TOKEN, String.valueOf(friendsRequest.size()));
 		
 		return returnValue;
-	}
+	} 
 	public boolean sendFriendRequestInEmail(User user, String subject, String fullname) {
 		String message = "Dear User,\n\n\nYou have recieved a friend request from  : " + fullname;
 		return emailService.sendMail(user.getEmailaddress(), subject, message);

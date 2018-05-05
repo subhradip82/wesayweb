@@ -10,6 +10,7 @@ public class WeSayContants {
 	public static String CONST_EMPTY="";
 	public static String CONST_MESSAGE="message";
 	public static String CONST_AUTH_TOKEN="auth_token";
+	public static String CONST_NEW_FRIENDS_REQUEST="friend_request";
 	public static String CONST_STATUS="status";
 	public static String CONST_WRONG_USER_NAME_PASSWORD="Wrong Username/Password provided";
 	public static String CONST_USER_NOT_ACTIVATED="Your account is not activated yet.";
