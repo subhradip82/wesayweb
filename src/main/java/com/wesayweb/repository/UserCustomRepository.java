@@ -16,5 +16,6 @@ public interface UserCustomRepository {
 	boolean activateUser(Long userId);
 	boolean changeUserPassword(Long userId, String password);
 	User findByUsername(String emailaddress);
+	User findActiveUser(Long userid);
 
 }

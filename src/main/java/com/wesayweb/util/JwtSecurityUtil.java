@@ -27,6 +27,21 @@ public class JwtSecurityUtil {
 		return builder.compact();
 	}
 	
+	public String createJWTTokenForFriendRequest(String sendersemail, 
+												 String recieversemail,
+												 String issuer) {
+		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+		long nowMillis = System.currentTimeMillis();
+		Date now = new Date(nowMillis);
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET);
+		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+		JwtBuilder builder = Jwts.builder().setId(sendersemail).
+				setIssuedAt(now).
+				setSubject(recieversemail)
+				.setIssuer(issuer).signWith(signatureAlgorithm, signingKey);
+		return builder.compact();
+	}
+	
 	public Map<String, String> parseJWT(String jwt) {
 		Map<String, String> returnMap = new HashMap<String, String>(); 
 	    Claims claims = Jwts.parser()         

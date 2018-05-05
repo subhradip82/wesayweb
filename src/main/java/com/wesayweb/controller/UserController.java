@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.OtpGenerator;
+import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserOtp;
+import com.wesayweb.model.UserSettingsCategoryMapping;
+import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UserOtpRepository;
 import com.wesayweb.repository.UserRepository;
+import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.request.model.UserRequest;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
@@ -39,6 +43,13 @@ public class UserController {
 
 	@Autowired
 	UserOtpRepository otpRepositoryService;
+	
+	@Autowired
+	SettingsRepository settingsRepositoryService;
+
+	@Autowired
+	UserSettingRepository userSettingRepositoryService;
+
 
 	private JwtSecurityUtil tokenUtil = new JwtSecurityUtil();
 
@@ -94,6 +105,8 @@ public class UserController {
 				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, jToken);
+				applyusersdefaultsettings(Long.valueOf(token.get("userid")));
+				
 			}
 		} else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
@@ -291,6 +304,19 @@ public class UserController {
 			returnValue.put("authtoken", authToken);
 		}
 		return returnValue;
+	}
+	
+	public void applyusersdefaultsettings(Long userid) {
+		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
+		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {
+			UserSettingsCategoryMapping userMappingObj = new UserSettingsCategoryMapping();
+			userMappingObj.setCategoryid(settingsCategoryObj.getId());
+			userMappingObj.setUserid(userid);
+			userMappingObj.setCategoryvalue(settingsCategoryObj.getDefaultvalue());
+			userMappingObj.setUniqueid(settingsCategoryObj.getUniqueid());
+			userSettingRepositoryService.save(userMappingObj);
+		}
+
 	}
 
 }

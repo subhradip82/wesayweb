@@ -90,5 +90,18 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		}
 	}
 
+	@Override
+	public User findActiveUser(Long userid) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
+		crit.add(Restrictions.eq("id", userid));
+		crit.add(Restrictions.eq("isactive", 1));
+		List<User> resultSet = crit.list();
+		if (resultSet.size() > 0) {
+			return resultSet.get(0);
+		} else {
+			return new User();
+		}
+	}
+
 	 
 }
