@@ -102,9 +102,11 @@ public class TraitsController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, 
+			produces = "application/json", 
+			consumes = "application/json")
 	@ResponseBody
-	public Map<String, List<TraitListResponse>> getActiveTraits(@RequestBody Map<String, Integer> traityype) {
+	public Map<String, List<TraitListResponse>> getActiveTraits() {
 		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
 		List<Traits> traitList = traitsRepository.getActiveTraits(0, 0);
 		List<String> availableCategory = new ArrayList<String>();
