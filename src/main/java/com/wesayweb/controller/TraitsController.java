@@ -51,7 +51,13 @@ public class TraitsController {
 					SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 			if (customTraitObj.getTraitgivenfor() == 0) { // Its for self{
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
+				customTraitObj.setActivestatus(1);
 			}
+			else
+			{
+				customTraitObj.setActivestatus(0);
+			}
+			
 
 			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
 					logedinUserObj.getId(), customTraitObj.getTraitgivenfor()).size() == 0) {
