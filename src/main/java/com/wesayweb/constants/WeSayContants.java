@@ -15,5 +15,8 @@ public class WeSayContants {
 	public static String CONST_WRONG_USER_NAME_PASSWORD="Wrong Username/Password provided";
 	public static String CONST_USER_NOT_ACTIVATED="Your account is not activated yet.";
 	public static String CONST_OTP_SENT="OTP Sent";
+	public static String CONST_TRAIT_NEUTRAL="neutral";
+	public static String CONST_TRAIT_USER_TYPE="user_type";
+	
 	
 }

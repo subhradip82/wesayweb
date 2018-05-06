@@ -274,6 +274,7 @@ public class UserController {
 		userObj.setIsregisteredbymobile(userReqObj.getIsregisteredbymobile());
 		userObj.setPassword(PasswordEncrypterUtil.encode(userReqObj.getPassword()));
 		userObj.setMobilenumber(userReqObj.getMobilenumber());
+		
 		return userObj;
 	}
 

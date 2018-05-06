@@ -11,12 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wesayweb.constants.WeSayContants;
-import com.wesayweb.helper.CsvReader;
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
@@ -37,74 +35,70 @@ public class TraitsController {
 
 	@Autowired
 	UserTraitRepository userTraitsRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	UserSettingRepository userSettingRepository;
-	
 
-	@RequestMapping(value = "/addTrait/",
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
 		SettingsUtil settingsUtil = new SettingsUtil();
 		Map<String, String> returnValue = new HashMap<String, String>();
-		for(CustomTraits customTraitObj : listOfCustomTraitObj) {
-		
-		User logedinUserObj = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		 if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(), logedinUserObj.getId(), customTraitObj.getTraitgivenfor())
-				.size() == 0) {
-			 List<Traits> definedTraits = traitsRepository
-					.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
-			UserTrait userTraitObj = new UserTrait();
-			if (definedTraits.size() > 0) {
-				userTraitObj.setTraitid(definedTraits.get(0).getId());
-				userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
-				userTraitObj.setTraitgivenby(logedinUserObj.getId());
-				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
-				if(logedinUserObj.getId()!=userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()), "c25bfc6a4ef111e89c2dfa7ae01bbebc")  )
-				{
-					userTraitObj.setIswaitingforapproval(1);
-				}
-				else
-				{
-					userTraitObj.setIswaitingforapproval(0);
-				}
-			} else {
-				CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
-				returnCustomTraitObj.setTraittype("neutral");
-				userTraitObj.setTraitid(returnCustomTraitObj.getId());
-				userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
-				userTraitObj.setTraitgivenby(logedinUserObj.getId());
-				userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
-				if(logedinUserObj.getId()!=userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()), "c25bfc6a4ef111e89c2dfa7ae01bbebc")  )
-				{
-					userTraitObj.setIswaitingforapproval(1);
-				}
-				else
-				{
-					userTraitObj.setIswaitingforapproval(0);
-				}
+		for (CustomTraits customTraitObj : listOfCustomTraitObj) {
+			User logedinUserObj = userRepository.findByUsername(
+					SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+			if (customTraitObj.getTraitgivenfor() == 0) { // Its for self{
+				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
 			}
-			userTraitsRepository.saveUserTraits(userTraitObj);
-			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		}
 
-		else {
-			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
-			returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
-		}
+			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
+					logedinUserObj.getId(), customTraitObj.getTraitgivenfor()).size() == 0) {
+				List<Traits> definedTraits = traitsRepository
+						.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
+				UserTrait userTraitObj = new UserTrait();
+				if (definedTraits.size() > 0) {
+					userTraitObj.setTraitid(definedTraits.get(0).getId());
+					userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
+					userTraitObj.setTraitgivenby(logedinUserObj.getId());
+					userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
+					if (logedinUserObj.getId() != userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(
+							userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()),
+							"c25bfc6a4ef111e89c2dfa7ae01bbebc")) {
+						userTraitObj.setIswaitingforapproval(1);
+					} else {
+						userTraitObj.setIswaitingforapproval(0);
+					}
+				} else {
+					CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
+					returnCustomTraitObj.setTraittype(WeSayContants.CONST_TRAIT_USER_TYPE);
+					userTraitObj.setTraitid(returnCustomTraitObj.getId());
+					userTraitObj.setTraituniqueid(returnCustomTraitObj.getTraituniqueid());
+					userTraitObj.setTraitgivenby(logedinUserObj.getId());
+					userTraitObj.setTraitgivenfor(customTraitObj.getTraitgivenfor());
+					if (logedinUserObj.getId() != userTraitObj.getTraitgivenfor() && settingsUtil.isRuleAppliable(
+							userSettingRepository.getUserSettings(userTraitObj.getTraitgivenfor()),
+							"c25bfc6a4ef111e89c2dfa7ae01bbebc")) {
+						userTraitObj.setIswaitingforapproval(1);
+					} else {
+						userTraitObj.setIswaitingforapproval(0);
+					}
+				}
+				userTraitsRepository.saveUserTraits(userTraitObj);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+			}
+
+			else {
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
+			}
 		}
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, 
-			produces = "application/json", 
-			consumes = "application/json")
+	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, List<TraitListResponse>> getActiveTraits() {
 		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
@@ -158,10 +152,7 @@ public class TraitsController {
 
 	}
 
-	@RequestMapping(value = "/deleteTrait/",
-					method = RequestMethod.POST, 
-					produces = "application/json",
-					consumes = "application/json")
+	@RequestMapping(value = "/deleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> deleteTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -170,40 +161,31 @@ public class TraitsController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/hideTrait/",
-			method = RequestMethod.POST, 
-			produces = "application/json",
-			consumes = "application/json")
+	@RequestMapping(value = "/hideTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> hideTrait(@RequestBody UserTrait userTrait) {
-	Map<String, String> returnValue = new HashMap<String, String>();
-	userTraitsRepository.hideTrait(userTrait);
-	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-	return returnValue;
+		Map<String, String> returnValue = new HashMap<String, String>();
+		userTraitsRepository.hideTrait(userTrait);
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
 	}
-	
-	@RequestMapping(value = "/unhideTrait/",
-			method = RequestMethod.POST, 
-			produces = "application/json",
-			consumes = "application/json")
+
+	@RequestMapping(value = "/unhideTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> unHideTrait(@RequestBody UserTrait userTrait) {
-	Map<String, String> returnValue = new HashMap<String, String>();
-	userTraitsRepository.unHideTrait(userTrait);
-	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-	return returnValue;
+		Map<String, String> returnValue = new HashMap<String, String>();
+		userTraitsRepository.unHideTrait(userTrait);
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
 	}
-	
-	@RequestMapping(value = "/approvecustomtrait/",
-			method = RequestMethod.POST, 
-			produces = "application/json",
-			consumes = "application/json")
+
+	@RequestMapping(value = "/approvecustomtrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> approveCustomTrait(@RequestBody UserTrait userTrait) {
-	Map<String, String> returnValue = new HashMap<String, String>();
-	userTraitsRepository.approveCustomTrait(userTrait);
-	returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-	return returnValue;
+		Map<String, String> returnValue = new HashMap<String, String>();
+		userTraitsRepository.approveCustomTrait(userTrait);
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
 	}
-	
+
 }
