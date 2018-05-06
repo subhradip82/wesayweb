@@ -2,7 +2,6 @@ package com.wesayweb.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,55 +99,38 @@ public class TraitsController {
 
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, List<TraitListResponse>> getActiveTraits() {
-		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
+	public List<TraitListResponse> getActiveTraits() {
+
 		List<Traits> traitList = traitsRepository.getActiveTraits(0, 0);
-		List<String> availableCategory = new ArrayList<String>();
-		availableCategory.add("negative");
-		availableCategory.add("neutral");
-		availableCategory.add("positive");
-		for (String traitName : availableCategory) {
-			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
-			for (Traits traitobj : traitList) {
-				if (traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
-					TraitListResponse responseObj = new TraitListResponse();
-					responseObj.setTraitname(traitobj.getTraitname().trim());
-					responseObj.setTraiticonpath(traitobj.getTraitdescripion());
-					responseObj.setTraituniqueid(traitobj.getTraituniqueid());
-					responseList.add(responseObj);
-				}
-			}
-			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
+
+		List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
+		for (Traits traitobj : traitList) {
+			TraitListResponse responseObj = new TraitListResponse();
+			responseObj.setTraitname(traitobj.getTraitname().trim());
+			responseObj.setTraiticonpath(traitobj.getTraitdescripion());
+			responseObj.setTraituniqueid(traitobj.getTraituniqueid());
+			responseList.add(responseObj);
 		}
 
-		return listOfTraits;
+		return responseList;
 
 	}
 
 	@RequestMapping(value = "/getListOfPoulerTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, List<TraitListResponse>> getListOfPoulerTraits() {
-		Map<String, List<TraitListResponse>> listOfTraits = new LinkedHashMap<String, List<TraitListResponse>>();
+	public List<TraitListResponse> getListOfPoulerTraits() {
 		List<Traits> traitList = traitsRepository.getActiveTraits(0, 20, 1);
-		List<String> availableCategory = new ArrayList<String>();
-		availableCategory.add("negative");
-		availableCategory.add("neutral");
-		availableCategory.add("positive");
-		for (String traitName : availableCategory) {
-			List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
-			for (Traits traitobj : traitList) {
-				if (traitName.trim().equalsIgnoreCase(traitobj.getTraittype().trim())) {
-					TraitListResponse responseObj = new TraitListResponse();
-					responseObj.setTraitname(traitobj.getTraitname().trim());
-					responseObj.setTraiticonpath(traitobj.getTraitdescripion());
-					responseObj.setTraituniqueid(traitobj.getTraituniqueid());
-					responseList.add(responseObj);
-				}
-			}
-			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
+
+		List<TraitListResponse> responseList = new ArrayList<TraitListResponse>();
+		for (Traits traitobj : traitList) {
+			TraitListResponse responseObj = new TraitListResponse();
+			responseObj.setTraitname(traitobj.getTraitname().trim());
+			responseObj.setTraiticonpath(traitobj.getTraitdescripion());
+			responseObj.setTraituniqueid(traitobj.getTraituniqueid());
+			responseList.add(responseObj);
 		}
 
-		return listOfTraits;
+		return responseList;
 
 	}
 

@@ -43,7 +43,7 @@ public class UserTraitsController {
 					produces = "application/json", 
 					consumes = "application/json")
 	@ResponseBody
-	public Map<String, List<UserTraitsResponsePojo>> getMyTraits(
+	public List<UserTraitsResponsePojo> getMyTraits(
 			@RequestBody(required = false) User traitsgivenforUser) {
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
@@ -60,16 +60,9 @@ public class UserTraitsController {
 			ismyowntrait = true;
 		}
 		List<Object[]> resultSet = userTraitsRepository.getMyTraits(traitsgivenfor);
-		Map<String, List<UserTraitsResponsePojo>> listOfTraits = new LinkedHashMap<String, List<UserTraitsResponsePojo>>();
-		SettingsUtil settingsUtl = new SettingsUtil();
-		List<String> availableCategory = new ArrayList<String>();
-		availableCategory.add("negative");
-		availableCategory.add("neutral");
-		availableCategory.add("positive");
-		for (String traitName : availableCategory) {
+			SettingsUtil settingsUtl = new SettingsUtil();
 			List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 			for (Object[] object : resultSet) {
-				if (traitName.trim().equalsIgnoreCase(((String) object[7]).trim())) {
 					UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
 					traitsResponseObj.setTraituniqid((String) object[0]);
 					traitsResponseObj.setTraitname((String) object[1]);
@@ -91,11 +84,9 @@ public class UserTraitsController {
 					responseList.add(traitsResponseObj);
 				}
 
-			}
-			listOfTraits.put(traitName.trim().toLowerCase(), responseList);
-		}
+					
 
-		return listOfTraits;
+		return responseList;
 	}
 
 	
