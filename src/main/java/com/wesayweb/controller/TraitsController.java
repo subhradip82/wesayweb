@@ -144,6 +144,12 @@ public class TraitsController {
 	@ResponseBody
 	public Map<String, String> deleteTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
+		User logedinUserObj = userRepository.findByUsername(
+				SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		if (userTrait.getTraitgivenfor() == 0) { // Its for self{
+			userTrait.setTraitgivenfor(logedinUserObj.getId());
+			
+		}
 		userTraitsRepository.deleteTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
