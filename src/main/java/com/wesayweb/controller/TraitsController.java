@@ -96,7 +96,7 @@ public class TraitsController {
 			}
 
 			else {
-				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
 			}
 		}
