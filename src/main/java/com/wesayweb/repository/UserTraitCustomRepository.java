@@ -16,13 +16,13 @@ public interface UserTraitCustomRepository {
 			" SELECT A.traitname, A.traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, B.typeofvote FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor AND B.ishidden = 0 "
-			+ " AND B.isactive = 1 and B.iswaitingforapproval = 0 " + 
+			+ "   " + 
 			" UNION ALL  " + 
 			" SELECT  A.traitname, A.traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
 			+ " B.typeofvote FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
-			+ " AND B.isactive = 1 and B.iswaitingforapproval = 0  " + 
+			+ "    " + 
 			" ) " + 
 			"select traituniqueid, " + 
 			"	   traitname , " + 

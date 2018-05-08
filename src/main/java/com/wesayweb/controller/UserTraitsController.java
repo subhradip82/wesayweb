@@ -47,19 +47,23 @@ public class UserTraitsController {
 			@RequestBody(required = false) User traitsgivenforUser) {
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		
 		Long traitsgivenfor = 0L;
 		boolean ismyowntrait = true;
-		try {
+		if(traitsgivenforUser.getId()!=0) {
 			// Need to check if the user is friend or not
 			traitsgivenfor = traitsgivenforUser.getId();
 			ismyowntrait = false;
-		} catch (Exception e) {
+		}
+		else
+		{
 			traitsgivenfor = logedinUserObj.getId();
-		}
-		if (traitsgivenfor == logedinUserObj.getId()) {
 			ismyowntrait = true;
+			
 		}
+		 
 		List<Object[]> resultSet = userTraitsRepository.getMyTraits(traitsgivenfor);
+		 
 			SettingsUtil settingsUtl = new SettingsUtil();
 			List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 			for (Object[] object : resultSet) {
