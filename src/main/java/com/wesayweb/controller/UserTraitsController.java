@@ -2,9 +2,7 @@ package com.wesayweb.controller;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,65 +32,60 @@ public class UserTraitsController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	UserSettingRepository userSettingRepository;
 
-	@RequestMapping(value = "/getMyTraits/",
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/getMyTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public List<UserTraitsResponsePojo> getMyTraits(
-			@RequestBody(required = false) User traitsgivenforUser) {
+	public List<UserTraitsResponsePojo> getMyTraits(@RequestBody(required = false) User traitsgivenforUser) {
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		
+
 		Long traitsgivenfor = 0L;
 		boolean ismyowntrait = true;
-		if(traitsgivenforUser.getId()!=0) {
-			// Need to check if the user is friend or not
-			traitsgivenfor = traitsgivenforUser.getId();
-			ismyowntrait = false;
-		}
-		else
-		{
+
+		try {
+			if (traitsgivenforUser.getId() != 0) {
+				// Need to check if the user is friend or not
+				traitsgivenfor = traitsgivenforUser.getId();
+				ismyowntrait = false;
+			} else {
+				traitsgivenfor = logedinUserObj.getId();
+				ismyowntrait = true;
+
+			}
+		} catch (NullPointerException e) {
 			traitsgivenfor = logedinUserObj.getId();
 			ismyowntrait = true;
-			
+
 		}
-		 
 		List<Object[]> resultSet = userTraitsRepository.getMyTraits(traitsgivenfor);
-		 
-			SettingsUtil settingsUtl = new SettingsUtil();
-			List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
-			for (Object[] object : resultSet) {
-					UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
-					traitsResponseObj.setTraituniqid((String) object[0]);
-					traitsResponseObj.setTraitname((String) object[1]);
-					traitsResponseObj.setTraitdescripion((String) object[2]);
-					traitsResponseObj.setTraiticonpath((String) object[3]);
-					if (ismyowntrait || settingsUtl.isRuleAppliable(
-							userSettingRepository.getUserSettings(traitsgivenfor),
-							"c25bf9724ef111e89c2dfa7ae01bbebc")) {
-						traitsResponseObj.setPositive(((BigInteger) object[4]).intValue());
-						traitsResponseObj.setNegetive(((BigInteger) object[5]).intValue());
-						traitsResponseObj.setNutral(((BigInteger) object[6]).intValue());
-					} else {
-						traitsResponseObj.setPositive(9999999);
-						traitsResponseObj.setNegetive(9999999);
-						traitsResponseObj.setNutral(9999999);
-					}
 
-					traitsResponseObj.setTraittype((String) object[7]);
-					responseList.add(traitsResponseObj);
-				}
+		SettingsUtil settingsUtl = new SettingsUtil();
+		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
+		for (Object[] object : resultSet) {
+			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
+			traitsResponseObj.setTraituniqid((String) object[0]);
+			traitsResponseObj.setTraitname((String) object[1]);
+			traitsResponseObj.setTraitdescripion((String) object[2]);
+			traitsResponseObj.setTraiticonpath((String) object[3]);
+			if (ismyowntrait || settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
+					"c25bf9724ef111e89c2dfa7ae01bbebc")) {
+				traitsResponseObj.setPositive(((BigInteger) object[4]).intValue());
+				traitsResponseObj.setNegetive(((BigInteger) object[5]).intValue());
+				traitsResponseObj.setNutral(((BigInteger) object[6]).intValue());
+			} else {
+				traitsResponseObj.setPositive(9999999);
+				traitsResponseObj.setNegetive(9999999);
+				traitsResponseObj.setNutral(9999999);
+			}
 
-					
+			traitsResponseObj.setTraittype((String) object[7]);
+			responseList.add(traitsResponseObj);
+		}
 
 		return responseList;
 	}
 
-	
-	
 }
