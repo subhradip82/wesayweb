@@ -13,33 +13,59 @@ import com.wesayweb.model.UserTrait;
 public interface UserTraitCustomRepository {
  
 	@Query(value = "WITH TRAIT AS (  " + 
-			" SELECT A.traitname, A.traittype, A.traitdescripion , A.traiticonpath , "
+			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, B.typeofvote FROM trait_master A JOIN user_trait B " + 
-			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor AND B.ishidden = 0 "
-			+ "   " + 
+			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
+			+ "  AND  B.isactive = 1 " + 
 			" UNION ALL  " + 
-			" SELECT  A.traitname, A.traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
+			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
 			+ " B.typeofvote FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
-			+ "    " + 
+			+ "  AND  B.isactive = 1   " + 
 			" ) " + 
 			"select traituniqueid, " + 
 			"	   traitname , " + 
-			"	   traitdescripion, " + 
-			"	   traiticonpath, " + 
+			"	   traiticonpath,traittype, " + 
 			"	   SUM(CASE WHEN typeofvote = 0 THEN 1 ELSE 0 END) AS positive, " + 
 			"	   SUM(CASE WHEN typeofvote = 1 THEN 1 ELSE 0 END) AS   negetive , " + 
-			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral ,traittype   " + 
+			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral   " + 
 			"	   from TRAIT GROUP BY  " + 
 			"	   traituniqueid, " + 
 			"	   traitname , " + 
-			"	   traitdescripion, " + 
 			"	   traiticonpath,"
 			+ "    traittype   " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "getmytraits")
 
 	List<Object[]> getMyTraits(@Param("traitgivenfor") long traitgivenfor);
+
+	@Query(value = "WITH TRAIT AS (  " + 
+			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
+			+ " A.traituniqueid, B.typeofvote FROM trait_master A JOIN user_trait B " + 
+			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
+			+ "  AND  B.isactive = 1  AND B.ishidden = 0  " + 
+			" UNION ALL  " + 
+			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
+			+ " B.typeofvote FROM "
+			+ " custom_traits A JOIN user_trait B " + 
+			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
+			+ "  AND  B.isactive = 1  AND B.ishidden = 0    " + 
+			" ) " + 
+			"select traituniqueid, " + 
+			"	   traitname , " + 
+			"	   traiticonpath,traittype, " + 
+			"	   SUM(CASE WHEN typeofvote = 0 THEN 1 ELSE 0 END) AS positive, " + 
+			"	   SUM(CASE WHEN typeofvote = 1 THEN 1 ELSE 0 END) AS   negetive , " + 
+			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral   " + 
+			"	   from TRAIT GROUP BY  " + 
+			"	   traituniqueid, " + 
+			"	   traitname , " + 
+			"	   traiticonpath,"
+			+ "    traittype   " + 
+			"       ORDER BY traitname", nativeQuery = true, name = "getMyFriendsTraits")
+
+	List<Object[]> getMyFriendsTraits(@Param("traitgivenfor") long traitgivenfor);
+	
 	void saveUserTraits(UserTrait userTraitObj);
 	void updateUserTrait(UserTrait userTraitObj);
 	
@@ -47,5 +73,5 @@ public interface UserTraitCustomRepository {
 	void hideTrait(UserTrait userTraitObj);
 	void approveCustomTrait(UserTrait userTraitObj);
 	void unHideTrait(UserTrait userTraitObj);
- 
+	List<UserTrait>  listOfUnreadTrait(Long userid);
 }

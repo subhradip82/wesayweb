@@ -18,6 +18,7 @@ import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.Traits;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
+import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
@@ -41,6 +42,9 @@ public class TraitsController {
 	@Autowired
 	UserSettingRepository userSettingRepository;
 
+	@Autowired
+	FriendsRepository friendsRepository;
+
 	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
@@ -49,21 +53,26 @@ public class TraitsController {
 		for (CustomTraits customTraitObj : listOfCustomTraitObj) {
 			User logedinUserObj = userRepository.findByUsername(
 					SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-			if (customTraitObj.getTraitgivenfor() == 0) { // Its for self{
+
+			int readstatus = 0;
+			if (customTraitObj.getTraitgivenfor() == 0) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
-				customTraitObj.setActivestatus(1);
+				readstatus = 1;
+			} else if (customTraitObj.getTraitgivenfor() == logedinUserObj.getId()) {
+				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
+				readstatus = 1;
+			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), customTraitObj.getTraitgivenfor())) {
+				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
+				returnValue.put(WeSayContants.CONST_MESSAGE, "Invalid request");
+				return returnValue;
 			}
-			else
-			{
-				customTraitObj.setActivestatus(0);
-			}
-			
 
 			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
 					logedinUserObj.getId(), customTraitObj.getTraitgivenfor()).size() == 0) {
 				List<Traits> definedTraits = traitsRepository
 						.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
 				UserTrait userTraitObj = new UserTrait();
+				userTraitObj.setIsactive(1);
 				if (definedTraits.size() > 0) {
 					userTraitObj.setTraitid(definedTraits.get(0).getId());
 					userTraitObj.setTraituniqueid(definedTraits.get(0).getTraituniqueid());
@@ -76,6 +85,7 @@ public class TraitsController {
 					} else {
 						userTraitObj.setIswaitingforapproval(0);
 					}
+
 				} else {
 					CustomTraits returnCustomTraitObj = traitsRepository.saveCustomTrait(customTraitObj);
 					returnCustomTraitObj.setTraittype(WeSayContants.CONST_TRAIT_USER_TYPE);
@@ -90,7 +100,9 @@ public class TraitsController {
 					} else {
 						userTraitObj.setIswaitingforapproval(0);
 					}
+					
 				}
+				userTraitObj.setReadstatus(readstatus);
 				userTraitsRepository.saveUserTraits(userTraitObj);
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 			}
@@ -144,11 +156,11 @@ public class TraitsController {
 	@ResponseBody
 	public Map<String, String> deleteTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		User logedinUserObj = userRepository.findByUsername(
-				SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 		if (userTrait.getTraitgivenfor() == 0) { // Its for self{
 			userTrait.setTraitgivenfor(logedinUserObj.getId());
-			
+
 		}
 		userTraitsRepository.deleteTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -182,4 +194,14 @@ public class TraitsController {
 		return returnValue;
 	}
 
+	@RequestMapping(value = "/newtraitsarived/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> newtraitsarived() {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		userTraitsRepository.listOfUnreadTrait(logedinUserObj.getId());
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
 }

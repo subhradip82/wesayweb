@@ -43,4 +43,21 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		return crit.list();
 	}
 
+	@Override
+	public boolean areTheyFriends(Long firstFriendId, Long secondFriendId) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
+		crit.add(Restrictions.eq("userid", firstFriendId));
+		crit.add(Restrictions.eq("friendsid", secondFriendId));
+		crit.add(Restrictions.eq("invitationacceptstatus", 0));
+		crit.add(Restrictions.isNotNull("requestuniueid"));
+		crit.add(Restrictions.isNotNull("invitationacceptdate"));
+		
+		if(crit.list().size()>0) { 
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 }

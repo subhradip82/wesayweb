@@ -1,6 +1,5 @@
 package com.wesayweb.controller;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,14 @@ public class UserTraitsController {
 			ismyowntrait = true;
 
 		}
-		List<Object[]> resultSet = userTraitsRepository.getMyTraits(traitsgivenfor);
+		List<Object[]> resultSet = new ArrayList<Object[]>();
+		if (ismyowntrait) {
+
+			resultSet.addAll(userTraitsRepository.getMyTraits(traitsgivenfor));
+		} else {
+			resultSet.addAll(userTraitsRepository.getMyFriendsTraits(traitsgivenfor));
+		}
+
 
 		SettingsUtil settingsUtl = new SettingsUtil();
 		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
@@ -68,20 +74,19 @@ public class UserTraitsController {
 			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
 			traitsResponseObj.setTraituniqid((String) object[0]);
 			traitsResponseObj.setTraitname((String) object[1]);
-			traitsResponseObj.setTraitdescripion((String) object[2]);
-			traitsResponseObj.setTraiticonpath((String) object[3]);
+			traitsResponseObj.setTraiticonpath((String) object[2]);
+			traitsResponseObj.setTraittype((String) object[3]);
 			if (ismyowntrait || settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
 					"c25bf9724ef111e89c2dfa7ae01bbebc")) {
-				traitsResponseObj.setPositive(((BigInteger) object[4]).intValue());
-				traitsResponseObj.setNegetive(((BigInteger) object[5]).intValue());
-				traitsResponseObj.setNutral(((BigInteger) object[6]).intValue());
+				traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
+				traitsResponseObj.setNegetive(Integer.valueOf(object[5].toString()));
+				traitsResponseObj.setNutral(Integer.valueOf(object[6].toString()));
 			} else {
-				traitsResponseObj.setPositive(9999999);
-				traitsResponseObj.setNegetive(9999999);
-				traitsResponseObj.setNutral(9999999);
+				traitsResponseObj.setPositive(99999);
+				traitsResponseObj.setNegetive(99999);
+				traitsResponseObj.setNutral(99999);
 			}
 
-			traitsResponseObj.setTraittype((String) object[7]);
 			responseList.add(traitsResponseObj);
 		}
 

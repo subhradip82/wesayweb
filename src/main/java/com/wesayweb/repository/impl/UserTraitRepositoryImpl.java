@@ -110,5 +110,18 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		em.createQuery(updateCriteria).executeUpdate();
 		
 	}
+
+	@Override
+	public List<Object[]> getMyFriendsTraits(long traitgivenfor) {
+		return em.createNamedQuery("getMyFriendsTraits").getResultList();
+	}
+
+	@Override
+	public List<UserTrait> listOfUnreadTrait(Long userid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	 
 	 
 }

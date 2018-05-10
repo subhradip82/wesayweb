@@ -38,6 +38,17 @@ public class UserTrait implements Serializable {
     private int iswaitingforapproval;
 	private String traituniqueid;
 	
+	@Column(name = "readstatus", nullable = false, columnDefinition = "int default 0")
+	private int readstatus;
+	
+	public int getReadstatus() {
+		return readstatus;
+	}
+
+	public void setReadstatus(int readstatus) {
+		this.readstatus = readstatus;
+	}
+
 	public int getIswaitingforapproval() {
 		return iswaitingforapproval;
 	}
