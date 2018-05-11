@@ -77,6 +77,20 @@ public class UserActivityController {
 		return responseObj;
 	}
 
+	@RequestMapping(value = "/changemysettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public List<UserSettingResponse> changemysettings(HttpServletRequest request, 
+			@RequestBody UserSettingsCategoryMapping settingObj
+			) {
+		List<UserSettingResponse> responseObj = new ArrayList<UserSettingResponse>();
+		String jToken = request.getHeader("X-Authorization").trim();
+		Map<String, String> token = tokenUtil.parseJWT(jToken);
+		Long userid = Long.valueOf(token.get("userid"));
+		settingObj.setUserid(userid);
+		userSettingRepositoryService.changeMySetting(settingObj);
+		return responseObj;
+	}
+	
 	public void applyusersdefaultsettings(Long userid) {
 		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
 		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {

@@ -68,4 +68,10 @@ public class UserSettingsCategoryMapping implements Serializable {
 		this.categoryid = categoryid;
 	}
 
+	@Override
+	public String toString() {
+		return "UserSettingsCategoryMapping [id=" + id + ", userid=" + userid + ", categoryid=" + categoryid
+				+ ", categoryvalue=" + categoryvalue + ", uniqueid=" + uniqueid + "]";
+	}
+
 }

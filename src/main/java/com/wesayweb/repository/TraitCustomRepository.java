@@ -19,12 +19,12 @@ public interface TraitCustomRepository {
 	@Query(value = "select  a.traituniqueid from user_trait a \r\n" + 
 			"JOIN  custom_traits b ON a.traituniqueid = b.traituniqueid "
 			+ " WHERE a.traitgivenby = :traitgivenby and a.traitgivenfor = :traitgivenfor and "
-			+ " lower(trim(b.traitname))= :traitname "
+			+ " lower(trim(b.traitname))= :traitname and a.isactive = 1 "
 			+ "  UNION ALL "
 			+ "select  a.traituniqueid from user_trait a \r\n" + 
 			"JOIN  trait_master b ON a.traituniqueid = b.traituniqueid "
 			+ " WHERE a.traitgivenby = :traitgivenby and a.traitgivenfor = :traitgivenfor and "
-			+ " lower(trim(b.traitname))= :traitname  "
+			+ " lower(trim(b.traitname))= :traitname  and a.isactive = 1 "
 			+ "", nativeQuery = true, name = "traitAlreadyExists")
 
 	public List<String> traitAlreadyExists(@Param("traitname") String traitname,

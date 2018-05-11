@@ -18,4 +18,6 @@ public interface UserSettingCustomRepository {
 
 	List<UserSettingsCategoryMapping> getUserSettings(Long userid);
 
+	boolean changeMySetting(UserSettingsCategoryMapping settingObj);
+
 }
