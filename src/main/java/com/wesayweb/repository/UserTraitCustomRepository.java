@@ -14,12 +14,12 @@ public interface UserTraitCustomRepository {
  
 	@Query(value = "WITH TRAIT AS (  " + 
 			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
-			+ " A.traituniqueid, B.typeofvote FROM trait_master A JOIN user_trait B " + 
+			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
 			+ "  AND  B.isactive = 1 " + 
 			" UNION ALL  " + 
 			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
-			+ " B.typeofvote FROM "
+			+ " B.typeofvote, B.ishidden FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
 			+ "  AND  B.isactive = 1   " + 
@@ -29,39 +29,41 @@ public interface UserTraitCustomRepository {
 			"	   traiticonpath,traittype, " + 
 			"	   SUM(CASE WHEN typeofvote = 0 THEN 1 ELSE 0 END) AS positive, " + 
 			"	   SUM(CASE WHEN typeofvote = 1 THEN 1 ELSE 0 END) AS   negetive , " + 
-			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral   " + 
+			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral  ,ishidden  " + 
 			"	   from TRAIT GROUP BY  " + 
 			"	   traituniqueid, " + 
 			"	   traitname , " + 
 			"	   traiticonpath,"
-			+ "    traittype   " + 
+			+ "    traittype  , ishidden " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "getmytraits")
 
 	List<Object[]> getMyTraits(@Param("traitgivenfor") long traitgivenfor);
 
 	@Query(value = "WITH TRAIT AS (  " + 
 			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
-			+ " A.traituniqueid, B.typeofvote FROM trait_master A JOIN user_trait B " + 
+			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
-			+ "  AND  B.isactive = 1  AND B.ishidden = 0  " + 
+			+ "  AND  B.isactive = 1   " + 
 			" UNION ALL  " + 
-			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , A.traituniqueid, "
-			+ " B.typeofvote FROM "
+			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
+			+ " A.traituniqueid, "
+			+ " B.typeofvote , B.ishidden FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
-			+ "  AND  B.isactive = 1  AND B.ishidden = 0    " + 
+			+ "  AND  B.isactive = 1      " + 
 			" ) " + 
 			"select traituniqueid, " + 
 			"	   traitname , " + 
-			"	   traiticonpath,traittype, " + 
+			"	   traiticonpath,"
+			+ "		traittype, " + 
 			"	   SUM(CASE WHEN typeofvote = 0 THEN 1 ELSE 0 END) AS positive, " + 
 			"	   SUM(CASE WHEN typeofvote = 1 THEN 1 ELSE 0 END) AS   negetive , " + 
-			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral   " + 
+			"	   SUM(CASE WHEN typeofvote = 2 THEN 1 ELSE 0 END) AS nutral ,ishidden   " + 
 			"	   from TRAIT GROUP BY  " + 
 			"	   traituniqueid, " + 
 			"	   traitname , " + 
 			"	   traiticonpath,"
-			+ "    traittype   " + 
+			+ "    traittype , ishidden  " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "getMyFriendsTraits")
 
 	List<Object[]> getMyFriendsTraits(@Param("traitgivenfor") long traitgivenfor);

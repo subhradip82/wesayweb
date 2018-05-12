@@ -171,6 +171,9 @@ public class TraitsController {
 	@ResponseBody
 	public Map<String, String> hideTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		userTrait.setTraitgivenfor(logedinUserObj.getId());
 		userTraitsRepository.hideTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
@@ -180,6 +183,9 @@ public class TraitsController {
 	@ResponseBody
 	public Map<String, String> unHideTrait(@RequestBody UserTrait userTrait) {
 		Map<String, String> returnValue = new HashMap<String, String>();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		userTrait.setTraitgivenfor(logedinUserObj.getId());
 		userTraitsRepository.unHideTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;

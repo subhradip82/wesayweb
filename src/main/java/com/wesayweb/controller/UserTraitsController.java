@@ -71,6 +71,7 @@ public class UserTraitsController {
 		SettingsUtil settingsUtl = new SettingsUtil();
 		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 		for (Object[] object : resultSet) {
+			 
 			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
 			traitsResponseObj.setTraituniqid((String) object[0]);
 			traitsResponseObj.setTraitname((String) object[1]);
@@ -86,7 +87,8 @@ public class UserTraitsController {
 				traitsResponseObj.setNegetive(99999);
 				traitsResponseObj.setNutral(99999);
 			}
-
+		
+			traitsResponseObj.setIshidden(Integer.valueOf(object[7].toString()));
 			responseList.add(traitsResponseObj);
 		}
 

@@ -37,17 +37,6 @@ public class WeSayWebApplication /* extends WebSecurityConfigurerAdapter */ impl
 
 	}
 
-	/*
-	 * @Override public void configure(HttpSecurity http) throws Exception {
-	 * http.csrf().disable().authorizeRequests().antMatchers(
-	 * "/api/emailregistration").permitAll()
-	 * .antMatchers("/api/loginviaemail").permitAll().
-	 * 
-	 * antMatchers("/firstimpression/**").permitAll().
-	 * antMatchers("/api/forgotpasswordviaemail").permitAll().
-	 * antMatchers("/traitapi/**").permitAll();
-	 * 
-	 * }
-	 */
+	 
 
 }

@@ -20,8 +20,14 @@ public class UserTraitsResponsePojo implements Serializable {
 	private int nutral;
 	private String traittype;
 	private int isannonymous;
+	private int ishidden;
 	
-	
+	public int getIshidden() {
+		return ishidden;
+	}
+	public void setIshidden(int ishidden) {
+		this.ishidden = ishidden;
+	}
 	public String getTraittype() {
 		return traittype;
 	}

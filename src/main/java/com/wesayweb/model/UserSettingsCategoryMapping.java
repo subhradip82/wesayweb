@@ -8,70 +8,46 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 
 @Table(name = "user_settings_category_mapping")
 @EntityListeners(AuditingEntityListener.class)
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class UserSettingsCategoryMapping implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter
+	@Setter
 	private Long id;
 
+	@Getter
+	@Setter
 	private Long userid;
+
+	@Getter
+	@Setter
 	private Long categoryid;
+
+	@Getter
+	@Setter
 	private int categoryvalue;
+
+	@Getter
+	@Setter
 	private String uniqueid;
-	
-	
-	public String getUniqueid() {
-		return uniqueid;
-	}
-
-	public void setUniqueid(String uniqueid) {
-		this.uniqueid = uniqueid;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public int getCategoryvalue() {
-		return categoryvalue;
-	}
-
-	public void setCategoryvalue(int categoryvalue) {
-		this.categoryvalue = categoryvalue;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getUserid() {
-		return userid;
-	}
-
-	public void setUserid(Long userid) {
-		this.userid = userid;
-	}
-
-	public Long getCategoryid() {
-		return categoryid;
-	}
-
-	public void setCategoryid(Long categoryid) {
-		this.categoryid = categoryid;
-	}
-
-	@Override
-	public String toString() {
-		return "UserSettingsCategoryMapping [id=" + id + ", userid=" + userid + ", categoryid=" + categoryid
-				+ ", categoryvalue=" + categoryvalue + ", uniqueid=" + uniqueid + "]";
-	}
 
 }

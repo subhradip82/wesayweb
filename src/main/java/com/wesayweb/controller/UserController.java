@@ -310,7 +310,7 @@ public class UserController {
 	public void applyusersdefaultsettings(Long userid) {
 		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
 		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {
-			UserSettingsCategoryMapping userMappingObj = new UserSettingsCategoryMapping();
+			UserSettingsCategoryMapping userMappingObj = UserSettingsCategoryMapping.builder().build();
 			userMappingObj.setCategoryid(settingsCategoryObj.getId());
 			userMappingObj.setUserid(userid);
 			userMappingObj.setCategoryvalue(settingsCategoryObj.getDefaultvalue());

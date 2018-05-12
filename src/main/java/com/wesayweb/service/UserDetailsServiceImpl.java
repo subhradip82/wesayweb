@@ -26,4 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		return new User(applicationUser.getEmailaddress(), applicationUser.getPassword(), emptyList());
 	}
+	
+	
 }
