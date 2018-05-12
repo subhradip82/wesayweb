@@ -10,9 +10,8 @@ import com.wesayweb.model.User;
 public interface UserCustomRepository {
 
 	public List<User> getUserByEmailAddess(String emailaddress, int activeStatus);
-	 
-	List<User> getUserByMobileNumber(String countryCode, String mobileNumber, int activeStatus);
-	 
+	public  List<User> getUserByMobileNumber(String countryCode, String mobileNumber, int activeStatus);
+	public  List<User> getUserByMobileEmail(String countryCode, String mobileNumber, String emailaddress); 
 	boolean activateUser(Long userId);
 	boolean changeUserPassword(Long userId, String password);
 	User findByUsername(String emailaddress);

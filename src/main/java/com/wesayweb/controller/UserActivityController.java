@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +25,7 @@ import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.UserSettingResponse;
 import com.wesayweb.service.AuthnticationService;
 import com.wesayweb.service.EmailService;
@@ -113,11 +112,12 @@ public class UserActivityController {
 		JwtSecurityUtil tokenUtil = new JwtSecurityUtil();
 		User loggedinuserObj = authnticationService.getSessionUser();
 		for (Friends friends : friendsObj) {
-			Friends requestFriendObj = new Friends();
+
+			Friends requestFriendObj = Friends.builder().build();
 			User userObj = userRepositoryService.findActiveUser(Long.valueOf(friends.getFriendsid()));
+
 			try {
 				requestFriendObj.setActivestatus(0);
-				requestFriendObj.setAddeddate(new Date());
 				requestFriendObj.setInvitationacceptstatus(0);
 				requestFriendObj.setActivestatus(0);
 				requestFriendObj.setUserid(loggedinuserObj.getId());
@@ -129,7 +129,7 @@ public class UserActivityController {
 				friendsRepositoryService.save(requestFriendObj);
 				sendFriendRequestInEmail(userObj, "WeSay friend request", loggedinuserObj.getFullname());
 			} catch (NullPointerException e) {
-
+				e.printStackTrace();
 			}
 		}
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
@@ -138,7 +138,7 @@ public class UserActivityController {
 
 	@RequestMapping(value = "/checkfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> checkfriendrequest(HttpServletRequest request) {
+	public Map<String, String> checkfriendrequest() {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		List<Friends> friendsRequest = friendsRepositoryService
 				.getMyFriendRequest(authnticationService.getSessionUserId());
@@ -147,12 +147,46 @@ public class UserActivityController {
 		return returnValue;
 	}
 
+	@RequestMapping(value = "/myFriends/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public List<Friends> myFriends() {
+
+		return friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId());
+
+	}
+	
+	
+	@RequestMapping(value = "/getMyFriendList/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public List<FriendsResponse> getMyFriendList() {
+		List<FriendsResponse> returnList = new ArrayList<FriendsResponse>();
+		List<Object[]> resultSet =  friendsRepositoryService.getMyFriendList(authnticationService.getSessionUserId());
+		for (Object[] object : resultSet) {
+			FriendsResponse responseObj = FriendsResponse.builder().build();
+			responseObj.setFriendsid(Long.valueOf(object[0].toString()));
+			responseObj.setEmailaddress(object[1].toString());
+			responseObj.setMobilenumber(object[3].toString());
+			responseObj.setCountrycode(object[2].toString());
+			responseObj.setFullname(object[4].toString());
+			responseObj.setAddeddate(object[5].toString());
+			if(null != object[6]) {
+				responseObj.setInvitationacceptdate(object[6].toString());
+			}
+			else
+			{
+				responseObj.setInvitationacceptdate("N/A"); 
+			}
+			responseObj.setAccept_status(Integer.valueOf(object[7].toString()));
+			responseObj.setId(Long.valueOf(object[8].toString()));
+			returnList.add(responseObj);
+		}
+		return returnList;
+	}
+	
 	@RequestMapping(value = "/getMyContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<ContactList> getMyContacts() {
-		User logedinUserObj = userRepository
-				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		return contactRepository.findAll();
+		return contactRepository.getMyContactList(authnticationService.getSessionUserId());
 	}
 
 	@RequestMapping(value = "/addContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -163,6 +197,13 @@ public class UserActivityController {
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 
 		for (ContactList contact : contactList) {
+			List<User> contactDetails = userRepositoryService.getUserByMobileEmail(contact.getCountrycode(),
+					contact.getMobilenumber(), contact.getEmailaddress());
+			if (contactDetails.size() > 0) {
+				contact.setIsregistredinwesay(1);
+			} else {
+				contact.setIsregistredinwesay(1);
+			}
 			contact.setSourceuserid(logedinUserObj.getId());
 			contactRepository.save(contact);
 		}

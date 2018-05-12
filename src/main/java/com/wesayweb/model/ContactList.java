@@ -13,14 +13,20 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user_contact_list")
 @EntityListeners(AuditingEntityListener.class)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class ContactList implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -48,8 +54,7 @@ public class ContactList implements Serializable {
 	private String mobilenumber;
 
 	@Getter
-	@Setter
-	private Date syncdate = new Date();
+	final Date syncdate = new Date();
 
 	@Getter
 	@Setter

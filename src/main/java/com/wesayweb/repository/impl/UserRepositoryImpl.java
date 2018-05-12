@@ -103,5 +103,14 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		}
 	}
 
+	@Override
+	public List<User> getUserByMobileEmail(String countryCode, String mobileNumber, String emailaddress) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
+		crit.add(Restrictions.eq("countrycode", countryCode.toLowerCase().trim()));
+		crit.add(Restrictions.eq("mobilenumber", mobileNumber.toLowerCase().trim()));
+		crit.add(Restrictions.eq("emailaddress", emailaddress.toLowerCase().trim()));
+		return crit.list();
+	}
+
 	 
 }

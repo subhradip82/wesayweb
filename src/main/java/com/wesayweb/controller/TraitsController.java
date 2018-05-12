@@ -48,12 +48,14 @@ public class TraitsController {
 	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
+		
+		
 		SettingsUtil settingsUtil = new SettingsUtil();
 		Map<String, String> returnValue = new HashMap<String, String>();
 		for (CustomTraits customTraitObj : listOfCustomTraitObj) {
+			  
 			User logedinUserObj = userRepository.findByUsername(
 					SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-
 			int readstatus = 0;
 			if (customTraitObj.getTraitgivenfor() == 0) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
@@ -61,7 +63,8 @@ public class TraitsController {
 			} else if (customTraitObj.getTraitgivenfor() == logedinUserObj.getId()) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
 				readstatus = 1;
-			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), customTraitObj.getTraitgivenfor())) {
+			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), 
+					customTraitObj.getTraitgivenfor())) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "Invalid request");
 				return returnValue;
@@ -102,7 +105,9 @@ public class TraitsController {
 					}
 					
 				}
+				userTraitObj.setTypeofvote(customTraitObj.getTypeofvote());
 				userTraitObj.setReadstatus(readstatus);
+				
 				userTraitsRepository.saveUserTraits(userTraitObj);
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 			}

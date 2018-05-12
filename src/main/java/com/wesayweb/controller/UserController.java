@@ -1,4 +1,4 @@
-package com.wesayweb.controller;
+package com.wesayweb.controller; 
 
 import java.util.Date;
 import java.util.HashMap;
@@ -25,6 +25,7 @@ import com.wesayweb.repository.UserOtpRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.request.model.UserRequest;
+import com.wesayweb.service.AuthnticationService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 import com.wesayweb.util.PasswordEncrypterUtil;
@@ -50,6 +51,8 @@ public class UserController {
 	@Autowired
 	UserSettingRepository userSettingRepositoryService;
 
+	@Autowired
+	AuthnticationService authnticationService;
 
 	private JwtSecurityUtil tokenUtil = new JwtSecurityUtil();
 
@@ -91,22 +94,19 @@ public class UserController {
 	@ResponseBody
 	public Map<String, String> validateOtpViaemail(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		String jToken = request.getHeader("X-Authorization").trim();
-		Map<String, String> token = tokenUtil.parseJWT(jToken);
 		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), 
-								Long.valueOf(token.get("userid")));
+				authnticationService.getSessionUserId());
 		 
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "OTP expired");
 			} else {
-				userRepository.activateUser(Long.valueOf(token.get("userid")));
-				otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
+				userRepository.activateUser(authnticationService.getSessionUserId());
+				otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(), 
+						userOtpObj.getOtp());
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-				returnValue.put(WeSayContants.CONST_AUTH_TOKEN, jToken);
-				applyusersdefaultsettings(Long.valueOf(token.get("userid")));
-				
+				applyusersdefaultsettings(authnticationService.getSessionUserId());
 			}
 		} else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
@@ -180,8 +180,8 @@ public class UserController {
 	public Map<String, String> passwordretrivevalidateotp(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		String jToken = request.getHeader("X-Authorization").trim();
-		Map<String, String> token = tokenUtil.parseJWT(jToken);
-		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), Long.valueOf(token.get("userid")));
+		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(),
+				authnticationService.getSessionUserId());
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(WeSayContants.CONST_MESSAGE, "OTP is expired");
@@ -189,9 +189,10 @@ public class UserController {
 				UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(userOtpObj);
 				Map<String, String> validationResult = validtionObj.changepasswordByEmail();
 				if (validationResult.size() == 0) {
-					userRepository.changeUserPassword(Long.valueOf(token.get("userid")),
+					userRepository.changeUserPassword(authnticationService.getSessionUserId(),
 							PasswordEncrypterUtil.encode(userOtpObj.getPassword()));
-					otpRepositoryService.updateOtpStatus(Long.valueOf(token.get("userid")), userOtpObj.getOtp());
+					otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(),
+							userOtpObj.getOtp());
 					returnValue.put("message", "User password changed successfully");
 					returnValue.put("authtoken", jToken);
 				} else {

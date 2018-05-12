@@ -41,7 +41,16 @@ public class CustomTraits implements Serializable {
 	@Transient
 	private Long traitgivenfor;
 	
+	@Transient
+	private int typeofvote;
 	
+	
+	public int getTypeofvote() {
+		return typeofvote;
+	}
+	public void setTypeofvote(int typeofvote) {
+		this.typeofvote = typeofvote;
+	}
 	public Long getTraitgivenfor() {
 		return traitgivenfor;
 	}
@@ -126,7 +135,16 @@ public class CustomTraits implements Serializable {
 				+ traitdescripion + ", traiticonpath=" + traiticonpath + ", activestatus=" + activestatus
 				+ ", deletestatus=" + deletestatus + ", creationdate=" + creationdate + ", updateondate=" + updateondate
 				+ ", approveddate=" + approveddate + ", traitidentifier=" + traitidentifier + ", traituniqueid="
-				+ traituniqueid + "]";
+				+ traituniqueid + ", traitgivenfor=" + traitgivenfor + ", typeofvote=" + typeofvote
+				+ ", getTypeofvote()=" + getTypeofvote() + ", getTraitgivenfor()=" + getTraitgivenfor()
+				+ ", getTraituniqueid()=" + getTraituniqueid() + ", getId()=" + getId() + ", getTraitname()="
+				+ getTraitname() + ", getTraittype()=" + getTraittype() + ", getTraitdescripion()="
+				+ getTraitdescripion() + ", getTraiticonpath()=" + getTraiticonpath() + ", getActivestatus()="
+				+ getActivestatus() + ", getDeletestatus()=" + getDeletestatus() + ", getCreationdate()="
+				+ getCreationdate() + ", getUpdateondate()=" + getUpdateondate() + ", getApproveddate()="
+				+ getApproveddate() + ", getTraitidentifier()=" + getTraitidentifier() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	 
 
 }

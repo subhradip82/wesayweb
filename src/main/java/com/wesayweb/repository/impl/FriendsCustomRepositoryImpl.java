@@ -7,12 +7,14 @@ import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
- 
+
 import com.wesayweb.model.Friends;
 import com.wesayweb.repository.FriendsCustomRepository;
+import com.wesayweb.response.model.FriendsResponse;
 
 @Service
 public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
@@ -46,18 +48,30 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 	@Override
 	public boolean areTheyFriends(Long firstFriendId, Long secondFriendId) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
-		crit.add(Restrictions.eq("userid", firstFriendId));
-		crit.add(Restrictions.eq("friendsid", secondFriendId));
-		crit.add(Restrictions.eq("invitationacceptstatus", 0));
+		
+		Criterion rest1= Restrictions.or(Restrictions.eq("userid", firstFriendId),
+				Restrictions.eq("friendsid", firstFriendId));
+		
+		Criterion rest2= Restrictions.or(Restrictions.eq("userid", firstFriendId),
+				Restrictions.eq("friendsid", firstFriendId));
+		
+		
+		crit.add(Restrictions.and(rest1, rest2));
+		 
+		crit.add(Restrictions.eq("invitationacceptstatus", 1));
 		crit.add(Restrictions.isNotNull("requestuniueid"));
 		crit.add(Restrictions.isNotNull("invitationacceptdate"));
-		
-		if(crit.list().size()>0) { 
+
+		if (crit.list().size() > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public List<Object[]> getMyFriendList(long userid) {
+		return em.createNamedQuery("getMyFriendList").getResultList();
 	}
 
 }
