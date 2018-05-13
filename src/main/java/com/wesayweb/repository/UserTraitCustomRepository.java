@@ -43,14 +43,14 @@ public interface UserTraitCustomRepository {
 			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
-			+ "  AND  B.isactive = 1   " + 
+			+ "  AND  B.isactive = 1  AND B.iswaitingforapproval = 0 " + 
 			" UNION ALL  " + 
 			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, "
 			+ " B.typeofvote , B.ishidden FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
-			+ "  AND  B.isactive = 1      " + 
+			+ "  AND  B.isactive = 1  AND B.iswaitingforapproval = 0    " + 
 			" ) " + 
 			"select traituniqueid, " + 
 			"	   traitname , " + 

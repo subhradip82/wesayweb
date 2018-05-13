@@ -77,7 +77,7 @@ public class UserTraitsController {
 			traitsResponseObj.setTraitname((String) object[1]);
 			traitsResponseObj.setTraiticonpath((String) object[2]);
 			traitsResponseObj.setTraittype((String) object[3]);
-			if (ismyowntrait || settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
+			if (ismyowntrait || ! settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
 					"c25bf9724ef111e89c2dfa7ae01bbebc")) {
 				traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
 				traitsResponseObj.setNegetive(Integer.valueOf(object[5].toString()));
