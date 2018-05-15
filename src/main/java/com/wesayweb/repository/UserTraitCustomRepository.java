@@ -91,12 +91,12 @@ public interface UserTraitCustomRepository {
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor "
 			+ " AND  B.iswaitingforapproval = 1    " + 
 			" ) " + 
-			"select a.traituniqueid, CASE WHEN a.ishidden = 1 then b.fullname else '' end as fullname ," + 
+			"select a.traituniqueid, CASE WHEN a.ishidden = 1 then '' else  b.fullname  end as fullname ," + 
 			"	   a.traitname , " + 
-			"	   a.traiticonpath,"
+			"	   CASE WHEN a.traiticonpath IS NULL THEN '' ELSE a.traiticonpath END AS traiticonpath," 
 			+ "	   a.traittype, " + 
 			"	   a.typeofvote   " + 
 			"	   from TRAIT a join user_master B on a.traitgivenby = b.id   " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "traitsWaitingForApproval")
-	List<UserTraitsResponsePojo> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);
+	List<Object[]> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);
 }

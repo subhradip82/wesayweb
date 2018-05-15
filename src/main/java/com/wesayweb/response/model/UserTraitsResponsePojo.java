@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,8 @@ public class UserTraitsResponsePojo implements Serializable {
 
 	@Getter
 	@Setter
-	private Long traitid;
+	@Builder.Default
+	private Long traitid = 0L;
 
 	@Getter
 	@Setter
@@ -65,6 +67,7 @@ public class UserTraitsResponsePojo implements Serializable {
 	
 	@Getter
 	@Setter
+	@Default
 	private int typeofvote;
 	
 	@Getter

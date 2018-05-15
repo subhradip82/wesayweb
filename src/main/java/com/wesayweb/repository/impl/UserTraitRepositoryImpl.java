@@ -125,7 +125,7 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	}
 
 	@Override
-	public List<UserTraitsResponsePojo> traitsWaitingForApproval(Long userId) {
+	public List<Object[]> traitsWaitingForApproval(Long userId) {
 		return em.createNamedQuery("traitsWaitingForApproval").getResultList();
 	}
 
