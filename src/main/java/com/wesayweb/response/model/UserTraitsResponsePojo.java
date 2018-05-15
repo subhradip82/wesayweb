@@ -1,6 +1,8 @@
 package com.wesayweb.response.model;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,4 +61,20 @@ public class UserTraitsResponsePojo implements Serializable {
 	@Getter
 	@Setter
 	private int ishidden;
+	
+	
+	@Getter
+	@Setter
+	private int typeofvote;
+	
+	@Getter
+	@Setter
+	private String fullname;
+	
+	@Getter
+	private Date creationdate;
+	
+	
+	
+	
 }

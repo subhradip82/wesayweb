@@ -15,6 +15,7 @@ import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.TraitListResponse;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 import com.wesayweb.util.SettingsUtil;
 
 public class TraitService {
@@ -31,9 +32,9 @@ public class TraitService {
 	@Autowired
 	UserTraitRepository userTraitsRepository;
 
-	public GenericApiResponse<List<UserTrait>> traitsWiatingForApproval(Long userId)
+	public GenericApiResponse<List<UserTraitsResponsePojo>> traitsWiatingForApproval(Long userId)
 	{
-		List<UserTrait> userTraits =  userTraitsRepository.traitsWaitingForApproval(userId);
+		List<UserTraitsResponsePojo> userTraits =  userTraitsRepository.traitsWaitingForApproval(userId);
 		GenericApiResponse genericResponseObj = GenericApiResponse.builder().build();
 		Map<String, String> customResponse = new LinkedHashMap<String, String>();
 		genericResponseObj.setStatus(WeSayContants.CONST_SUCCESS);

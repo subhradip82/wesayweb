@@ -24,6 +24,7 @@ import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.TraitListResponse;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.TraitService;
 import com.wesayweb.util.SettingsUtil;
@@ -187,12 +188,12 @@ public class TraitsController {
 		userTrait.setTraitgivenfor(authenticationService.getSessionUserId());
 		userTraitsRepository.unHideTrait(userTrait);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		return returnValue;
+		return returnValue; 
 	}
 
 	@RequestMapping(value = "/traitswiatingforapproval/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public GenericApiResponse<List<UserTrait>> traitswiatingforapproval() {
+	public GenericApiResponse<List<UserTraitsResponsePojo>> traitswiatingforapproval() {
 		return traitService.traitsWiatingForApproval(authenticationService.getSessionUserId());
 	}
 	

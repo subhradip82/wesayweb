@@ -19,6 +19,7 @@ import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.UserTraitCustomRepository;
 import com.wesayweb.response.model.TraitListResponse;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 
 @Service
 public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
@@ -124,11 +125,8 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	}
 
 	@Override
-	public List<UserTrait> traitsWaitingForApproval(Long userId) {
-		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
-		crit.add(Restrictions.eq("traitgivenfor", userId));
-		crit.add(Restrictions.eq("iswaitingforapproval", 1));
-		return crit.list();
+	public List<UserTraitsResponsePojo> traitsWaitingForApproval(Long userId) {
+		return em.createNamedQuery("traitsWaitingForApproval").getResultList();
 	}
 
 	 

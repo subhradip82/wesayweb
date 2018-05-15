@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.response.model.TraitListResponse;
+import com.wesayweb.response.model.UserTraitsResponsePojo;
 
 @Repository
 public interface UserTraitCustomRepository {
@@ -75,6 +76,27 @@ public interface UserTraitCustomRepository {
 	void hideTrait(UserTrait userTraitObj);
 	void approveCustomTrait(UserTrait userTraitObj);
 	void unHideTrait(UserTrait userTraitObj);
-	List<UserTrait>  listOfUnreadTrait(Long userid);
-	List<UserTrait> traitsWaitingForApproval(Long userId);
+	List<UserTrait>  listOfUnreadTrait(Long userid); 
+	
+	@Query(value = "WITH TRAIT AS (  " + 
+			" SELECT A.traitname, B.traitgivenby, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
+			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
+			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
+			+ "  AND  B.iswaitingforapproval = 1 " + 
+			" UNION ALL  " + 
+			" SELECT  A.traitname, B.traitgivenby, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
+			+ " A.traituniqueid, "
+			+ " B.typeofvote ,  B.ishidden FROM "
+			+ " custom_traits A JOIN user_trait B " + 
+			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor "
+			+ " AND  B.iswaitingforapproval = 1    " + 
+			" ) " + 
+			"select a.traituniqueid, CASE WHEN a.ishidden = 1 then b.fullname else '' end as fullname ," + 
+			"	   a.traitname , " + 
+			"	   a.traiticonpath,"
+			+ "	   a.traittype, " + 
+			"	   a.typeofvote   " + 
+			"	   from TRAIT a join user_master B on a.traitgivenby = b.id   " + 
+			"       ORDER BY traitname", nativeQuery = true, name = "traitsWaitingForApproval")
+	List<UserTraitsResponsePojo> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);
 }
