@@ -201,10 +201,10 @@ public class TraitsController {
 	
 	@RequestMapping(value = "/approvecustomtrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> approveCustomTrait(@RequestBody UserTrait userTrait) {
-		Map<String, String> returnValue = new HashMap<String, String>();
+	public GenericApiResponse approveCustomTrait(@RequestBody UserTrait userTrait) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		userTraitsRepository.approveCustomTrait(userTrait);
-		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 

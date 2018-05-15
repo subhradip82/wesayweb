@@ -79,23 +79,23 @@ public interface UserTraitCustomRepository {
 	List<UserTrait>  listOfUnreadTrait(Long userid); 
 	
 	@Query(value = "WITH TRAIT AS (  " + 
-			" SELECT A.traitname, B.traitgivenby, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
+			" SELECT A.traitname, B.creationdate, B.traitgivenby, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
-			+ "  AND  B.iswaitingforapproval = 1 " + 
+			+ "  AND  B.iswaitingforapproval = 1  and B.isactive = 1" + 
 			" UNION ALL  " + 
-			" SELECT  A.traitname, B.traitgivenby, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
+			" SELECT  A.traitname, B.creationdate, B.traitgivenby, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, "
 			+ " B.typeofvote ,  B.ishidden FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor "
-			+ " AND  B.iswaitingforapproval = 1    " + 
+			+ " AND  B.iswaitingforapproval = 1  and B.isactive = 1  " + 
 			" ) " + 
 			"select a.traituniqueid, CASE WHEN a.ishidden = 1 then '' else  b.fullname  end as fullname ," + 
 			"	   a.traitname , " + 
 			"	   CASE WHEN a.traiticonpath IS NULL THEN '' ELSE a.traiticonpath END AS traiticonpath," 
 			+ "	   a.traittype, " + 
-			"	   a.typeofvote   " + 
+			"	   a.typeofvote ,a.creationdate  " + 
 			"	   from TRAIT a join user_master B on a.traitgivenby = b.id   " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "traitsWaitingForApproval")
 	List<Object[]> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);

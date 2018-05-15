@@ -75,7 +75,8 @@ public class UserTraitsResponsePojo implements Serializable {
 	private String fullname;
 	
 	@Getter
-	private Date creationdate;
+	@Setter
+	private String creationdate;
 	
 	
 	

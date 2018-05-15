@@ -44,6 +44,7 @@ public class TraitService {
 			responseObj.setTraiticonpath(object[3].toString());
 			responseObj.setTraittype(object[4].toString());
 			responseObj.setTypeofvote(Integer.valueOf(object[5].toString()));
+			responseObj.setCreationdate(object[6].toString());
 			responseList.add(responseObj);
 		}
 		
