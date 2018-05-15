@@ -27,7 +27,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		crit.add(Restrictions.eq("friendsid", userid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));
-		crit.add(Restrictions.isNotNull("requestuniueid"));
+		crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNull("invitationacceptdate"));
 		crit.addOrder(Order.asc("addeddate"));
 		return crit.list();

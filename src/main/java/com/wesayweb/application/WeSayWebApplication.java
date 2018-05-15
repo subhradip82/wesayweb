@@ -18,7 +18,7 @@ import com.wesayweb.repository.UserRepository;
 @EntityScan("com.wesayweb.model")
 @EnableJpaRepositories("com.wesayweb.repository")
 
-public class WeSayWebApplication /* extends WebSecurityConfigurerAdapter */ implements WebMvcConfigurer {
+public class WeSayWebApplication implements WebMvcConfigurer {
 
 	@Autowired
 	UserRepository repository;
@@ -30,13 +30,11 @@ public class WeSayWebApplication /* extends WebSecurityConfigurerAdapter */ impl
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "OPTIONS", "PUT")
-				.allowedHeaders("Content-Type","X-Authorization", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-						"Access-Control-Request-Headers")
+				.allowedHeaders("Content-Type", "X-Authorization", "X-Requested-With", "accept", "Origin",
+						"Access-Control-Request-Method", "Access-Control-Request-Headers")
 				.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
 				.allowCredentials(true).maxAge(3600);
 
 	}
-
-	 
 
 }

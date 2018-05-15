@@ -2,7 +2,6 @@ package com.wesayweb.conf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import com.wesayweb.service.EmailService;
 
 @Configuration

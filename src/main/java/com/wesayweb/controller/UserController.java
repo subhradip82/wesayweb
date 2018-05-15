@@ -1,4 +1,4 @@
-package com.wesayweb.controller; 
+package com.wesayweb.controller;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -25,7 +25,8 @@ import com.wesayweb.repository.UserOtpRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.request.model.UserRequest;
-import com.wesayweb.service.AuthnticationService;
+import com.wesayweb.response.model.GenericApiResponse;
+import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 import com.wesayweb.util.PasswordEncrypterUtil;
@@ -44,7 +45,7 @@ public class UserController {
 
 	@Autowired
 	UserOtpRepository otpRepositoryService;
-	
+
 	@Autowired
 	SettingsRepository settingsRepositoryService;
 
@@ -52,28 +53,28 @@ public class UserController {
 	UserSettingRepository userSettingRepositoryService;
 
 	@Autowired
-	AuthnticationService authnticationService;
+	AuthenticationService authnticationService;
 
 	private JwtSecurityUtil tokenUtil = new JwtSecurityUtil();
 
 	@RequestMapping(value = "/emailregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> registerviaemail(@RequestBody UserRequest user) {
+	public GenericApiResponse<Map<String, String>> registerviaemail(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(user);
 		Map<String, String> validationResult = validtionObj.validateUerRegistrationByEmail();
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		if (validationResult.size() == 0) {
-			returnValue.putAll(completeRegistartion(user));
+			responseObj.setResponse(completeRegistartion(user));
+			responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		} else {
-			returnValue.putAll(validationResult);
+			responseObj.setResponse(validationResult);
+			responseObj.setStatus(WeSayContants.CONST_ERROR);
 		}
-		return returnValue;
+		return responseObj;
 	}
 
-	@RequestMapping(value = "/resendactivationcode/",
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/resendactivationcode/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> resendactivationcode(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -87,24 +88,20 @@ public class UserController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/validateotpviaemail/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/validateotpviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> validateOtpViaemail(HttpServletRequest request, @RequestBody UserOtp userOtpObj) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(), 
+		List<UserOtp> otpObj = otpRepositoryService.validateOtp(userOtpObj.getOtp(),
 				authnticationService.getSessionUserId());
-		 
+
 		if (otpObj.size() > 0) {
 			if (new Date().compareTo(otpObj.get(0).getValidupto()) > 0) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "OTP expired");
 			} else {
 				userRepository.activateUser(authnticationService.getSessionUserId());
-				otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(), 
-						userOtpObj.getOtp());
+				otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(), userOtpObj.getOtp());
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				applyusersdefaultsettings(authnticationService.getSessionUserId());
 			}
@@ -116,10 +113,7 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/forgotpasswordviaemail/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/forgotpasswordviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> forgotpasswordviaemail(@RequestBody UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -144,11 +138,7 @@ public class UserController {
 
 	}
 
-	
-	@RequestMapping(value = "/loginviaemail/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/loginviaemail/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> loginviaemail(@RequestBody User user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -191,8 +181,7 @@ public class UserController {
 				if (validationResult.size() == 0) {
 					userRepository.changeUserPassword(authnticationService.getSessionUserId(),
 							PasswordEncrypterUtil.encode(userOtpObj.getPassword()));
-					otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(),
-							userOtpObj.getOtp());
+					otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(), userOtpObj.getOtp());
 					returnValue.put("message", "User password changed successfully");
 					returnValue.put("authtoken", jToken);
 				} else {
@@ -207,10 +196,7 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = "/validatemobile/",
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/validatemobile/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public int validatebymobile(@RequestBody User user) {
 		return userRepository.getUserByMobileNumber(user.getCountrycode(), user.getMobilenumber(), 0).size();
@@ -275,7 +261,7 @@ public class UserController {
 		userObj.setIsregisteredbymobile(userReqObj.getIsregisteredbymobile());
 		userObj.setPassword(PasswordEncrypterUtil.encode(userReqObj.getPassword()));
 		userObj.setMobilenumber(userReqObj.getMobilenumber());
-		
+
 		return userObj;
 	}
 
@@ -286,7 +272,6 @@ public class UserController {
 
 	}
 
-	
 	public Map<String, String> completeRegistartion(UserRequest user) {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		if (userRepository.getUserByEmailAddess(user.getEmailaddress().trim(), 0).size() > 0) {
@@ -307,7 +292,7 @@ public class UserController {
 		}
 		return returnValue;
 	}
-	
+
 	public void applyusersdefaultsettings(Long userid) {
 		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
 		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {

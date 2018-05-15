@@ -70,6 +70,6 @@ public class Friends implements Serializable {
 
 	@Getter
 	@Setter
-	private String requestuniueid;
+	private String requestuniqueid;
 
 }

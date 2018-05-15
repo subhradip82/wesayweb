@@ -1,92 +1,62 @@
 package com.wesayweb.response.model;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class UserTraitsResponsePojo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Getter
+	@Setter
 	private Long traitid;
-	
+
+	@Getter
+	@Setter
 	private String traitname;
-	private String traituniqid;
+
+	@Getter
+	@Setter
+	private String traituniqueid;
+
+	@Getter
+	@Setter
 	private String traitdescripion;
-	
+
+	@Getter
+	@Setter
 	private String traiticonpath;
-	
+
+	@Getter
+	@Setter
 	private int positive;
+
+	@Getter
+	@Setter
 	private int negetive;
+
+	@Getter
+	@Setter
 	private int nutral;
+
+	@Getter
+	@Setter
 	private String traittype;
+
+	@Getter
+	@Setter
 	private int isannonymous;
+
+	@Getter
+	@Setter
 	private int ishidden;
-	
-	public int getIshidden() {
-		return ishidden;
-	}
-	public void setIshidden(int ishidden) {
-		this.ishidden = ishidden;
-	}
-	public String getTraittype() {
-		return traittype;
-	}
-	public void setTraittype(String traittype) {
-		this.traittype = traittype;
-	}
-	public String getTraituniqid() {
-		return traituniqid;
-	}
-	public void setTraituniqid(String traituniqid) {
-		this.traituniqid = traituniqid;
-	}
-	public Long getTraitid() {
-		return traitid;
-	}
-	public void setTraitid(Long traitid) {
-		this.traitid = traitid;
-	}
-	public String getTraitname() {
-		return traitname;
-	}
-	public void setTraitname(String traitname) {
-		this.traitname = traitname;
-	}
-	public String getTraitdescripion() {
-		return traitdescripion;
-	}
-	public void setTraitdescripion(String traitdescripion) {
-		this.traitdescripion = traitdescripion;
-	}
-	public String getTraiticonpath() {
-		return traiticonpath;
-	}
-	public void setTraiticonpath(String traiticonpath) {
-		this.traiticonpath = traiticonpath;
-	}
-	public int getPositive() {
-		return positive;
-	}
-	public void setPositive(int positive) {
-		this.positive = positive;
-	}
-	public int getNegetive() {
-		return negetive;
-	}
-	public void setNegetive(int negetive) {
-		this.negetive = negetive;
-	}
-	public int getNutral() {
-		return nutral;
-	}
-	public void setNutral(int nutral) {
-		this.nutral = nutral;
-	}
-	public int getIsannonymous() {
-		return isannonymous;
-	}
-	public void setIsannonymous(int isannonymous) {
-		this.isannonymous = isannonymous;
-	}
-	 	
 }

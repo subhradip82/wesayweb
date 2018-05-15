@@ -1,5 +1,8 @@
 package com.wesayweb.response.model;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,30 +14,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+public class GenericApiResponse<T> implements Serializable {
 
-public class TraitListResponse {
-
-	@Getter
-	@Setter
-	private String traitname;
+	private static final long serialVersionUID = 1L;
 
 	@Getter
 	@Setter
-	private String traitdescription;
+	private String status;
 
 	@Getter
 	@Setter
-	private String traiticonpath;
+	private String authtoken;
 
 	@Getter
 	@Setter
-	private String traituniqueid;
+	private T response;
 
 	@Getter
 	@Setter
-	private String message;
-
-	@Getter
-	@Setter
-	private int readstatus;
+	private Map<String,String> customResponse;
 }

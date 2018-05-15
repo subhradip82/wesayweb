@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.UserRepository;
 
-public class AuthnticationService {
+public class AuthenticationService {
 
 	@Autowired
 	UserRepository userRepository;

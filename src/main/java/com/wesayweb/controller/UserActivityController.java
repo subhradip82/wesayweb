@@ -26,8 +26,9 @@ import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.response.model.FriendsResponse;
+import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.UserSettingResponse;
-import com.wesayweb.service.AuthnticationService;
+import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 
@@ -57,9 +58,12 @@ public class UserActivityController {
 	UserRepository userRepository;
 
 	@Autowired
-	AuthnticationService authnticationService;
+	AuthenticationService authnticationService;
 
-	@RequestMapping(value = "/applydeafultsettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/applydeafultsettings/", 
+					method = RequestMethod.POST, 
+					produces = "application/json",
+					consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> applydeafultsettings() {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -68,9 +72,12 @@ public class UserActivityController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/mysettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/mysettings/", 
+					method = RequestMethod.POST, 
+					produces = "application/json", 
+					consumes = "application/json")
 	@ResponseBody
-	public List<UserSettingResponse> mysettings() {
+	public GenericApiResponse<List<UserSettingResponse>> mysettings() {
 		List<UserSettingResponse> responseObj = new ArrayList<UserSettingResponse>();
 		List<Object[]> resultSet = userSettingRepositoryService.getMySettings(authnticationService.getSessionUserId());
 		for (Object[] object : resultSet) {
@@ -80,7 +87,10 @@ public class UserActivityController {
 			userSettingResponse.setUniqueid(object[2].toString().trim());
 			responseObj.add(userSettingResponse);
 		}
-		return responseObj;
+		GenericApiResponse returnResponse = GenericApiResponse.builder().build();
+		returnResponse.setResponse(WeSayContants.CONST_SUCCESS);
+		returnResponse.setResponse(responseObj);
+		return returnResponse;
 	}
 
 	@RequestMapping(value = "/changemysettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -90,19 +100,6 @@ public class UserActivityController {
 		settingObj.setUserid(authnticationService.getSessionUserId());
 		userSettingRepositoryService.changeMySetting(settingObj);
 		return responseObj;
-	}
-
-	public void applyusersdefaultsettings(Long userid) {
-		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
-		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {
-			UserSettingsCategoryMapping userMappingObj = UserSettingsCategoryMapping.builder().build();
-			userMappingObj.setCategoryid(settingsCategoryObj.getId());
-			userMappingObj.setUserid(userid);
-			userMappingObj.setCategoryvalue(settingsCategoryObj.getDefaultvalue());
-			userMappingObj.setUniqueid(settingsCategoryObj.getUniqueid());
-			userSettingRepositoryService.save(userMappingObj);
-		}
-
 	}
 
 	@RequestMapping(value = "/sendfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -123,7 +120,7 @@ public class UserActivityController {
 				requestFriendObj.setUserid(loggedinuserObj.getId());
 				requestFriendObj.setInvitedby(loggedinuserObj.getId());
 				requestFriendObj.setFriendsid(friends.getFriendsid());
-				requestFriendObj.setRequestuniueid(
+				requestFriendObj.setRequestuniqueid(
 						tokenUtil.createJWTTokenForFriendRequest(String.valueOf(loggedinuserObj.getId()),
 								userObj.getEmailaddress(), String.valueOf(friends.getFriendsid())));
 				friendsRepositoryService.save(requestFriendObj);
@@ -154,13 +151,12 @@ public class UserActivityController {
 		return friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId());
 
 	}
-	
-	
+
 	@RequestMapping(value = "/getMyFriendList/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<FriendsResponse> getMyFriendList() {
 		List<FriendsResponse> returnList = new ArrayList<FriendsResponse>();
-		List<Object[]> resultSet =  friendsRepositoryService.getMyFriendList(authnticationService.getSessionUserId());
+		List<Object[]> resultSet = friendsRepositoryService.getMyFriendList(authnticationService.getSessionUserId());
 		for (Object[] object : resultSet) {
 			FriendsResponse responseObj = FriendsResponse.builder().build();
 			responseObj.setFriendsid(Long.valueOf(object[0].toString()));
@@ -169,12 +165,10 @@ public class UserActivityController {
 			responseObj.setCountrycode(object[2].toString());
 			responseObj.setFullname(object[4].toString());
 			responseObj.setAddeddate(object[5].toString());
-			if(null != object[6]) {
+			if (null != object[6]) {
 				responseObj.setInvitationacceptdate(object[6].toString());
-			}
-			else
-			{
-				responseObj.setInvitationacceptdate("N/A"); 
+			} else {
+				responseObj.setInvitationacceptdate("N/A");
 			}
 			responseObj.setAccept_status(Integer.valueOf(object[7].toString()));
 			responseObj.setId(Long.valueOf(object[8].toString()));
@@ -182,7 +176,7 @@ public class UserActivityController {
 		}
 		return returnList;
 	}
-	
+
 	@RequestMapping(value = "/getMyContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<ContactList> getMyContacts() {
@@ -235,7 +229,7 @@ public class UserActivityController {
 			Friends friendobj = new Friends();
 			if (friendsRequest.size() > 0) {
 				friendobj = friendsRequest.get(0);
-				Map<String, String> requesttoken = tokenUtil.parseInvitationJWT(friendobj.getRequestuniueid());
+				Map<String, String> requesttoken = tokenUtil.parseInvitationJWT(friendobj.getRequestuniqueid());
 				if (authnticationService.getSessionUser().getEmailaddress().trim()
 						.equalsIgnoreCase(requesttoken.get("recieversemail"))
 						&& (friendobj.getUserid() == Long.valueOf((requesttoken.get("sendersid"))))) {
@@ -261,4 +255,19 @@ public class UserActivityController {
 		String message = "Dear User,\n\n\nYou have recieved a friend request from  : " + fullname;
 		return emailService.sendMail(user.getEmailaddress(), subject, message);
 	}
+
+
+	public void applyusersdefaultsettings(Long userid) {
+		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
+		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {
+			UserSettingsCategoryMapping userMappingObj = UserSettingsCategoryMapping.builder().build();
+			userMappingObj.setCategoryid(settingsCategoryObj.getId());
+			userMappingObj.setUserid(userid);
+			userMappingObj.setCategoryvalue(settingsCategoryObj.getDefaultvalue());
+			userMappingObj.setUniqueid(settingsCategoryObj.getUniqueid());
+			userSettingRepositoryService.save(userMappingObj);
+		}
+
+	}
+
 }

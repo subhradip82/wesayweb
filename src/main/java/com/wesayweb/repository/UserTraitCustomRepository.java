@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.UserTrait;
+import com.wesayweb.response.model.TraitListResponse;
 
 @Repository
 public interface UserTraitCustomRepository {
@@ -70,10 +71,10 @@ public interface UserTraitCustomRepository {
 	
 	void saveUserTraits(UserTrait userTraitObj);
 	void updateUserTrait(UserTrait userTraitObj);
-	
 	void deleteTrait(UserTrait userTraitObj);
 	void hideTrait(UserTrait userTraitObj);
 	void approveCustomTrait(UserTrait userTraitObj);
 	void unHideTrait(UserTrait userTraitObj);
 	List<UserTrait>  listOfUnreadTrait(Long userid);
+	List<UserTrait> traitsWaitingForApproval(Long userId);
 }

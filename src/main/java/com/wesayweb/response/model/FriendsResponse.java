@@ -1,10 +1,6 @@
 package com.wesayweb.response.model;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import com.wesayweb.model.UserSettingsCategoryMapping;
-import com.wesayweb.model.UserSettingsCategoryMapping.UserSettingsCategoryMappingBuilder;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +15,8 @@ import lombok.ToString;
 @ToString
 public class FriendsResponse implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@Getter
 	@Setter
 	private Long friendsid;
@@ -26,7 +24,7 @@ public class FriendsResponse implements Serializable {
 	@Getter
 	@Setter
 	private Long id;
-	
+
 	@Getter
 	@Setter
 	private String emailaddress;
@@ -54,10 +52,9 @@ public class FriendsResponse implements Serializable {
 	@Getter
 	@Setter
 	private int accept_status;
-	
+
 	@Getter
 	@Setter
-	private String requestuniueid;
-	
+	private String requestuniqueid;
 
 }

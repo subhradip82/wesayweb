@@ -13,163 +13,90 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name = "user_trait")
 @EntityListeners(AuditingEntityListener.class)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+
 public class UserTrait implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter
+	@Setter
 	private Long id;
 
+	@Getter
+	@Setter
 	private long traitid;
-	private Date creationdate = new Date();
+
+	@Getter
+	final Date creationdate = new Date();
+
+	@Getter
+	@Setter
 	private Date updationdate;
 
+	@Getter
+	@Setter
 	@Column(name = "isactive", nullable = false, columnDefinition = "int default 1")
 	private int isactive;
+
+	@Getter
+	@Setter
 	private long traitgivenby;
+
+	@Getter
+	@Setter
 	private long traitgivenfor;
+
+	@Getter
+	@Setter
 	@Column(name = "isannonymous", nullable = false, columnDefinition = "int default 0")
 	private int isannonymous;
+
+	@Getter
+	@Setter
 	@Column(name = "iswaitingforapproval", nullable = false, columnDefinition = "int default 0")
-    private int iswaitingforapproval;
+	private int iswaitingforapproval;
+
+	@Getter
+	@Setter
 	private String traituniqueid;
-	
+
+	@Getter
+	@Setter
 	@Column(name = "readstatus", nullable = false, columnDefinition = "int default 0")
 	private int readstatus;
-	
-	public int getReadstatus() {
-		return readstatus;
-	}
 
-	public void setReadstatus(int readstatus) {
-		this.readstatus = readstatus;
-	}
-
-	public int getIswaitingforapproval() {
-		return iswaitingforapproval;
-	}
-
-	public void setIswaitingforapproval(int iswaitingforapproval) {
-		this.iswaitingforapproval = iswaitingforapproval;
-	}
-
-	public String getTraituniqueid() {
-		return traituniqueid;
-	}
-
-	public void setTraituniqueid(String traituniqueid) {
-		this.traituniqueid = traituniqueid;
-	}
-
+	@Getter
+	@Setter
 	@Column(name = "ishidden", nullable = false, columnDefinition = "int default 0")
 	private int ishidden;
 
-	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral 
+	@Getter
+	@Setter
+	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral
 
+	@Getter
+	@Setter
 	@Column(name = "subtypeofvote", nullable = false, columnDefinition = "int default 0")
-	private int subtypeofvote ; 
-	
+	private int subtypeofvote;
+
+	@Getter
+	@Setter
 	private String comment;
-	
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public long getTraitid() {
-		return traitid;
-	}
-
-	public void setTraitid(long traitid) {
-		this.traitid = traitid;
-	}
-
-	public Date getCreationdate() {
-		return creationdate;
-	}
-
-	public void setCreationdate(Date creationdate) {
-		this.creationdate = creationdate;
-	}
-
-	public Date getUpdationdate() {
-		return updationdate;
-	}
-
-	public void setUpdationdate(Date updationdate) {
-		this.updationdate = updationdate;
-	}
-
-	public int getIsactive() {
-		return isactive;
-	}
-
-	public void setIsactive(int isactive) {
-		this.isactive = isactive;
-	}
-
-	public long getTraitgivenby() {
-		return traitgivenby;
-	}
-
-	public void setTraitgivenby(long traitgivenby) {
-		this.traitgivenby = traitgivenby;
-	}
-
-	public Long getTraitgivenfor() {
-		return traitgivenfor;
-	}
-
-	public void setTraitgivenfor(Long traitgivenfor) {
-		this.traitgivenfor = traitgivenfor;
-	}
-
-	public int getIsannonymous() {
-		return isannonymous;
-	}
-
-	public void setIsannonymous(int isannonymous) {
-		this.isannonymous = isannonymous;
-	}
-
-	public int getIshidden() {
-		return ishidden;
-	}
-
-	public void setIshidden(int ishidden) {
-		this.ishidden = ishidden;
-	}
-
-	public int getTypeofvote() {
-		return typeofvote;
-	}
-
-	public void setTypeofvote(int typeofvote) {
-		this.typeofvote = typeofvote;
-	}
-
-	public int getSubtypeofvote() {
-		return subtypeofvote;
-	}
-
-	public void setSubtypeofvote(int subtypeofvote) {
-		this.subtypeofvote = subtypeofvote;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-	
 }

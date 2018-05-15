@@ -9,11 +9,16 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.UserTraitCustomRepository;
+import com.wesayweb.response.model.TraitListResponse;
 
 @Service
 public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
@@ -70,7 +75,6 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	@Override
 	@Transactional
 	public void hideTrait(UserTrait userTraitObj) {
-
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
 		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
@@ -84,7 +88,6 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	@Override
 	@Transactional
 	public void unHideTrait(UserTrait userTraitObj) {
-
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
 		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
@@ -93,13 +96,11 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
 		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
 		em.createQuery(updateCriteria).executeUpdate();
-
 	}
 	
 	@Override
 	@Transactional
 	public void deleteTrait(UserTrait userTraitObj) {
-
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
 		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
@@ -120,6 +121,14 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	public List<UserTrait> listOfUnreadTrait(Long userid) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<UserTrait> traitsWaitingForApproval(Long userId) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
+		crit.add(Restrictions.eq("traitgivenfor", userId));
+		crit.add(Restrictions.eq("iswaitingforapproval", 1));
+		return crit.list();
 	}
 
 	 

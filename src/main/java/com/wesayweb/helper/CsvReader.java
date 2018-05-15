@@ -8,17 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.apache.logging.log4j.Logger;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
-import com.wesayweb.application.WeSayWebApplication;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.Traits;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CsvReader {
-
-	@Inject
-	private static Logger logger;
 
 	public static List<Traits> getTraits() {
 		List<Traits> returnList = new ArrayList<Traits>();
@@ -33,7 +28,7 @@ public class CsvReader {
 			br = new BufferedReader(new FileReader(file));
 			while ((line = br.readLine()) != null) {
 				if (linecounter > 0) {
-					
+
 					Traits traitObj = new Traits();
 					String[] trait = line.split(cvsSplitBy);
 					traitObj.setIsdefault(Integer.valueOf(trait[3]));
@@ -48,30 +43,29 @@ public class CsvReader {
 					traitObj.setTraitidentifier(10000);
 					traitObj.setApproveddate(new Date());
 					traitObj.setTraituniqueid(WesayStringUtil.generateRandomNumber());
-					
-					
+
 					returnList.add(traitObj);
-					
+
 				}
 				linecounter++;
 			}
 
 		} catch (FileNotFoundException e) {
-			logger.error(e);
+			log.error(e.getMessage());
 		} catch (IOException e) {
-			logger.error(e);
+			log.error(e.getMessage());
 		} finally {
 			if (br != null) {
 				try {
 					br.close();
 				} catch (IOException e) {
-					logger.error(e);
+					log.error(e.getMessage());
 				}
 			}
 		}
 		return returnList;
 	}
-	
+
 	public static List<SettingsCategory> getSettings() {
 		List<SettingsCategory> returnList = new ArrayList<SettingsCategory>();
 		ClassLoader classLoader = CsvReader.class.getClassLoader();
@@ -98,15 +92,15 @@ public class CsvReader {
 			}
 
 		} catch (FileNotFoundException e) {
-			logger.error(e);
+			log.error(e.getMessage());
 		} catch (IOException e) {
-			logger.error(e);
+			log.error(e.getMessage());
 		} finally {
 			if (br != null) {
 				try {
 					br.close();
 				} catch (IOException e) {
-					logger.error(e);
+					log.error(e.getMessage());
 				}
 			}
 		}
