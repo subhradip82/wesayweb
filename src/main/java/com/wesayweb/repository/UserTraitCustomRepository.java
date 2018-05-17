@@ -43,17 +43,17 @@ public interface UserTraitCustomRepository {
 
 	@Query(value = "WITH TRAIT AS (  " + 
 			" SELECT A.traitname, 'predefined' AS traittype, A.traitdescripion , A.traiticonpath , "
-			+ " A.traituniqueid, B.typeofvote, B.ishidden FROM trait_master A JOIN user_trait B " + 
+			+ " A.traituniqueid, B.typeofvote, B.ishidden, CASE WHEN B.traitgivenby = :traitgivenby THEN 1 ELSE 0 END AS istraitigave FROM trait_master A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  "
 			+ "  AND  B.isactive = 1  AND B.iswaitingforapproval = 0 " + 
 			" UNION ALL  " + 
 			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, "
-			+ " B.typeofvote , B.ishidden FROM "
+			+ " B.typeofvote , B.ishidden, CASE WHEN B.traitgivenby = :traitgivenby THEN 1 ELSE 0 END AS istraitigave FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
 			+ "  AND  B.isactive = 1  AND B.iswaitingforapproval = 0    " + 
-			" ) " + 
+			" ) , total_trait AS ( " + 
 			"select traituniqueid, " + 
 			"	   traitname , " + 
 			"	   traiticonpath,"
@@ -66,9 +66,17 @@ public interface UserTraitCustomRepository {
 			"	   traitname , " + 
 			"	   traiticonpath,"
 			+ "    traittype , ishidden  " + 
-			"       ORDER BY traitname", nativeQuery = true, name = "getMyFriendsTraits")
+			"        ) "
+			+ " SELECT a.traituniqueid,a.traitname,a.traiticonpath,a.traittype,a.positive,a.negetive,"
+			+ " a.nutral, a.ishidden ,b.istraitigave , "
+			+ "CASE WHEN b.typeofvote = 0 THEN 'y' ELSE 'n' END  as my_positive_vote, "
+			+ "CASE WHEN b.typeofvote = 1 THEN 'y' ELSE 'n' END  as my_negetive_vote, "
+			+ "CASE WHEN b.typeofvote = 2 THEN 'y' ELSE 'n' END  as my_neutral_vote FROM  total_trait "
+			+ "a LEFT JOIN TRAIT B ON "
+			+ "CASE WHEN b.istraitigave = 1 THEN  a.traituniqueid = b.traituniqueid  else 1= 2 end"
+			+ "", nativeQuery = true, name = "getMyFriendsTraits")
 
-	List<Object[]> getMyFriendsTraits(@Param("traitgivenfor") long traitgivenfor);
+	List<Object[]> getMyFriendsTraits(@Param("traitgivenfor") long traitgivenfor , @Param("traitgivenby") long traitgivenby);
 	
 	void saveUserTraits(UserTrait userTraitObj);
 	void updateUserTrait(UserTrait userTraitObj);

@@ -62,6 +62,7 @@ public class TraitsController {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		User logedinUserObj = authenticationService.getSessionUser();
 		for (CustomTraits customTraitObj : listOfCustomTraitObj) {
+			
 			int readstatus = 0;
 			if (customTraitObj.getTraitgivenfor() == 0) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
@@ -74,9 +75,11 @@ public class TraitsController {
 				returnValue.put(WeSayContants.CONST_MESSAGE, "Invalid request");
 				return returnValue;
 			}
+
+			
 			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
 					logedinUserObj.getId(), customTraitObj.getTraitgivenfor()).size() == 0) {
-				List<Traits> definedTraits = traitsRepository
+			List<Traits> definedTraits = traitsRepository
 						.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
 				UserTrait userTraitObj = new UserTrait();
 				userTraitObj.setIsactive(1);
@@ -114,15 +117,37 @@ public class TraitsController {
 				userTraitsRepository.saveUserTraits(userTraitObj);
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 			}
-
-			else {
-				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-				returnValue.put(WeSayContants.CONST_MESSAGE, "Trait already exists.");
+			else
+			{
+				changeTraitForUser(customTraitObj);
 			}
 		}
 		return returnValue;
 	}
 
+	public void changeTraitForUser(CustomTraits traitObj)
+	{
+		List<Traits> definedTraits = traitsRepository
+				.definedTraitAlreadyExists(traitObj.getTraitname().trim().toLowerCase());
+		if(definedTraits.size()>0) {
+			traitsRepository.updateUserTrait(definedTraits.get(0).getTraituniqueid(),
+					authenticationService.getSessionUserId(),
+					traitObj.getTraitgivenfor(),traitObj.getTypeofvote());
+			
+		}
+		else 
+		{
+			 List<String> result =	traitsRepository.customTraitAlreadyExists(traitObj.getTraitname().trim().toLowerCase(), 
+					authenticationService.getSessionUserId(),
+					traitObj.getTraitgivenfor());
+
+			 for(String uniqueid : result) {
+				 traitsRepository.updateCustomTrait(uniqueid, authenticationService.getSessionUserId(),
+					traitObj.getTraitgivenfor(),traitObj.getTypeofvote());
+			 }
+			 
+		}
+	}
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse getActiveTraits() {

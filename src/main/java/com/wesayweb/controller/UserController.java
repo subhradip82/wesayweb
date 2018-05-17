@@ -146,6 +146,7 @@ public class UserController {
 		Map<String, String> validationResult = validtionObj.validateUerLoginByEmail();
 		if (validationResult.size() == 0) {
 			List<User> userObj = userRepository.getUserByEmailAddess(user.getEmailaddress().trim().toLowerCase(), 1);
+			System.err.println(userObj);
 			if (userObj.size() == 0) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, WeSayContants.CONST_USER_NOT_ACTIVATED);

@@ -22,13 +22,13 @@ import lombok.ToString;
 
 @Entity
 
-@Table(name = "badge_master")
+@Table(name = "custom_badge")
 @EntityListeners(AuditingEntityListener.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Badges implements Serializable {
+public class CustomBadges implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -40,6 +40,10 @@ public class Badges implements Serializable {
 
 	@Getter
 	@Setter
+	private Long badgecreatedby;
+	
+	@Getter
+	@Setter
 	private String badgename;
 
 	@Getter
@@ -48,7 +52,7 @@ public class Badges implements Serializable {
 
 	@Getter
 	@Setter
-	private String badgeicon; 
+	private String badgeicon;
  
 	@Getter
 	@Setter
@@ -59,6 +63,6 @@ public class Badges implements Serializable {
 	final Date addeddate = new Date();
 
 	@Getter
-	final String badgeuniqueid = WesayStringUtil.generateRandomNumber();	
+	final String badgeuiqueid = WesayStringUtil.generateRandomNumber();	
 	
 }

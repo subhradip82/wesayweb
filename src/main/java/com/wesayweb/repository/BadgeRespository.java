@@ -1,19 +1,11 @@
 package com.wesayweb.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.wesayweb.model.Badges;
 
-@NoRepositoryBean
-public interface BadgeRespository<T extends Badges, ID extends Long> extends CrudRepository<T, ID> {
+@Repository
+public interface BadgeRespository  extends JpaRepository<Badges, Long>, BadgeCustomRespository    {
 
-	@Override
-	@Transactional(readOnly = true)
-	@Query("select e from #{#Badges} e where e.badgeisactive = 1")
-	List<T> findAll();
 }

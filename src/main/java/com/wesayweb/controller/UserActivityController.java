@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wesayweb.constants.WeSayContants;
+import com.wesayweb.model.Badges;
 import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 import com.wesayweb.model.SettingsCategory;
@@ -29,6 +30,7 @@ import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.UserSettingResponse;
 import com.wesayweb.service.AuthenticationService;
+import com.wesayweb.service.BadgeService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 
@@ -59,6 +61,9 @@ public class UserActivityController {
 
 	@Autowired
 	AuthenticationService authnticationService;
+	
+	@Autowired
+	BadgeService badgeService;
 
 	@RequestMapping(value = "/applydeafultsettings/", 
 					method = RequestMethod.POST, 
@@ -80,6 +85,8 @@ public class UserActivityController {
 	public GenericApiResponse<List<UserSettingResponse>> mysettings() {
 		List<UserSettingResponse> responseObj = new ArrayList<UserSettingResponse>();
 		List<Object[]> resultSet = userSettingRepositoryService.getMySettings(authnticationService.getSessionUserId());
+		
+		
 		for (Object[] object : resultSet) {
 			UserSettingResponse userSettingResponse = new UserSettingResponse();
 			userSettingResponse.setCategoryname(object[0].toString().trim());
@@ -183,6 +190,34 @@ public class UserActivityController {
 		return contactRepository.getMyContactList(authnticationService.getSessionUserId());
 	}
 
+	@RequestMapping(value = "/getMyBadgeCount/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Integer> getMyBadgeCount() {
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		responseObj.setResponse(badgeService.getEligibleNumberOfBadeges().intValue());
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);   
+		return responseObj;
+	}
+	
+	@RequestMapping(value = "/getAvailableBadges/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<List<Badges>> getAvailableBadges() {
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		responseObj.setResponse(badgeService.getAvailableBadges());
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);    
+		return responseObj;
+	}
+	
+	@RequestMapping(value = "/addCustomBadge/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Badges> addCustomBadge(Badges badgeObj) {
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		responseObj.setResponse(badgeService.getAvailableBadges());
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);    
+		return responseObj;
+	}
+	
+	
 	@RequestMapping(value = "/addContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addContacts(@RequestBody List<ContactList> contactList) {

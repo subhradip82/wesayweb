@@ -65,11 +65,12 @@ public class UserTraitsController {
 			ismyowntrait = true;
 
 		}
+		
 		List<Object[]> resultSet = new ArrayList<Object[]>();
 		if (ismyowntrait) {
 			resultSet.addAll(userTraitsRepository.getMyTraits(traitsgivenfor));
 		} else {
-			resultSet.addAll(userTraitsRepository.getMyFriendsTraits(traitsgivenfor));
+			resultSet.addAll(userTraitsRepository.getMyFriendsTraits(traitsgivenfor, authenticationService.getSessionUserId()));
 		}
 		SettingsUtil settingsUtl = new SettingsUtil();
 		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
@@ -90,8 +91,21 @@ public class UserTraitsController {
 				traitsResponseObj.setNegetive(99999);
 				traitsResponseObj.setNutral(99999);
 			}
-
 			traitsResponseObj.setIshidden(Integer.valueOf(object[7].toString()));
+			try {
+			traitsResponseObj.setMytraitcontibution(Integer.valueOf(object[8].toString()));
+			traitsResponseObj.setMypositive(object[9].toString());
+			traitsResponseObj.setMynegetive(object[10].toString());
+			traitsResponseObj.setMyneutral(object[11].toString());
+			}
+			catch(Exception e)
+			{
+				traitsResponseObj.setMytraitcontibution(0);
+				traitsResponseObj.setMypositive(String.valueOf("n"));
+				traitsResponseObj.setMynegetive(String.valueOf("n"));
+				traitsResponseObj.setMyneutral(String.valueOf("n"));
+			}
+			 
 			responseList.add(traitsResponseObj);
 		}
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();

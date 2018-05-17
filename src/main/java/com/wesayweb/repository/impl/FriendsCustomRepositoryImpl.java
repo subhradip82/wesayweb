@@ -39,7 +39,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		crit.add(Restrictions.eq("friendsid", userid));
 		crit.add(Restrictions.eq("id", requestid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));
-		crit.add(Restrictions.isNotNull("requestuniueid"));
+		crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNull("invitationacceptdate"));
 		crit.addOrder(Order.asc("addeddate"));
 		return crit.list();
@@ -59,7 +59,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		crit.add(Restrictions.and(rest1, rest2));
 		 
 		crit.add(Restrictions.eq("invitationacceptstatus", 1));
-		crit.add(Restrictions.isNotNull("requestuniueid"));
+		crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNotNull("invitationacceptdate"));
 
 		if (crit.list().size() > 0) {

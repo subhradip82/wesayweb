@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.wesayweb.model.Badges;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.Traits;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +89,45 @@ public class CsvReader {
 					categoryObj.setDefaultvalue(Integer.valueOf(rows[3].trim()));
 					categoryObj.setUniqueid(rows[4].trim());
 					returnList.add(categoryObj);
+				}
+				linecounter++;
+			}
+
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					log.error(e.getMessage());
+				}
+			}
+		}
+		return returnList;
+	}
+	
+	public static List<Badges> getBadges() {
+		List<Badges> returnList = new ArrayList<Badges>();
+		ClassLoader classLoader = CsvReader.class.getClassLoader();
+		File file = new File(classLoader.getResource("supported_stuff/badges.csv").getFile());
+		BufferedReader br = null;
+		int linecounter = 0;
+		String line = "";
+		String cvsSplitBy = ",";
+		try {
+
+			br = new BufferedReader(new FileReader(file));
+			while ((line = br.readLine()) != null) {
+				if (linecounter > 0) {
+					Badges badgeObj = Badges.builder().build();
+					String[] rows = line.split(cvsSplitBy);
+					badgeObj.setBadgename(rows[0].trim());
+					badgeObj.setBadgeisactive(Integer.valueOf(rows[1].trim()));
+					
+					returnList.add(badgeObj);
 				}
 				linecounter++;
 			}

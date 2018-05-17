@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.wesayweb.service.AuthenticationService;
+import com.wesayweb.service.BadgeService;
 import com.wesayweb.service.TraitService;
 
 @Configuration
@@ -65,5 +66,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	TraitService getTraitService() {
 		return new TraitService();
 	}
+	
+	@Bean
+	BadgeService getBadgeService() {
+		return new BadgeService();
+	}
+	
 	
 }

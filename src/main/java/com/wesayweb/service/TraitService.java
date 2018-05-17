@@ -45,7 +45,7 @@ public class TraitService {
 			responseObj.setTraittype(object[4].toString());
 			responseObj.setTypeofvote(Integer.valueOf(object[5].toString()));
 			responseObj.setCreationdate(object[6].toString());
-			responseList.add(responseObj);
+				responseList.add(responseObj);
 		}
 		
 		GenericApiResponse genericResponseObj = GenericApiResponse.builder().build();

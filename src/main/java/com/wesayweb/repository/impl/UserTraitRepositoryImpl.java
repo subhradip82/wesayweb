@@ -114,7 +114,7 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	}
 
 	@Override
-	public List<Object[]> getMyFriendsTraits(long traitgivenfor) {
+	public List<Object[]> getMyFriendsTraits(long traitgivenfor, long traitgivenby) {
 		return em.createNamedQuery("getMyFriendsTraits").getResultList();
 	}
 

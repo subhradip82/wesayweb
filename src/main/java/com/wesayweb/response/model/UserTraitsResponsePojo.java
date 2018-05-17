@@ -78,7 +78,21 @@ public class UserTraitsResponsePojo implements Serializable {
 	@Setter
 	private String creationdate;
 	
-	
-	
+	@Getter
+	@Setter
+	private int mytraitcontibution;
+
+	@Getter
+	@Setter
+	private String mypositive;
+
+	@Getter
+	@Setter
+	private String mynegetive;
+
+	@Getter
+	@Setter
+	private String myneutral;
+
 	
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -43,15 +43,14 @@ public class UserSettingRepositoryImpl implements UserSettingCustomRepository {
 	@Override
 	@Transactional
 	public boolean changeMySetting(UserSettingsCategoryMapping settingObj) {
+		 
 		boolean returnValue = false;
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaUpdate<UserSettingsCategoryMapping> updateCriteria = cb
-				.createCriteriaUpdate(UserSettingsCategoryMapping.class);
-		Root<UserSettingsCategoryMapping> userObj = updateCriteria.from(UserSettingsCategoryMapping.class);
-		updateCriteria.set(userObj.get("categoryvalue"), settingObj.getCategoryvalue());
-		updateCriteria.where(cb.equal(userObj.get("userid"), settingObj.getUserid()));
-		updateCriteria.where(cb.equal(userObj.get("uniqueid"), settingObj.getUniqueid()));
-		int affected = em.createQuery(updateCriteria).executeUpdate();
+		Query q = em.createQuery("update UserSettingsCategoryMapping set categoryvalue=:categoryvalue "
+				+ "  where uniqueid=:uniqueid and userid =:userid");
+		q.setParameter("categoryvalue", settingObj.getCategoryvalue());
+		q.setParameter("uniqueid", settingObj.getUniqueid());
+		q.setParameter("userid", settingObj.getUserid());
+		int affected = q.executeUpdate();
 		if (affected > 0) {
 			returnValue = true;
 		}

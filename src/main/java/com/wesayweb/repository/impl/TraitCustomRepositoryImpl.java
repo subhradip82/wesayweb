@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
+import javax.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -104,6 +105,33 @@ public class TraitCustomRepositoryImpl implements TraitCustomRepository {
 		}
 		crit.addOrder(Order.asc("traitname"));
 		return crit.list();
+	}
+ 
+	@Override
+	@Transactional
+	public int updateUserTrait(String  traituniqueid, Long traitgivenby, Long traitgivenfor, int newvote) {
+		String deleteQuery = "update UserTrait set typeofvote = :typeofvote where traituniqueid= :traituniqueid "
+				+ " AND traitgivenby = :traitgivenby and traitgivenfor = :traitgivenfor";
+	      Query query = em.createQuery(deleteQuery);
+	      query.setParameter("traituniqueid", traituniqueid);
+	      query.setParameter("traitgivenby", traitgivenby);
+	      query.setParameter("traitgivenfor", traitgivenfor);
+	      query.setParameter("typeofvote", newvote);
+	      return query.executeUpdate();
+	}
+
+	@Override
+	@Transactional
+	public int updateCustomTrait(String traituniqueid, Long traitgivenby, Long traitgivenfor,
+			int newvote) {
+		String deleteQuery = "update UserTrait set typeofvote = :typeofvote where traituniqueid= :traituniqueid "
+				+ " AND traitgivenby = :traitgivenby and traitgivenfor = :traitgivenfor";
+	      Query query = em.createQuery(deleteQuery);
+	      query.setParameter("traituniqueid", traituniqueid);
+	      query.setParameter("traitgivenby", traitgivenby);
+	      query.setParameter("traitgivenfor", traitgivenfor);
+	      query.setParameter("typeofvote", newvote);
+	      return query.executeUpdate();
 	}
 
 	 

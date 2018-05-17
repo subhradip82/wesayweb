@@ -33,7 +33,7 @@ public interface TraitCustomRepository {
 			);
 
 	
-	@Query(value = "select  a.traituniqueid from user_trait a \r\n" + 
+	@Query(value = "select  lower(trim(a.traituniqueid)) as traituniqueid from user_trait a \r\n" + 
 			"JOIN  custom_traits b ON a.traituniqueid = b.traituniqueid "
 			+ " WHERE a.traitgivenby = :traitgivenby "
 			+ " and a.traitgivenfor = :traitgivenfor and lower(trim(b.traitname))= :traitname ", nativeQuery = true, 
@@ -51,4 +51,6 @@ public interface TraitCustomRepository {
 	public CustomTraits saveCustomTrait(CustomTraits customTrait);
 	boolean removeTrait(Traits traitObj);
 	void removealltraits();
+	int updateUserTrait(String traituniqueid, Long traitgivenby, Long traitgivenfor, int newvote);
+	int updateCustomTrait(String traituniqueid, Long traitgivenby, Long traitgivenfor, int newvote);
 }
