@@ -3,6 +3,7 @@ package com.wesayweb.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -203,8 +204,11 @@ public class UserActivityController {
 	@ResponseBody
 	public GenericApiResponse<List<Badges>> getAvailableBadges() {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		Map<String, String> customResponse = new LinkedHashMap<String, String>();
+		customResponse.put("number_of_badges", String.valueOf(badgeService.getEligibleNumberOfBadeges().intValue()));
 		responseObj.setResponse(badgeService.getAvailableBadges());
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);    
+		responseObj.setCustomResponse(customResponse);
 		return responseObj;
 	}
 	

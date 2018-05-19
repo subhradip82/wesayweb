@@ -17,7 +17,7 @@ public interface BadgeCustomRespository {
 			+ ", GIVEN_BADGE_COUNT AS  " + "(  "
 			+ "    SELECT COUNT(*) AS TOTAL, 1 AS USERID from user_badge  where badgegivenby = :sourceuserid " + ")  "
 			+ " "
-			+ "SELECT   (A.TOTAL - CASE WHEN B.TOTAL IS NULL THEN 0 ELSE B.TOTAL END)/5 AS TOTAL_AVAILABLE_BADGE  "
+			+ "SELECT   (A.TOTAL - CASE WHEN B.TOTAL IS NULL THEN 0 ELSE B.TOTAL END)/1 AS TOTAL_AVAILABLE_BADGE  "
 			+ "FROM FRIENDS_COUNT A FULL OUTER JOIN GIVEN_BADGE_COUNT B ON A.USERID = B.USERID ", nativeQuery = true, name = "getNumberOfEligibleBadges")
 
 	public List<BigInteger> getNumberOfEligibleBadges(@Param("sourceuserid") long sourceuserid);

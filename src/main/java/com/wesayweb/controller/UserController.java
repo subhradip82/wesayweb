@@ -27,6 +27,7 @@ import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.request.model.UserRequest;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.service.AuthenticationService;
+import com.wesayweb.service.BadgeService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 import com.wesayweb.util.PasswordEncrypterUtil;
@@ -40,6 +41,9 @@ public class UserController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	BadgeService badgeService;
+	
 	@Autowired
 	EmailService emailService;
 
@@ -104,6 +108,7 @@ public class UserController {
 				otpRepositoryService.updateOtpStatus(authnticationService.getSessionUserId(), userOtpObj.getOtp());
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 				applyusersdefaultsettings(authnticationService.getSessionUserId());
+				badgeService.addBadgesForRegistration();
 			}
 		} else {
 			returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
