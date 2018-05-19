@@ -70,11 +70,11 @@ public class TraitsController {
 			} else if (customTraitObj.getTraitgivenfor() == logedinUserObj.getId()) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
 				readstatus = 1;
-			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), customTraitObj.getTraitgivenfor())) {
+			} /*else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), customTraitObj.getTraitgivenfor())) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "Invalid request");
 				return returnValue;
-			}
+			}*/
 
 			
 			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
