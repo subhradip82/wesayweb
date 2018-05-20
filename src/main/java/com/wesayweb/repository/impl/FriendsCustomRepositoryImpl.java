@@ -60,7 +60,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		
 		crit.add(Restrictions.or(rest1, rest2));
 		crit.add(Restrictions.eq("invitationacceptstatus", 1));
-		crit.add(Restrictions.isNotNull("requestuniqueid"));
+		//crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNotNull("invitationacceptdate"));
 
 		if (crit.list().size() > 0) {
