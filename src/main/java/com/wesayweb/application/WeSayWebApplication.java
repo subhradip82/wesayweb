@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.UserRepository;
 
 @SpringBootApplication()
@@ -24,6 +25,8 @@ public class WeSayWebApplication implements WebMvcConfigurer {
 	UserRepository repository;
 
 	public static void main(String[] args) {
+		
+		
 		SpringApplication.run(WeSayWebApplication.class, args);
 	}
 

@@ -47,6 +47,8 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 
 	@Override
 	public boolean areTheyFriends(Long firstFriendId, Long secondFriendId) {
+		
+		System.err.println("firstFriendId:"+firstFriendId+"  secondFriendId:"+secondFriendId);
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		
 		Criterion rest1= Restrictions.and(Restrictions.eq("userid", firstFriendId),
@@ -57,7 +59,6 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		
 		
 		crit.add(Restrictions.or(rest1, rest2));
-		 
 		crit.add(Restrictions.eq("invitationacceptstatus", 1));
 		crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNotNull("invitationacceptdate"));
