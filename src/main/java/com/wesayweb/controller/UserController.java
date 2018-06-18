@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.OtpGenerator;
+import com.wesayweb.model.ContactList;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserOtp;
@@ -24,10 +25,12 @@ import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UserOtpRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.request.model.ContactRequest;
 import com.wesayweb.request.model.UserRequest;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.BadgeService;
+import com.wesayweb.service.CotactService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
 import com.wesayweb.util.PasswordEncrypterUtil;
@@ -47,6 +50,9 @@ public class UserController {
 	@Autowired
 	EmailService emailService;
 
+	@Autowired
+	CotactService contactService;
+	
 	@Autowired
 	UserOtpRepository otpRepositoryService;
 
@@ -214,6 +220,13 @@ public class UserController {
 		return userRepository.getUserByEmailAddess(user.getEmailaddress(), 0).size();
 	}
 
+	@RequestMapping(value = "/checkIfCntactIsInWesay/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public List<ContactRequest> checkIfCntactIsInWesay(@RequestBody List<ContactRequest> contactList) {
+		return contactService.checkIfContactIsInWesay(contactList);
+	}
+	
+	
 	public String sendotpInemail(String emailAddress, Long userId) {
 		String otp = OtpGenerator.genrateOtp();
 

@@ -10,6 +10,7 @@ import com.wesayweb.model.ContactList;
 
 @Repository
 public interface ContactCustomRepository {
+	
 	@Query(value = "SELECT "
 			+ "     '' as firstname,'' as lastname, "
 			+ "     a.fullname,a.isinviationsent, a.sourceuserid,a.syncdate,"
@@ -29,6 +30,9 @@ public interface ContactCustomRepository {
 		    "		WHERE sourceuserid = :sourceuserid ",
 		    	   nativeQuery = true, name = "getMyContactList")
 				public List<ContactList> getMyContactList(@Param("sourceuserid") long sourceuserid);
-	public boolean saveMyContact(ContactList contact);
+				
+				public boolean saveMyContact(ContactList contact);
+	
+				public boolean isAlreadyAddedInApplication(String emailid, String mobilenum);
 	
 }
