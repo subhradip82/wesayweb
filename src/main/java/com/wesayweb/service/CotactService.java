@@ -12,7 +12,7 @@ import com.wesayweb.request.model.ContactRequest;
 
 
 public class CotactService {
-
+ 
 	@Autowired
 	ContactRepository  contactRepository;
 

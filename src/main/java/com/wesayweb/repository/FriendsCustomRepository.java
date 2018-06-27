@@ -28,5 +28,6 @@ public interface FriendsCustomRepository {
 			+ "					"
 			+ "			FROM  FRIENDS_DATA A JOIN user_master B  ON A.friendsid = B.id", nativeQuery = true, name = "getMyFriendList")
 	public List<Object[]> getMyFriendList(@Param("userid") long userid);
-
+	
+	
 }

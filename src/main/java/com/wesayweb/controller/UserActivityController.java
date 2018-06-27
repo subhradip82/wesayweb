@@ -29,6 +29,7 @@ import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.GenericApiResponse;
+import com.wesayweb.response.model.MyFriendsZoneResponse;
 import com.wesayweb.response.model.UserSettingResponse;
 import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.BadgeService;
@@ -62,14 +63,11 @@ public class UserActivityController {
 
 	@Autowired
 	AuthenticationService authnticationService;
-	
+
 	@Autowired
 	BadgeService badgeService;
 
-	@RequestMapping(value = "/applydeafultsettings/", 
-					method = RequestMethod.POST, 
-					produces = "application/json",
-					consumes = "application/json")
+	@RequestMapping(value = "/applydeafultsettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> applydeafultsettings() {
 		Map<String, String> returnValue = new HashMap<String, String>();
@@ -78,16 +76,12 @@ public class UserActivityController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/mysettings/", 
-					method = RequestMethod.POST, 
-					produces = "application/json", 
-					consumes = "application/json")
+	@RequestMapping(value = "/mysettings/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<List<UserSettingResponse>> mysettings() {
 		List<UserSettingResponse> responseObj = new ArrayList<UserSettingResponse>();
 		List<Object[]> resultSet = userSettingRepositoryService.getMySettings(authnticationService.getSessionUserId());
-		
-		
+
 		for (Object[] object : resultSet) {
 			UserSettingResponse userSettingResponse = new UserSettingResponse();
 			userSettingResponse.setCategoryname(object[0].toString().trim());
@@ -160,6 +154,20 @@ public class UserActivityController {
 
 	}
 
+	@RequestMapping(value = "/friendsZone/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse friendsZone() {
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
+		response.setMyfriends(getMyListOfActiveFriends());
+		response.setMyfriendrequest(
+				friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId()));
+		responseObj.setResponse(response);
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
+		return responseObj;
+
+	}
+
 	@RequestMapping(value = "/getMyFriendList/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<FriendsResponse> getMyFriendList() {
@@ -196,10 +204,10 @@ public class UserActivityController {
 	public GenericApiResponse<Integer> getMyBadgeCount() {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		responseObj.setResponse(badgeService.getEligibleNumberOfBadeges().intValue());
-		responseObj.setStatus(WeSayContants.CONST_SUCCESS);   
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
 	}
-	
+
 	@RequestMapping(value = "/getAvailableBadges/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<List<Badges>> getAvailableBadges() {
@@ -207,21 +215,20 @@ public class UserActivityController {
 		Map<String, String> customResponse = new LinkedHashMap<String, String>();
 		customResponse.put("number_of_badges", String.valueOf(badgeService.getEligibleNumberOfBadeges().intValue()));
 		responseObj.setResponse(badgeService.getAvailableBadges());
-		responseObj.setStatus(WeSayContants.CONST_SUCCESS);    
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		responseObj.setCustomResponse(customResponse);
 		return responseObj;
 	}
-	
+
 	@RequestMapping(value = "/addCustomBadge/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<Badges> addCustomBadge(Badges badgeObj) {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		responseObj.setResponse(badgeService.getAvailableBadges());
-		responseObj.setStatus(WeSayContants.CONST_SUCCESS);    
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
 	}
-	
-	
+
 	@RequestMapping(value = "/addContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addContacts(@RequestBody List<ContactList> contactList) {
@@ -295,7 +302,6 @@ public class UserActivityController {
 		return emailService.sendMail(user.getEmailaddress(), subject, message);
 	}
 
-
 	public void applyusersdefaultsettings(Long userid) {
 		List<SettingsCategory> settingsCategoryList = settingsRepositoryService.findAll();
 		for (SettingsCategory settingsCategoryObj : settingsCategoryList) {
@@ -306,6 +312,30 @@ public class UserActivityController {
 			userMappingObj.setUniqueid(settingsCategoryObj.getUniqueid());
 			userSettingRepositoryService.save(userMappingObj);
 		}
+
+	}
+
+	public List<FriendsResponse> getMyListOfActiveFriends() {
+		List<FriendsResponse> returnList = new ArrayList<FriendsResponse>();
+		List<Object[]> resultSet = friendsRepositoryService.getMyFriendList(authnticationService.getSessionUserId());
+		for (Object[] object : resultSet) {
+			FriendsResponse responseObj = FriendsResponse.builder().build();
+			responseObj.setFriendsid(Long.valueOf(object[0].toString()));
+			responseObj.setEmailaddress(object[1].toString());
+			responseObj.setMobilenumber(object[3].toString());
+			responseObj.setCountrycode(object[2].toString());
+			responseObj.setFullname(object[4].toString());
+			responseObj.setAddeddate(object[5].toString());
+			if (null != object[6]) {
+				responseObj.setInvitationacceptdate(object[6].toString());
+			} else {
+				responseObj.setInvitationacceptdate("N/A");
+			}
+			responseObj.setAccept_status(Integer.valueOf(object[7].toString()));
+			responseObj.setId(Long.valueOf(object[8].toString()));
+			returnList.add(responseObj);
+		}
+		return returnList;
 
 	}
 
