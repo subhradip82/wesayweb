@@ -11,7 +11,8 @@ import com.wesayweb.model.Friends;
 @Repository
 public interface FriendsCustomRepository {
 
-	List<Friends> getMyFriendRequest(Long userid);
+	List<Friends> getMySentFriendRequest(Long userid);
+	List<Friends> getMyRecievedFriendRequest(Long userid);
 	List<Friends> getMyFriendRequest(Long userid, Long requestid);
 	boolean areTheyFriends(Long firstFriendId, Long secondFriendId);
 

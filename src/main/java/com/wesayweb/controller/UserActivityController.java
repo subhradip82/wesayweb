@@ -135,22 +135,13 @@ public class UserActivityController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/checkfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	@ResponseBody
-	public Map<String, String> checkfriendrequest() {
-		Map<String, String> returnValue = new HashMap<String, String>();
-		List<Friends> friendsRequest = friendsRepositoryService
-				.getMyFriendRequest(authnticationService.getSessionUserId());
-		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		returnValue.put(WeSayContants.CONST_NEW_FRIENDS_REQUEST, String.valueOf(friendsRequest.size()));
-		return returnValue;
-	}
-
 	@RequestMapping(value = "/myFriends/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<Friends> myFriends() {
 
-		return friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId());
+		return null;
+		// return
+		// friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId());
 
 	}
 
@@ -160,8 +151,11 @@ public class UserActivityController {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
 		response.setMyfriends(getMyListOfActiveFriends());
-		response.setMyfriendrequest(
-				friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId()));
+		response.setMySentfriendrequest(
+				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));
+		response.setMyRecievedfriendrequest(
+				friendsRepositoryService.getMyRecievedFriendRequest(authnticationService.getSessionUserId()));
+
 		responseObj.setResponse(response);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
@@ -278,7 +272,7 @@ public class UserActivityController {
 				Map<String, String> requesttoken = tokenUtil.parseInvitationJWT(friendobj.getRequestuniqueid());
 				if (authnticationService.getSessionUser().getEmailaddress().trim()
 						.equalsIgnoreCase(requesttoken.get("recieversemail"))
-						&& (friendobj.getUserid() == Long.valueOf((requesttoken.get("sendersid"))))) {
+						&& (friendobj.getUser().getId() == Long.valueOf((requesttoken.get("sendersid"))))) {
 					friendobj.setActivestatus(1);
 					friendobj.setInvitationacceptdate(new Date());
 					friendobj.setInvitationacceptstatus(1);

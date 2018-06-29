@@ -23,7 +23,18 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 	private EntityManager em;
 
 	@Override
-	public List<Friends> getMyFriendRequest(Long userid) {
+	public List<Friends> getMySentFriendRequest(Long userid) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
+		crit.add(Restrictions.eq("invitedby", userid));
+		crit.add(Restrictions.eq("invitationacceptstatus", 0));
+		crit.add(Restrictions.isNotNull("requestuniqueid"));
+		crit.add(Restrictions.isNull("invitationacceptdate"));
+		crit.addOrder(Order.asc("addeddate"));
+		return crit.list();
+	}
+
+	@Override
+	public List<Friends> getMyRecievedFriendRequest(Long userid) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		crit.add(Restrictions.eq("friendsid", userid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));
@@ -32,7 +43,8 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 		crit.addOrder(Order.asc("addeddate"));
 		return crit.list();
 	}
-
+	
+	
 	@Override
 	public List<Friends> getMyFriendRequest(Long userid, Long requestid) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
