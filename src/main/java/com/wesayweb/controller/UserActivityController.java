@@ -150,6 +150,7 @@ public class UserActivityController {
 	public GenericApiResponse friendsZone() {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
+		System.err.println(">>>"+authnticationService.getSessionUserId());
 		response.setMyfriends(getMyListOfActiveFriends());
 		response.setMySentfriendrequest(
 				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));

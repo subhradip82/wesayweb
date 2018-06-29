@@ -46,9 +46,9 @@ public class Friends implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.EAGER)
 	@JoinColumns({
-	    @JoinColumn(name="id", referencedColumnName="user")
+	    @JoinColumn(name="id", referencedColumnName="friendsid")
 	     
 	})
 	private User user; 
