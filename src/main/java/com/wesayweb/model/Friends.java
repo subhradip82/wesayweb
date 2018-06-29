@@ -49,7 +49,6 @@ public class Friends implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.EAGER)
 	@JoinColumns({
 	    @JoinColumn(name="id", referencedColumnName="friendsid")
-	     
 	})
 	private User user; 
 
@@ -89,4 +88,7 @@ public class Friends implements Serializable {
 	@Setter
 	private String requestuniqueid;
 
+	@Getter
+	@Setter
+	public String fullname;
 }

@@ -32,5 +32,7 @@ public class MyFriendsZoneResponse implements Serializable {
 	@Getter
 	@Setter
 	public List<Friends> myRecievedfriendrequest;
+	
+	
 
 }
