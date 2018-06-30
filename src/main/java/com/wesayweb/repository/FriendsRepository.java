@@ -8,6 +8,6 @@ import com.wesayweb.model.User;
 
 @Repository
 public interface FriendsRepository extends JpaRepository<Friends, Long> , FriendsCustomRepository {
-	
+
 
 }

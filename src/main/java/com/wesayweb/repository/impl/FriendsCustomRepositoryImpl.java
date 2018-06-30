@@ -24,6 +24,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 
 	@Override
 	public List<Friends> getMySentFriendRequest(Long userid) {
+		System.err.println(">>>>"+userid);
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		crit.add(Restrictions.eq("invitedby", userid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));
@@ -85,6 +86,19 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 	@Override
 	public List<Object[]> getMyFriendList(long userid) {
 		return em.createNamedQuery("getMyFriendList").getResultList();
+	}
+
+	@Override
+	public List<Friends> getMyActiveFriends(long userid) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
+		Criterion c2 = Restrictions.eq("friendsid", userid);
+	    Criterion c3 = Restrictions.eq("invitedby", userid);
+	    crit.add(Restrictions.or(c2, c3));
+		crit.add(Restrictions.eq("invitationacceptstatus", 1));
+		crit.add(Restrictions.isNotNull("requestuniqueid"));
+		crit.add(Restrictions.isNotNull("invitationacceptdate"));
+		crit.addOrder(Order.asc("addeddate"));
+		return crit.list(); 
 	}
 
 }

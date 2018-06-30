@@ -15,9 +15,10 @@ import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,15 +47,15 @@ public class Friends implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.LAZY )
 	@JoinColumns({
-	    @JoinColumn(name="id", referencedColumnName="friendsid")
+	    @JoinColumn(name="friendsid", referencedColumnName="id",  insertable = false, updatable = false)
 	})
-	private User user; 
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private User user;  
 
 	@Getter
 	@Setter
-	@Transient
 	private Long userid;
 	
 	@Getter
@@ -88,7 +89,5 @@ public class Friends implements Serializable {
 	@Setter
 	private String requestuniqueid;
 
-	@Getter
-	@Setter
-	public String fullname;
+	 
 }

@@ -150,8 +150,8 @@ public class UserActivityController {
 	public GenericApiResponse friendsZone() {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
-		System.err.println(">>>"+authnticationService.getSessionUserId());
-		response.setMyfriends(getMyListOfActiveFriends());
+		Map<String, List<FriendsResponse>> responseMap = new LinkedHashMap<String, List<FriendsResponse>>();
+		response.setMyfriends(friendsRepositoryService.getMyActiveFriends(authnticationService.getSessionUserId()));
 		response.setMySentfriendrequest(
 				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));
 		response.setMyRecievedfriendrequest(
@@ -162,7 +162,7 @@ public class UserActivityController {
 		return responseObj;
 
 	}
-
+ 	
 	@RequestMapping(value = "/getMyFriendList/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<FriendsResponse> getMyFriendList() {
