@@ -156,13 +156,14 @@ public class UserActivityController {
 				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));
 		response.setMyRecievedfriendrequest(
 				friendsRepositoryService.getMyRecievedFriendRequest(authnticationService.getSessionUserId()));
+		response.setMyContactList(contactRepository.getMyContactList(authnticationService.getSessionUserId()));
 
 		responseObj.setResponse(response);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
 
 	}
- 	
+
 	@RequestMapping(value = "/getMyFriendList/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<FriendsResponse> getMyFriendList() {

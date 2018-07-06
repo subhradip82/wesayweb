@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +34,9 @@ public class MyFriendsZoneResponse implements Serializable {
 	@Setter
 	public List<Friends> myRecievedfriendrequest;
 	
+	@Getter
+	@Setter
+	public List<ContactList> myContactList;
 	
 
 }
