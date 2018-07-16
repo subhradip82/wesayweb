@@ -20,11 +20,13 @@ import com.wesayweb.model.Badges;
 import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 import com.wesayweb.model.SettingsCategory;
+import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
 import com.wesayweb.repository.ContactRepository;
 import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.SettingsRepository;
+import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.response.model.FriendsResponse;
@@ -58,6 +60,10 @@ public class UserActivityController {
 	@Autowired
 	ContactRepository contactRepository;
 
+	@Autowired
+	UploadContactRespository uploadContactRepository;
+
+	
 	@Autowired
 	UserRepository userRepository;
 
@@ -135,14 +141,16 @@ public class UserActivityController {
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/myFriends/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/uploadContact/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public List<Friends> myFriends() {
-
-		return null;
-		// return
-		// friendsRepositoryService.getMyFriendRequest(authnticationService.getSessionUserId());
-
+	public GenericApiResponse uploadContact(@RequestBody String contactList) {
+		GenericApiResponse responseObj = GenericApiResponse.builder().build();
+		UploadContacts contacts = UploadContacts.builder().build();
+		contacts.setContactaddeddby(authnticationService.getSessionUserId());
+		contacts.setRawcontacts(contactList);
+		uploadContactRepository.save(contacts);
+		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
+		return responseObj;
 	}
 
 	@RequestMapping(value = "/friendsZone/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")

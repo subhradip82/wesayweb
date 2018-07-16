@@ -142,4 +142,13 @@ public class User implements Serializable {
 		this.isactive = isactive;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", emailaddress=" + emailaddress + ", password=" + password + ", countrycode="
+				+ countrycode + ", mobilenumber=" + mobilenumber + ", isregisteredbymobile=" + isregisteredbymobile
+				+ ", dateofbirth=" + dateofbirth + ", gender=" + gender + ", creationdate=" + creationdate
+				+ ", isactive=" + isactive + ", fullname=" + fullname + "]";
+	}
+
+	
 }
