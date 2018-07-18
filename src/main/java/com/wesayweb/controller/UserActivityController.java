@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.model.Badges;
 import com.wesayweb.model.ContactList;
@@ -29,6 +31,8 @@ import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.request.model.ContactRequestModel;
+import com.wesayweb.request.model.PhoneNumberModel;
 import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.MyFriendsZoneResponse;
@@ -63,7 +67,6 @@ public class UserActivityController {
 	@Autowired
 	UploadContactRespository uploadContactRepository;
 
-	
 	@Autowired
 	UserRepository userRepository;
 
@@ -149,8 +152,42 @@ public class UserActivityController {
 		contacts.setContactaddeddby(authnticationService.getSessionUserId());
 		contacts.setRawcontacts(contactList);
 		uploadContactRepository.save(contacts);
+		parseSontacts(contactList);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
+	}
+
+	public void parseSontacts(String jsonString) {
+		List<ContactRequestModel> contactList = new ArrayList<ContactRequestModel>();
+		Gson gson = new Gson();
+		JsonArray jsonObject = gson.fromJson(jsonString, JsonArray.class);
+		for (int counter = 0; counter < jsonObject.size(); counter++) {
+			ContactRequestModel saltPojo = gson.fromJson(
+					jsonObject.get(counter).getAsJsonObject().get("_objectInstance"), ContactRequestModel.class);
+			contactList.add(saltPojo);
+		}
+		for (ContactRequestModel contactModel : contactList) {
+			for (PhoneNumberModel phoneObj : contactModel.getPhoneNumbers()) {
+				ContactList contactListObj = ContactList.builder().build();
+				contactListObj.setFullname(contactModel.getDisplayName());
+				contactListObj.setMobilenumber(phoneObj.getValue());
+				addContactToMylist(contactListObj);
+			}
+		}
+	}
+
+	public void addContactToMylist(ContactList contact) {
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		List<User> contactDetails = userRepositoryService.getUserByMobileEmail(contact.getCountrycode(),
+				contact.getMobilenumber());
+		if (contactDetails.size() > 0) {
+			contact.setIsregistredinwesay(1);
+		} else {
+			contact.setIsregistredinwesay(0);
+		}
+		contact.setSourceuserid(logedinUserObj.getId());
+		contactRepository.save(contact);
 	}
 
 	@RequestMapping(value = "/friendsZone/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -242,7 +279,7 @@ public class UserActivityController {
 
 		for (ContactList contact : contactList) {
 			List<User> contactDetails = userRepositoryService.getUserByMobileEmail(contact.getCountrycode(),
-					contact.getMobilenumber(), contact.getEmailaddress());
+					contact.getMobilenumber());
 			if (contactDetails.size() > 0) {
 				contact.setIsregistredinwesay(1);
 			} else {
