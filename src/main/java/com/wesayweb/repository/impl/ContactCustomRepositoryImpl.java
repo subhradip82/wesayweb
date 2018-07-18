@@ -59,4 +59,22 @@ public class ContactCustomRepositoryImpl implements ContactCustomRepository {
 		 
 	}
 
+
+
+	@Override
+	public boolean getByMobilenumber(String mobilenumber) {
+		Criteria crit = entityManager.unwrap(Session.class).createCriteria(ContactList.class);
+		 
+		crit.add(Restrictions.eq("mobilenumber", mobilenumber.trim()).ignoreCase());
+		 
+		 if(crit.list().size()>0)
+		 {
+			 return true;
+		 }
+		 else
+		 {
+			 return false;
+		 }
+	}
+
 }

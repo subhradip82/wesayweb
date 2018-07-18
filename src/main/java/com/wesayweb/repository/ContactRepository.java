@@ -8,5 +8,5 @@ import com.wesayweb.model.ContactList;
 @Repository
 public interface ContactRepository extends JpaRepository<ContactList, Long>, ContactCustomRepository {
 
-	public boolean getByMobilenumber(String mobilenumber);
+	
 }

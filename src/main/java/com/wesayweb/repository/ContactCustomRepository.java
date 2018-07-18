@@ -32,5 +32,7 @@ public interface ContactCustomRepository {
 				public boolean saveMyContact(ContactList contact);
 	
 				public boolean isAlreadyAddedInApplication(String emailid, String mobilenum);
+				
+				public boolean getByMobilenumber(String mobilenumber);
 	
 }
