@@ -168,7 +168,7 @@ public class UserActivityController {
 		}
 		for (ContactRequestModel contactModel : contactList) {
 			for (PhoneNumberModel phoneObj : contactModel.getPhoneNumbers()) {
-			if(phoneObj.getValue().trim().length()>8 && ! contactRepository.getByMobilenumber(phoneObj.getValue().trim()))) {
+			if(phoneObj.getValue().trim().length()>8 && (! contactRepository.getByMobilenumber(phoneObj.getValue().trim()))) {
 				ContactList contactListObj = ContactList.builder().build();
 				contactListObj.setFullname(contactModel.getDisplayName());
 				contactListObj.setMobilenumber(phoneObj.getValue());
