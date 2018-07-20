@@ -135,6 +135,9 @@ public class UserActivityController {
 						tokenUtil.createJWTTokenForFriendRequest(String.valueOf(loggedinuserObj.getId()),
 								userObj.getEmailaddress(), String.valueOf(friends.getFriendsid())));
 				friendsRepositoryService.save(requestFriendObj);
+				
+				
+				
 				sendFriendRequestInEmail(userObj, "WeSay friend request", loggedinuserObj.getFullname());
 			} catch (NullPointerException e) {
 				e.printStackTrace();

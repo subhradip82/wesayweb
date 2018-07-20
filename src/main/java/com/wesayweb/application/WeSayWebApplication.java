@@ -23,6 +23,8 @@ public class WeSayWebApplication implements WebMvcConfigurer {
 	UserRepository repository;
 
 	public static void main(String[] args) {
+		System.setProperty("server.tomcat.max-threads","200");
+        System.setProperty("server.connection-timeout","120000");
 		SpringApplication.run(WeSayWebApplication.class, args);
 	}
 
