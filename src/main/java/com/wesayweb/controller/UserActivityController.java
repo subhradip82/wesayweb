@@ -152,9 +152,9 @@ public class UserActivityController {
 	public GenericApiResponse uploadContact(@RequestBody String contactList) {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		UploadContacts contacts = UploadContacts.builder().build();
-		contacts.setContactaddeddby(authnticationService.getSessionUserId());
-		contacts.setRawcontacts(contactList);
-		uploadContactRepository.save(contacts);
+		//contacts.setContactaddeddby(authnticationService.getSessionUserId());
+		//contacts.setRawcontacts(contactList);
+		//uploadContactRepository.save(contacts);
 		parseContacts(contactList);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
