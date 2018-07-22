@@ -135,9 +135,6 @@ public class UserActivityController {
 						tokenUtil.createJWTTokenForFriendRequest(String.valueOf(loggedinuserObj.getId()),
 								userObj.getEmailaddress(), String.valueOf(friends.getFriendsid())));
 				friendsRepositoryService.save(requestFriendObj);
-				
-				
-				
 				sendFriendRequestInEmail(userObj, "WeSay friend request", loggedinuserObj.getFullname());
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -152,9 +149,6 @@ public class UserActivityController {
 	public GenericApiResponse uploadContact(@RequestBody String contactList) {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		UploadContacts contacts = UploadContacts.builder().build();
-		//contacts.setContactaddeddby(authnticationService.getSessionUserId());
-		//contacts.setRawcontacts(contactList);
-		//uploadContactRepository.save(contacts);
 		parseContacts(contactList);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
@@ -167,11 +161,12 @@ public class UserActivityController {
 		for (int counter = 0; counter < jsonObject.size(); counter++) {
 			ContactRequestModel saltPojo = gson.fromJson(
 					jsonObject.get(counter).getAsJsonObject().get("_objectInstance"), ContactRequestModel.class);
-			contactList.add(saltPojo);
+					contactList.add(saltPojo);
 		}
 		for (ContactRequestModel contactModel : contactList) {
 			for (PhoneNumberModel phoneObj : contactModel.getPhoneNumbers()) {
-			if(phoneObj.getValue().trim().length()>8 && (! contactRepository.getByMobilenumber(phoneObj.getValue().trim()))) {
+			if(phoneObj.getValue().trim().length()>8 && 
+					(! contactRepository.getByMobilenumber(phoneObj.getValue().trim()))) {
 				ContactList contactListObj = ContactList.builder().build();
 				contactListObj.setFullname(contactModel.getDisplayName());
 				contactListObj.setMobilenumber(phoneObj.getValue());

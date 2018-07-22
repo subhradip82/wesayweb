@@ -56,6 +56,17 @@ public class Friends implements Serializable {
 
 	@Getter
 	@Setter
+	@OneToOne(cascade = CascadeType.ALL,     orphanRemoval=true, fetch=FetchType.LAZY )
+	@JoinColumns({
+	    @JoinColumn(name="userid", referencedColumnName="id",  insertable = false, updatable = false)
+	})
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	private User friendUser;  
+
+	
+	
+	@Getter
+	@Setter
 	private Long userid;
 	
 	@Getter
