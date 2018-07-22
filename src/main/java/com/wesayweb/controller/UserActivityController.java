@@ -313,18 +313,19 @@ public class UserActivityController {
 		for (Friends friendsrequestid : requestid) {
 			List<Friends> friendsRequest = friendsRepositoryService
 					.getMyFriendRequest(authnticationService.getSessionUserId(), friendsrequestid.getId());
+			
 			Friends friendobj = new Friends();
 			if (friendsRequest.size() > 0) {
 				friendobj = friendsRequest.get(0);
 				Map<String, String> requesttoken = tokenUtil.parseInvitationJWT(friendobj.getRequestuniqueid());
-				if (authnticationService.getSessionUser().getEmailaddress().trim()
+			/*	if (authnticationService.getSessionUser().getEmailaddress().trim()
 						.equalsIgnoreCase(requesttoken.get("recieversemail"))
 						&& (friendobj.getUser().getId() == Long.valueOf((requesttoken.get("sendersid"))))) {
-					friendobj.setActivestatus(1);
+			*/		friendobj.setActivestatus(1);
 					friendobj.setInvitationacceptdate(new Date());
 					friendobj.setInvitationacceptstatus(1);
 					friendsRepositoryService.save(friendobj);
-				}
+			//	}
 			}
 		}
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
