@@ -196,7 +196,7 @@ public class UserActivityController {
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
 		Map<String, List<FriendsResponse>> responseMap = new LinkedHashMap<String, List<FriendsResponse>>();
-		response.setMyfriends(friendsRepositoryService.getMyActiveFriends(authnticationService.getSessionUserId()));
+		response.setMyfriends(userRepositoryService.getMyConfirmedFriendList(authnticationService.getSessionUserId()));
 		response.setMySentfriendrequest(
 				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));
 		response.setMyRecievedfriendrequest(

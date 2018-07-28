@@ -1,5 +1,6 @@
 package com.wesayweb.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -111,6 +112,23 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		//crit.add(Restrictions.eq("emailaddress", emailaddress.toLowerCase().trim()));
 		return crit.list();
 	}
+
+	@Override
+	public List<User> getMyConfirmedFriendList(long userid) {
+		List<User> returnList = new ArrayList<User>();
+		List<Object[]> result = em.createNamedQuery("getMyConfirmedFriendList").getResultList();
+		for (Object[] resultObj : result) {
+			User userObj = new User();
+			userObj.setId(Long.valueOf(resultObj[0].toString()));
+			userObj.setFullname(resultObj[5].toString());
+			userObj.setEmailaddress(resultObj[4].toString());
+			userObj.setMobilenumber(resultObj[9].toString());
+			returnList.add(userObj);
+		}
+
+		return returnList;
+	}
+
 
 	 
 }
