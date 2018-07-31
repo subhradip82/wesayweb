@@ -203,7 +203,7 @@ public class UserActivityController {
 		List<User> friendSentObj = new ArrayList<User>();
 		for (Friends friendsObj : sentFriendRequest) {
 			User userTempObj = new User();
-			userTempObj.setId(friendsObj.getFriendUser().getId());
+			userTempObj.setId(friendsObj.getFriendsid());
 			userTempObj.setFullname(friendsObj.getFriendUser().getFullname());
 			userTempObj.setEmailaddress(friendsObj.getFriendUser().getEmailaddress());
 			friendSentObj.add(userTempObj);
