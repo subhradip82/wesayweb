@@ -207,7 +207,6 @@ public class UserActivityController {
 			userTempObj.setId(friendsObj.getFriendUser().getId());
 			userTempObj.setFullname(friendsObj.getFriendUser().getFullname());
 			userTempObj.setEmailaddress(friendsObj.getFriendUser().getEmailaddress());
-			 
 			friendUserObj.add(userTempObj);
 		}
 
