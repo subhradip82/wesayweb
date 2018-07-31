@@ -203,8 +203,12 @@ public class UserActivityController {
 				.getMyRecievedFriendRequest(authnticationService.getSessionUserId());
 		List<User> friendUserObj = new ArrayList<User>();
 		for (Friends friendsObj : recievedFriendRequest) {
+			User userTempObj = new User();
+			userTempObj.setId(friendsObj.getFriendUser().getId());
+			userTempObj.setFullname(friendsObj.getFriendUser().getFullname());
+			userTempObj.setEmailaddress(friendsObj.getFriendUser().getEmailaddress());
 			 
-			friendUserObj.add(friendsObj.getFriendUser());
+			friendUserObj.add(userTempObj);
 		}
 
 		response.setMyRecievedfriendrequest(friendUserObj);
