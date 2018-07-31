@@ -29,7 +29,7 @@ public class MyFriendsZoneResponse implements Serializable {
 	
 	@Getter
 	@Setter
-	public List<Friends> mySentfriendrequest;
+	public List<User> mySentfriendrequest;
 	
 	@Getter
 	@Setter

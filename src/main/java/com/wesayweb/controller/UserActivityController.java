@@ -197,10 +197,23 @@ public class UserActivityController {
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
 		Map<String, List<FriendsResponse>> responseMap = new LinkedHashMap<String, List<FriendsResponse>>();
 		response.setMyfriends(userRepositoryService.getMyConfirmedFriendList(authnticationService.getSessionUserId()));
-		response.setMySentfriendrequest(
-				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId()));
+		
+		List<Friends> sentFriendRequest = 
+				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId());
+		List<User> friendSentObj = new ArrayList<User>();
+		for (Friends friendsObj : sentFriendRequest) {
+			User userTempObj = new User();
+			userTempObj.setId(friendsObj.getFriendUser().getId());
+			userTempObj.setFullname(friendsObj.getFriendUser().getFullname());
+			userTempObj.setEmailaddress(friendsObj.getFriendUser().getEmailaddress());
+			friendSentObj.add(userTempObj);
+		}
+		response.setMySentfriendrequest(friendSentObj);
+		
+		
 		List<Friends> recievedFriendRequest = friendsRepositoryService
 				.getMyRecievedFriendRequest(authnticationService.getSessionUserId());
+		
 		List<User> friendUserObj = new ArrayList<User>();
 		for (Friends friendsObj : recievedFriendRequest) {
 			User userTempObj = new User();
