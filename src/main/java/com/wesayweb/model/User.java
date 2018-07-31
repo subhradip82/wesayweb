@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,6 +54,17 @@ public class User implements Serializable {
 	private Date creationdate = new Date();
 	private int isactive;
 	private String fullname;
+	
+	@Transient
+	private Long friendsid;
+
+	public Long getFriendsid() {
+		return friendsid;
+	}
+
+	public void setFriendsid(Long friendsid) {
+		this.friendsid = friendsid;
+	}
 
 	public String getFullname() {
 		return fullname;
