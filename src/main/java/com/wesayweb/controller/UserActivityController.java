@@ -305,7 +305,7 @@ public class UserActivityController {
 		return responseObj;
 	}
 
-	@RequestMapping(value = "/addContact/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@RequestMapping(value = "/addContacts/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addContacts(@RequestBody List<ContactList> contactList) {
 		Map<String, String> returnValue = new HashMap<String, String>();
