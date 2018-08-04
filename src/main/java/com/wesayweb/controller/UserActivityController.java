@@ -41,6 +41,7 @@ import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.BadgeService;
 import com.wesayweb.service.EmailService;
 import com.wesayweb.util.JwtSecurityUtil;
+import com.wesayweb.validation.EntityValidation;
 
 @RestController
 @RequestMapping("/userzone")
@@ -165,12 +166,22 @@ public class UserActivityController {
 		}
 		for (ContactRequestModel contactModel : contactList) {
 			for (PhoneNumberModel phoneObj : contactModel.getPhoneNumbers()) {
-				if (phoneObj.getValue().trim().length() > 8
-						&& (!contactRepository.getByMobilenumber(phoneObj.getValue().trim()))) {
-					ContactList contactListObj = ContactList.builder().build();
-					contactListObj.setFullname(contactModel.getDisplayName());
-					contactListObj.setMobilenumber(phoneObj.getValue());
-					addContactToMylist(contactListObj);
+				Map<String, String> phone = EntityValidation.getMobileNumberFromContact(phoneObj.getValue().trim(),
+						"+91");
+				if (phone.get("status").equalsIgnoreCase("valid")) {
+					if (phoneObj.getValue().trim().length() > 8 && (!contactRepository
+							.getByMobilenumber(phone.get("localnumber").trim(), phone.get("countrycode").trim()))) {
+
+						List<User> contactDetails = userRepositoryService
+								.getUserByMobileEmail(phone.get("countrycode").trim(), phone.get("localnumber").trim());
+						if (contactDetails.size() == 0) {
+							ContactList contactListObj = ContactList.builder().build();
+							contactListObj.setFullname(contactModel.getDisplayName());
+							contactListObj.setMobilenumber(phoneObj.getValue());
+							contactListObj.setCountrycode(phone.get("countrycode").trim().replace("+", ""));
+							addContactToMylist(contactListObj);
+						}
+					}
 				}
 			}
 		}
@@ -197,9 +208,9 @@ public class UserActivityController {
 		MyFriendsZoneResponse response = MyFriendsZoneResponse.builder().build();
 		Map<String, List<FriendsResponse>> responseMap = new LinkedHashMap<String, List<FriendsResponse>>();
 		response.setMyfriends(userRepositoryService.getMyConfirmedFriendList(authnticationService.getSessionUserId()));
-		
-		List<Friends> sentFriendRequest = 
-				friendsRepositoryService.getMySentFriendRequest(authnticationService.getSessionUserId());
+
+		List<Friends> sentFriendRequest = friendsRepositoryService
+				.getMySentFriendRequest(authnticationService.getSessionUserId());
 		List<User> friendSentObj = new ArrayList<User>();
 		for (Friends friendsObj : sentFriendRequest) {
 			User userTempObj = new User();
@@ -210,11 +221,10 @@ public class UserActivityController {
 			friendSentObj.add(userTempObj);
 		}
 		response.setMySentfriendrequest(friendSentObj);
-		
-		
+
 		List<Friends> recievedFriendRequest = friendsRepositoryService
 				.getMyRecievedFriendRequest(authnticationService.getSessionUserId());
-		
+
 		List<User> friendUserObj = new ArrayList<User>();
 		for (Friends friendsObj : recievedFriendRequest) {
 			User userTempObj = new User();

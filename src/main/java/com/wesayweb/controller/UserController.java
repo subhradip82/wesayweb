@@ -70,6 +70,7 @@ public class UserController {
 	@RequestMapping(value = "/emailregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<Map<String, String>> registerviaemail(@RequestBody UserRequest user) {
+		 
 		Map<String, String> returnValue = new HashMap<String, String>();
 		UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(user);
 		Map<String, String> validationResult = validtionObj.validateUerRegistrationByEmail();

@@ -62,10 +62,10 @@ public class ContactCustomRepositoryImpl implements ContactCustomRepository {
 
 
 	@Override
-	public boolean getByMobilenumber(String mobilenumber) {
+	public boolean getByMobilenumber(String mobilenumber, String countryCode) {
 		Criteria crit = entityManager.unwrap(Session.class).createCriteria(ContactList.class);
-		 
 		crit.add(Restrictions.eq("mobilenumber", mobilenumber.trim()).ignoreCase());
+		crit.add(Restrictions.eq("countrycode", countryCode.trim()).ignoreCase());
 		 
 		 if(crit.list().size()>0)
 		 {

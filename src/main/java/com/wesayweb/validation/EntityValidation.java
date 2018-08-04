@@ -4,13 +4,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
 import edu.vt.middleware.password.CharacterCharacteristicsRule;
@@ -101,4 +105,52 @@ public class EntityValidation {
 
 	}
 	 
+	public static Map<String, String> getMobileNumberFromContact(String mobileNumber, String usercountryCode)
+	{
+		Map<String, String> returnMap = new HashMap<String, String>(); 
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+		if(mobileNumber.startsWith("+")) {
+			try {
+				Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(mobileNumber, Locale.US.getCountry());
+				PhoneNumberUtil.PhoneNumberType phoneNumberType = phoneUtil.getNumberType(phoneNumber);
+				
+				if(phoneNumberType == PhoneNumberUtil.PhoneNumberType.MOBILE)
+				{
+					returnMap.put("status", "valid");
+					returnMap.put("countrycode", String.valueOf(phoneNumber.getCountryCode()));
+					returnMap.put("localnumber", String.valueOf(phoneNumber.getNationalNumber()));
+				}
+				else
+				{
+					returnMap.put("status", "invalid");
+				}
+
+			} catch (NumberParseException e) {
+				returnMap.put("status", "invalid");
+			}
+		}
+		else
+		{
+			try {
+				Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse("+"+usercountryCode.replace("+", "")+""+mobileNumber, Locale.US.getCountry());
+				PhoneNumberUtil.PhoneNumberType phoneNumberType = phoneUtil.getNumberType(phoneNumber);
+				if(phoneNumberType == PhoneNumberUtil.PhoneNumberType.MOBILE)
+				{
+					returnMap.put("status", "valid");
+					returnMap.put("countrycode", String.valueOf(phoneNumber.getCountryCode()));
+					returnMap.put("localnumber", String.valueOf(phoneNumber.getNationalNumber()));
+				}
+				else
+				{
+					returnMap.put("status", "invalid");
+				}
+
+			} catch (NumberParseException e) {
+				returnMap.put("status", "invalid");
+			}
+		
+		}
+		return returnMap;
+	}
+	
 }
