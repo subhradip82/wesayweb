@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
 		crit.add(Restrictions.eq("countrycode", countryCode.toLowerCase().trim()));
 		crit.add(Restrictions.eq("mobilenumber", mobileNumber.toLowerCase().trim()));
-		crit.add(Restrictions.ne("sourceuserid", sessionUserId));
+		crit.add(Restrictions.ne("id", sessionUserId));
 		crit.add(Restrictions.eq("isactive", 1));
 		
 		return crit.list();
