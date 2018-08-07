@@ -178,7 +178,7 @@ public class UserActivityController {
 							.getByMobilenumber(phone.get("localnumber").trim(), phone.get("countrycode").trim()))) {
 						List<User> contactDetails = userRepositoryService
 								.getUserByMobileEmail(phone.get("countrycode").trim(), phone.get("localnumber").trim());
-						if (contactDetails.size() == 0) {
+						if (contactDetails.size() > 0) {
 							ContactList contactListObj = ContactList.builder().build();
 							contactListObj.setFullname(contactModel.getDisplayName());
 							contactListObj.setMobilenumber(phone.get("localnumber").trim());
