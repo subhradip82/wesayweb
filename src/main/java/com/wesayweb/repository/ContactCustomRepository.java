@@ -25,7 +25,7 @@ public interface ContactCustomRepository {
 		    "		FROM user_contact_list a  " + 
 		    "       JOIN user_master B ON " + 
 		    "		TRIM(LOWER(a.mobilenumber)) = TRIM(LOWER(B.mobilenumber)) " + 
-		    "		WHERE sourceuserid = :sourceuserid and a.isinviationsent = 0",
+		    "		WHERE sourceuserid = :sourceuserid and a.isinviationsent = 0 and   a.sourceuserid != CASE WHEN b.id IS NULL THEN a.contactid ELSE b.id END",
 		    	   nativeQuery = true, name = "getMyContactList")
 				public List<ContactList> getMyContactList(@Param("sourceuserid") long sourceuserid);
 				
