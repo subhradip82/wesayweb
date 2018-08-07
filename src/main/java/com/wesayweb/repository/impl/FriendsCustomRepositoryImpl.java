@@ -50,7 +50,7 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 	public List<Friends> getMyFriendRequest(Long userid, Long requestid) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		crit.add(Restrictions.eq("friendsid", userid));
-		crit.add(Restrictions.eq("id", requestid));
+		crit.add(Restrictions.eq("invitedby", requestid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));
 		crit.add(Restrictions.isNotNull("requestuniqueid"));
 		crit.add(Restrictions.isNull("invitationacceptdate"));

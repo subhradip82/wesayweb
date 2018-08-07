@@ -238,7 +238,6 @@ public class UserActivityController {
 
 		response.setMyRecievedfriendrequest(friendUserObj);
 		response.setMyContactList(contactRepository.getMyContactList(authnticationService.getSessionUserId()));
-
 		responseObj.setResponse(response);
 		responseObj.setStatus(WeSayContants.CONST_SUCCESS);
 		return responseObj;
