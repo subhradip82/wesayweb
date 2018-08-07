@@ -2,6 +2,8 @@ package com.wesayweb.request.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +29,12 @@ public class ContactRequestModel {
 	@Setter
 	private String displayName;
 
+	@Getter
+	@Setter
+	@Column(name = "is_friend_request_sent", nullable = false, columnDefinition = "int default 0")
+	private int is_friend_request_sent;
+
+	
 	@Getter
 	@Setter
 	private List<PhoneNumberModel> phoneNumbers;
