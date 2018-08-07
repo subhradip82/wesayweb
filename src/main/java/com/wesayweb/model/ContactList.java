@@ -78,4 +78,5 @@ public class ContactList implements Serializable {
 	@Column(name = "isinviationsent", nullable = false, columnDefinition = "int default  0")
 	private int isinviationsent;
 
+	
 }

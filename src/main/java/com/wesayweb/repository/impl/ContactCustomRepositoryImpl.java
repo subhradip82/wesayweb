@@ -77,4 +77,26 @@ public class ContactCustomRepositoryImpl implements ContactCustomRepository {
 		 }
 	}
 
+
+
+	@Override
+	public ContactList getRequestedContactDetails(String mobileNumber, String countryCode , Long loggedinUserId) {
+		ContactList contactDetailsObj = ContactList.builder().build();
+		Criteria crit = entityManager.unwrap(Session.class).createCriteria(ContactList.class);
+		crit.add(Restrictions.eq("mobilenumber", mobileNumber.trim()).ignoreCase());
+		crit.add(Restrictions.eq("countrycode", countryCode.trim()).ignoreCase());
+		crit.add(Restrictions.eq("sourceuserid", loggedinUserId));
+		List<ContactList> contactList = crit.list();
+		if(contactList.size()>0)
+		 {
+			contactDetailsObj = contactList.get(0);
+			contactDetailsObj.setIsinviationsent(1);
+			
+		 }
+		  
+		
+	
+		return contactDetailsObj;
+	}
+
 }

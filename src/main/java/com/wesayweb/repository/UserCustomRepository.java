@@ -25,5 +25,5 @@ public interface UserCustomRepository {
 			"and invitationacceptstatus = 1 and requestuniqueid is not null and invitationacceptdate is not null   " + 
 			"    )", nativeQuery = true, name = "getMyConfirmedFriendList")
 	public List<User> getMyConfirmedFriendList(@Param("userid") long userid);
-
+	
 }

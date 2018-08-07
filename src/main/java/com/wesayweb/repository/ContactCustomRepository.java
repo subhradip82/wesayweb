@@ -34,5 +34,7 @@ public interface ContactCustomRepository {
 				public boolean isAlreadyAddedInApplication(String emailid, String mobilenum);
 				
 				public boolean getByMobilenumber(String mobilenumber, String countryCode);
+				
+				public ContactList getRequestedContactDetails(String mobileNumber, String countryCode , Long loggedinUserId);
 	
 }

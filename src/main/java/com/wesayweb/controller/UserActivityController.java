@@ -124,7 +124,6 @@ public class UserActivityController {
 
 			Friends requestFriendObj = Friends.builder().build();
 			User userObj = userRepositoryService.findActiveUser(Long.valueOf(friends.getFriendsid()));
-
 			try {
 				requestFriendObj.setActivestatus(0);
 				requestFriendObj.setInvitationacceptstatus(0);
@@ -136,6 +135,11 @@ public class UserActivityController {
 						tokenUtil.createJWTTokenForFriendRequest(String.valueOf(loggedinuserObj.getId()),
 								userObj.getEmailaddress(), String.valueOf(friends.getFriendsid())));
 				friendsRepositoryService.save(requestFriendObj);
+
+				ContactList contactObj = contactRepository.getRequestedContactDetails(userObj.getMobilenumber(),
+						userObj.getCountrycode(), loggedinuserObj.getId());
+				contactRepository.save(contactObj);
+
 				sendFriendRequestInEmail(userObj, "WeSay friend request", loggedinuserObj.getFullname());
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -173,8 +177,7 @@ public class UserActivityController {
 					if (phoneObj.getValue().trim().length() > 8 && (!contactRepository
 							.getByMobilenumber(phone.get("localnumber").trim(), phone.get("countrycode").trim()))) {
 						List<User> contactDetails = userRepositoryService
-								.getUserByMobileEmail(phone.get("countrycode").trim(), 
-										phone.get("localnumber").trim());
+								.getUserByMobileEmail(phone.get("countrycode").trim(), phone.get("localnumber").trim());
 						if (contactDetails.size() == 0) {
 							ContactList contactListObj = ContactList.builder().build();
 							contactListObj.setFullname(contactModel.getDisplayName());
