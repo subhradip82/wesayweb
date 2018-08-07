@@ -191,8 +191,8 @@ public class UserActivityController {
 	public void addContactToMylist(ContactList contact) {
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		List<User> contactDetails = userRepositoryService.getUserByMobileEmail(contact.getCountrycode(),
-				contact.getMobilenumber());
+		List<User> contactDetails = userRepositoryService.getUserByMobileNumberForUserSync(contact.getCountrycode(),
+				contact.getMobilenumber(), authnticationService.getSessionUserId());
 		if (contactDetails.size() > 0) {
 			contact.setIsregistredinwesay(1);
 		} else {

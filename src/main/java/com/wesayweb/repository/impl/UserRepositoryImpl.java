@@ -48,6 +48,19 @@ public class UserRepositoryImpl implements UserCustomRepository {
 	}
 
 	@Override
+	public List<User> getUserByMobileNumberForUserSync(String countryCode, String mobileNumber, Long sessionUserId) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
+		crit.add(Restrictions.eq("countrycode", countryCode.toLowerCase().trim()));
+		crit.add(Restrictions.eq("mobilenumber", mobileNumber.toLowerCase().trim()));
+		crit.add(Restrictions.ne("id", sessionUserId));
+		crit.add(Restrictions.eq("isactive", 1));
+		
+		return crit.list();
+
+	}
+
+	
+	@Override
 	@Transactional
 	public boolean activateUser(Long userId) {
 		boolean returnValue = false;
