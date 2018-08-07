@@ -176,15 +176,12 @@ public class UserActivityController {
 				if (phone.get("status").equalsIgnoreCase("valid")) {
 					if (phoneObj.getValue().trim().length() > 8 && (!contactRepository
 							.getByMobilenumber(phone.get("localnumber").trim(), phone.get("countrycode").trim()))) {
-						List<User> contactDetails = userRepositoryService
-								.getUserByMobileEmail(phone.get("countrycode").trim(), phone.get("localnumber").trim());
-						if (contactDetails.size() > 0) {
 							ContactList contactListObj = ContactList.builder().build();
 							contactListObj.setFullname(contactModel.getDisplayName());
 							contactListObj.setMobilenumber(phone.get("localnumber").trim());
 							contactListObj.setCountrycode(phone.get("countrycode").trim().replace("+", ""));
 							addContactToMylist(contactListObj);
-						}
+						
 					}
 				}
 			}
