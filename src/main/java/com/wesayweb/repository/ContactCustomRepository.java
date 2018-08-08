@@ -36,5 +36,7 @@ public interface ContactCustomRepository {
 				public boolean getByMobilenumber(String mobilenumber, String countryCode);
 				
 				public ContactList getRequestedContactDetails(String mobileNumber, String countryCode , Long loggedinUserId);
-	
+				
+				public boolean isAlreadyExists(String mobileNumber, String countryCode , Long loggedinUserId);
+				
 }

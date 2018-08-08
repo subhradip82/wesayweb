@@ -175,7 +175,9 @@ public class UserActivityController {
 						loggedinUser.getCountrycode());
 				if (phone.get("status").equalsIgnoreCase("valid")) {
 					if (phoneObj.getValue().trim().length() > 8 && (!contactRepository
-							.getByMobilenumber(phone.get("localnumber").trim(), phone.get("countrycode").trim()))) {
+							.isAlreadyExists(phone.get("localnumber").trim(), phone.get("countrycode").trim(),
+									authnticationService.getSessionUserId()
+									))) {
 							ContactList contactListObj = ContactList.builder().build();
 							contactListObj.setFullname(contactModel.getDisplayName());
 							contactListObj.setMobilenumber(phone.get("localnumber").trim());

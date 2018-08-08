@@ -99,4 +99,22 @@ public class ContactCustomRepositoryImpl implements ContactCustomRepository {
 		return contactDetailsObj;
 	}
 
+
+
+	@Override
+	public boolean isAlreadyExists(String mobileNumber, String countryCode, Long loggedinUserId) {
+		Criteria crit = entityManager.unwrap(Session.class).createCriteria(ContactList.class);
+		crit.add(Restrictions.eq("mobilenumber", mobileNumber.trim()).ignoreCase());
+		crit.add(Restrictions.eq("countrycode", countryCode.trim()).ignoreCase());
+		crit.add(Restrictions.eq("sourceuserid", loggedinUserId));
+		if(crit.list().size()>0)
+		 {
+			 return true;
+		 }
+		 else
+		 {
+			 return false;
+		 }
+	}
+
 }
