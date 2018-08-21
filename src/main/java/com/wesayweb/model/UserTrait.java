@@ -32,6 +32,10 @@ public class UserTrait implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public UserTrait(Long id)
+	{
+	this.id = id;	
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter

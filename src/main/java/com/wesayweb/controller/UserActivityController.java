@@ -19,18 +19,24 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.model.Badges;
+import com.wesayweb.model.CommentLikeDislike;
+import com.wesayweb.model.Comments;
 import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
+import com.wesayweb.model.UserTrait;
+import com.wesayweb.repository.CommentLikeDislikeRespository;
+import com.wesayweb.repository.CommentRepository;
 import com.wesayweb.repository.ContactRepository;
 import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
 import com.wesayweb.response.model.FriendsResponse;
@@ -50,6 +56,12 @@ public class UserActivityController {
 	@Autowired
 	SettingsRepository settingsRepositoryService;
 
+	@Autowired
+	CommentRepository commentRepository;
+
+	@Autowired
+	CommentLikeDislikeRespository likeRespository;
+	
 	@Autowired
 	FriendsRepository friendsRepositoryService;
 
@@ -174,16 +186,15 @@ public class UserActivityController {
 				Map<String, String> phone = EntityValidation.getMobileNumberFromContact(phoneObj.getValue().trim(),
 						loggedinUser.getCountrycode());
 				if (phone.get("status").equalsIgnoreCase("valid")) {
-					if (phoneObj.getValue().trim().length() > 8 && (!contactRepository
-							.isAlreadyExists(phone.get("localnumber").trim(), phone.get("countrycode").trim(),
-									authnticationService.getSessionUserId()
-									))) {
-							ContactList contactListObj = ContactList.builder().build();
-							contactListObj.setFullname(contactModel.getDisplayName());
-							contactListObj.setMobilenumber(phone.get("localnumber").trim());
-							contactListObj.setCountrycode(phone.get("countrycode").trim().replace("+", ""));
-							addContactToMylist(contactListObj);
-						
+					if (phoneObj.getValue().trim().length() > 8
+							&& (!contactRepository.isAlreadyExists(phone.get("localnumber").trim(),
+									phone.get("countrycode").trim(), authnticationService.getSessionUserId()))) {
+						ContactList contactListObj = ContactList.builder().build();
+						contactListObj.setFullname(contactModel.getDisplayName());
+						contactListObj.setMobilenumber(phone.get("localnumber").trim());
+						contactListObj.setCountrycode(phone.get("countrycode").trim().replace("+", ""));
+						addContactToMylist(contactListObj);
+
 					}
 				}
 			}
@@ -342,6 +353,62 @@ public class UserActivityController {
 		return returnValue;
 	}
 
+	@RequestMapping(value = "/traits/comment", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> commentOnTrait(@RequestBody CommentOnTrait comment) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		Comments commentObj = new Comments();
+		commentObj.setCommentactivestatus(1);
+		commentObj.setTraitId(new UserTrait(comment.getTraitId()));
+		commentObj.setCommentedby(new User(logedinUserObj.getId()));
+		commentObj.setCommentText(comment.getComment());
+		commentObj.setDeletestatus(0);
+		commentObj.setParent(new Comments(comment.getParentCommentId()));
+		commentRepository.save(commentObj);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/traits/comment/list", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> getCommentsOnTrait(@RequestBody CommentOnTrait comment) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		commentRepository.findByTraitId(comment.getTraitId());
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/traits/comment/like", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> likeOnComment(@RequestBody CommentOnTrait comment) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		
+		CommentLikeDislike likeObj = likeRespository.findBylikeDislikeByAndComment(logedinUserObj.getId(), comment.getCommentId());
+		likeObj.setLikeDislikeStatus(1);
+		likeRespository.save(likeObj);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/traits/comment/dislike", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> dislikeOnComment(@RequestBody CommentOnTrait comment) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		CommentLikeDislike likeObj = likeRespository.findBylikeDislikeByAndComment(logedinUserObj.getId(), comment.getCommentId());
+		likeObj.setLikeDislikeStatus(2);
+		likeRespository.save(likeObj);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS); 
+		return returnValue;
+	}
+
+	
+	
 	@RequestMapping(value = "/acceptfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> acceptfriendrequest(@RequestBody List<Friends> requestid) {

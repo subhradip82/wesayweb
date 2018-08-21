@@ -13,13 +13,14 @@ import javax.persistence.Transient;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.Builder;
 import lombok.ToString;
 
 @Entity
 
 @Table(name = "user_master")
 @EntityListeners(AuditingEntityListener.class)
- 
+
 public class User implements Serializable {
 
 	public User() {
