@@ -42,7 +42,7 @@ public class Comments implements Serializable {
 	@Setter
 	private Long commentid;
 
-	@Getter
+/*	@Getter
 	@Setter
 	@ManyToOne
     @JoinColumn(name = "parentId")
@@ -50,7 +50,7 @@ public class Comments implements Serializable {
 
     @OneToMany(mappedBy = "parent")
     private Set<Comments> subParent;
-    
+    */
     
 	@Getter
 	@Setter

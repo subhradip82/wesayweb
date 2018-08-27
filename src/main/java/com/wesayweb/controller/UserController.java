@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.helper.OtpGenerator;
-import com.wesayweb.model.ContactList;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserOtp;
@@ -37,22 +36,26 @@ import com.wesayweb.util.PasswordEncrypterUtil;
 import com.wesayweb.validation.UserLoginByEmailValidation;
 import com.wesayweb.validation.UserRegistrationByEmailValidation;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("/api")
-public class UserController {
+@Api(value = "Wesay", description = "API for WeSay ", tags = "WeSay")
+
+public class UserController { 
 
 	@Autowired
 	UserRepository userRepository;
 
 	@Autowired
 	BadgeService badgeService;
-	
+
 	@Autowired
 	EmailService emailService;
 
 	@Autowired
 	CotactService contactService;
-	
+
 	@Autowired
 	UserOtpRepository otpRepositoryService;
 
@@ -70,7 +73,7 @@ public class UserController {
 	@RequestMapping(value = "/emailregistration/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<Map<String, String>> registerviaemail(@RequestBody UserRequest user) {
-		 
+
 		Map<String, String> returnValue = new HashMap<String, String>();
 		UserRegistrationByEmailValidation validtionObj = new UserRegistrationByEmailValidation(user);
 		Map<String, String> validationResult = validtionObj.validateUerRegistrationByEmail();
@@ -226,8 +229,7 @@ public class UserController {
 	public List<ContactRequest> checkIfCntactIsInWesay(@RequestBody List<ContactRequest> contactList) {
 		return contactService.checkIfContactIsInWesay(contactList);
 	}
-	
-	
+
 	public String sendotpInemail(String emailAddress, Long userId) {
 		String otp = OtpGenerator.genrateOtp();
 

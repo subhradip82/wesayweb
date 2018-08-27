@@ -365,7 +365,7 @@ public class UserActivityController {
 		commentObj.setCommentedby(new User(logedinUserObj.getId()));
 		commentObj.setCommentText(comment.getComment());
 		commentObj.setDeletestatus(0);
-		commentObj.setParent(new Comments(comment.getParentCommentId()));
+	//	commentObj.setParent(new Comments(comment.getParentCommentId()));
 		commentRepository.save(commentObj);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;

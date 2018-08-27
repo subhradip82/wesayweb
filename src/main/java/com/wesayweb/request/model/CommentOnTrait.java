@@ -1,11 +1,17 @@
 package com.wesayweb.request.model;
 
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-public class CommentOnTrait {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentOnTrait implements Serializable {
 
 	@Getter
 	@Setter

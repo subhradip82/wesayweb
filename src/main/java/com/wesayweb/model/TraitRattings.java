@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 
 @Table(name = "comments_like_dislike")
-public class CommentLikeDislike implements Serializable {
+public class TraitRattings implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,6 @@ public class CommentLikeDislike implements Serializable {
 	@Getter
 	final Date lastUpdatedOn = new Date();
 
-	 
 	@Getter
 	@Setter
 	@Column(name = "deletestatus", nullable = false, columnDefinition = "int default 0")
