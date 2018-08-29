@@ -27,7 +27,6 @@ import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
-import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.CommentLikeDislikeRespository;
 import com.wesayweb.repository.CommentRepository;
 import com.wesayweb.repository.ContactRepository;
@@ -39,6 +38,7 @@ import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
+import com.wesayweb.response.model.CommentsResponse;
 import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.MyFriendsZoneResponse;
@@ -61,7 +61,7 @@ public class UserActivityController {
 
 	@Autowired
 	CommentLikeDislikeRespository likeRespository;
-	
+
 	@Autowired
 	FriendsRepository friendsRepositoryService;
 
@@ -361,11 +361,10 @@ public class UserActivityController {
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 		Comments commentObj = new Comments();
 		commentObj.setCommentactivestatus(1);
-		commentObj.setTraitId(new UserTrait(comment.getTraitId()));
+		commentObj.setUserTraitId(comment.getTraitId());
 		commentObj.setCommentedby(new User(logedinUserObj.getId()));
 		commentObj.setCommentText(comment.getComment());
 		commentObj.setDeletestatus(0);
-	//	commentObj.setParent(new Comments(comment.getParentCommentId()));
 		commentRepository.save(commentObj);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
@@ -375,7 +374,29 @@ public class UserActivityController {
 	@ResponseBody
 	public GenericApiResponse<Object> getCommentsOnTrait(@RequestBody CommentOnTrait comment) {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
-		commentRepository.findByTraitId(comment.getTraitId());
+		List<CommentsResponse> responseList = new ArrayList<CommentsResponse>();
+		List<Comments> comments = commentRepository.getCommentList(comment.getTraitId());
+		for (Comments c : comments) {
+			CommentsResponse pojo = CommentsResponse.builder().build();
+			pojo.setCommentedBy(c.getCommentedby().getFullname());
+			pojo.setCommentedDate(c.getCreationdate().toString());
+			pojo.setCommentsText(c.getCommentText());
+			pojo.setCommentId(c.getCommentid());
+			int likeCount = 0;
+			int disLikeCount = 0;
+			for (CommentLikeDislike d : c.getLikeDislike()) {
+				if (d.getLikeDislikeStatus() == 1) {
+					likeCount++;
+				} else {
+					disLikeCount++; 
+				}
+			}
+			pojo.setDisLikeCount(disLikeCount);
+			pojo.setLikeCount(likeCount);
+			responseList.add(pojo);
+		}
+
+		returnValue.setResponse(responseList);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
@@ -386,29 +407,13 @@ public class UserActivityController {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		
-		CommentLikeDislike likeObj = likeRespository.findBylikeDislikeByAndComment(logedinUserObj.getId(), comment.getCommentId());
-		likeObj.setLikeDislikeStatus(1);
+		CommentLikeDislike likeObj = likeRespository.giveLikeDislike(logedinUserObj.getId(), comment.getCommentId(),
+				comment.getLike());
 		likeRespository.save(likeObj);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 
-	@RequestMapping(value = "/traits/comment/dislike", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-	@ResponseBody
-	public GenericApiResponse<Object> dislikeOnComment(@RequestBody CommentOnTrait comment) {
-		GenericApiResponse returnValue = GenericApiResponse.builder().build();
-		User logedinUserObj = userRepository
-				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		CommentLikeDislike likeObj = likeRespository.findBylikeDislikeByAndComment(logedinUserObj.getId(), comment.getCommentId());
-		likeObj.setLikeDislikeStatus(2);
-		likeRespository.save(likeObj);
-		returnValue.setStatus(WeSayContants.CONST_SUCCESS); 
-		return returnValue;
-	}
-
-	
-	
 	@RequestMapping(value = "/acceptfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> acceptfriendrequest(@RequestBody List<Friends> requestid) {

@@ -32,5 +32,9 @@ public class CommentOnTrait implements Serializable {
 	private String comment;
 	
 	
+	@Getter
+	@Setter
+	private int like;
+	
 	
 }

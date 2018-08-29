@@ -46,7 +46,8 @@ public class UserTraitsController {
 	
 	@RequestMapping(value = "/getMyTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public GenericApiResponse<List<UserTraitsResponsePojo>> getMyTraits(@RequestBody(required = false) User traitsgivenforUser) {
+	public GenericApiResponse<List<UserTraitsResponsePojo>> getMyTraits(
+			@RequestBody(required = false) User traitsgivenforUser) {
 		User logedinUserObj = authenticationService.getSessionUser();
 		Long traitsgivenfor = 0L;
 		boolean ismyowntrait = true;

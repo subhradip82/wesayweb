@@ -25,7 +25,6 @@ public class FriendsCustomRepositoryImpl implements FriendsCustomRepository {
 
 	@Override
 	public List<Friends> getMySentFriendRequest(Long userid) {
-		System.err.println(">>>>" + userid);
 		Criteria crit = em.unwrap(Session.class).createCriteria(Friends.class);
 		crit.add(Restrictions.eq("invitedby", userid));
 		crit.add(Restrictions.eq("invitationacceptstatus", 0));

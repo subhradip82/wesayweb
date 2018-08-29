@@ -9,8 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,12 +33,18 @@ public class CommentLikeDislike implements Serializable {
 
 	@Getter
 	@Setter
+	private Long commentId;
 	
-	private Comments comment;
+	@Getter
+	@Setter
+	private Long userId;
+	
 	
 	@Getter
 	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userId", referencedColumnName = "id", insertable = false, updatable = false)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private User likeDislikeBy;
 
 	@Getter
@@ -44,6 +53,6 @@ public class CommentLikeDislike implements Serializable {
 	 
 	@Getter
 	@Setter
-	@Column(name = "deletestatus", nullable = false, columnDefinition = "int default 0")
+	@Column(name = "likeStatus", nullable = false, columnDefinition = "int default 0")
 	private int likeDislikeStatus;
 }

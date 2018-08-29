@@ -3,7 +3,6 @@ package com.wesayweb.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,18 +15,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 
 @Table(name = "comments_master")
- 
+
 public class Comments implements Serializable {
 
 	public Comments(Long parentCommentId) {
-		 this.commentid = parentCommentId;
+		this.commentid = parentCommentId;
 	}
 
 	public Comments() {
@@ -42,19 +43,14 @@ public class Comments implements Serializable {
 	@Setter
 	private Long commentid;
 
-/*	@Getter
+	@Getter
 	@Setter
-	@ManyToOne
-    @JoinColumn(name = "parentId")
-    private Comments parent;
+	private Long userTraitId;
 
-    @OneToMany(mappedBy = "parent")
-    private Set<Comments> subParent;
-    */
-    
 	@Getter
 	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private User commentedby;
 
 	@Getter
@@ -63,11 +59,14 @@ public class Comments implements Serializable {
 	private String commentText;
 
 	@Getter
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "UTC")
 	final Date creationdate = new Date();
 
 	@Getter
 	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userTraitId", referencedColumnName = "id", insertable = false, updatable = false)
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private UserTrait traitId;
 
 	@Getter
@@ -80,8 +79,11 @@ public class Comments implements Serializable {
 	@Column(name = "deletestatus", nullable = false, columnDefinition = "int default 0")
 	private int deletestatus;
 
+	
 	@Getter
 	@Setter
 	@OneToMany(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	@JoinColumn(name = "id", referencedColumnName = "commentId", insertable = false, updatable = false)
 	private List<CommentLikeDislike> likeDislike;
 }
