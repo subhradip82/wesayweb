@@ -86,17 +86,33 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		em.createQuery(updateCriteria).executeUpdate();
 
 	}
+	
 	@Override
 	@Transactional
-	public void unHideTrait(UserTrait userTraitObj) {
+	public void hideATrait(Long traitId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("ishidden"),1);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("id"), traitId));
+		em.createQuery(updateCriteria).executeUpdate();
+
+
+	}
+	
+	
+	@Override
+	@Transactional
+	public void unHideATrait(Long traitId) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
 		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
 		updateCriteria.set(userObj.get("ishidden"),0);
 		updateCriteria.set(userObj.get("updationdate"), new Date());
-		updateCriteria.where(cb.equal(userObj.get("traitgivenfor"), userTraitObj.getTraitgivenfor()));
-		updateCriteria.where(cb.equal(userObj.get("traituniqueid"), userTraitObj.getTraituniqueid()));
+		updateCriteria.where(cb.equal(userObj.get("id"), traitId));
 		em.createQuery(updateCriteria).executeUpdate();
+
 	}
 	
 	@Override
@@ -129,6 +145,23 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		return em.createNamedQuery("traitsWaitingForApproval").getResultList();
 	}
 
-	 
+	@Override
+	@Transactional
+	public void deleteATrait(Long traitId) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("isactive"), 0);
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("id"), traitId));
+		em.createQuery(updateCriteria).executeUpdate();
+		
+	}
+
+	@Override
+	public void unHideTrait(UserTrait userTraitObj) {
+		// TODO Auto-generated method stub
+		
+	}
 	 
 }

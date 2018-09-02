@@ -84,20 +84,20 @@ public class UserTraitsController {
 			traitsResponseObj.setTraittype((String) object[3]);
 			if (ismyowntrait || !settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
 					"c25bf9724ef111e89c2dfa7ae01bbebc")) {
-				traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
-				traitsResponseObj.setNegetive(Integer.valueOf(object[5].toString()));
-				traitsResponseObj.setNutral(Integer.valueOf(object[6].toString()));
-			} else {
-				traitsResponseObj.setPositive(99999);
-				traitsResponseObj.setNegetive(99999);
-				traitsResponseObj.setNutral(99999);
-			}
+					traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
+					traitsResponseObj.setNegetive(Integer.valueOf(object[5].toString()));
+					traitsResponseObj.setNutral(Integer.valueOf(object[6].toString()));
+				} else {
+					traitsResponseObj.setPositive(99999);
+					traitsResponseObj.setNegetive(99999);
+					traitsResponseObj.setNutral(99999);
+				}
 			traitsResponseObj.setIshidden(Integer.valueOf(object[7].toString()));
 			try {
-			traitsResponseObj.setMytraitcontibution(Integer.valueOf(object[8].toString()));
-			traitsResponseObj.setMypositive(object[9].toString());
-			traitsResponseObj.setMynegetive(object[10].toString());
-			traitsResponseObj.setMyneutral(object[11].toString());
+				traitsResponseObj.setMytraitcontibution(Integer.valueOf(object[8].toString()));
+				traitsResponseObj.setMypositive(object[9].toString());
+				traitsResponseObj.setMynegetive(object[10].toString());
+				traitsResponseObj.setMyneutral(object[11].toString());
 			}
 			catch(Exception e)
 			{
@@ -106,7 +106,6 @@ public class UserTraitsController {
 				traitsResponseObj.setMynegetive(String.valueOf("n"));
 				traitsResponseObj.setMyneutral(String.valueOf("n"));
 			}
-			 
 			responseList.add(traitsResponseObj);
 		}
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();

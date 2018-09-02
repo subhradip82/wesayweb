@@ -107,4 +107,11 @@ public interface UserTraitCustomRepository {
 			"	   from TRAIT a join user_master B on a.traitgivenby = b.id   " + 
 			"       ORDER BY traitname", nativeQuery = true, name = "traitsWaitingForApproval")
 	List<Object[]> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);
+
+	void deleteATrait(Long traitId);
+
+	void hideATrait(Long traitId);
+
+ 
+	void unHideATrait(Long traitId);
 }

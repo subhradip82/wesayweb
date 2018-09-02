@@ -54,7 +54,6 @@ public class TraitsController {
 	@Autowired
 	TraitService traitService;
 
-	
 	@RequestMapping(value = "/addTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> addTrait(@RequestBody List<CustomTraits> listOfCustomTraitObj) {
@@ -62,7 +61,7 @@ public class TraitsController {
 		Map<String, String> returnValue = new HashMap<String, String>();
 		User logedinUserObj = authenticationService.getSessionUser();
 		for (CustomTraits customTraitObj : listOfCustomTraitObj) {
-			
+
 			int readstatus = 0;
 			if (customTraitObj.getTraitgivenfor() == 0) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
@@ -70,17 +69,15 @@ public class TraitsController {
 			} else if (customTraitObj.getTraitgivenfor() == logedinUserObj.getId()) {
 				customTraitObj.setTraitgivenfor(logedinUserObj.getId());
 				readstatus = 1;
-			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), 
-					customTraitObj.getTraitgivenfor())) {
+			} else if (!friendsRepository.areTheyFriends(logedinUserObj.getId(), customTraitObj.getTraitgivenfor())) {
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_ERROR);
 				returnValue.put(WeSayContants.CONST_MESSAGE, "Invalid request");
 				return returnValue;
 			}
 
-			
 			if (traitsRepository.traitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase(),
 					logedinUserObj.getId(), customTraitObj.getTraitgivenfor()).size() == 0) {
-			List<Traits> definedTraits = traitsRepository
+				List<Traits> definedTraits = traitsRepository
 						.definedTraitAlreadyExists(customTraitObj.getTraitname().trim().toLowerCase());
 				UserTrait userTraitObj = new UserTrait();
 				userTraitObj.setIsactive(1);
@@ -117,38 +114,33 @@ public class TraitsController {
 				userTraitObj.setReadstatus(readstatus);
 				userTraitsRepository.saveUserTraits(userTraitObj);
 				returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-			}
-			else
-			{
+			} else {
 				changeTraitForUser(customTraitObj);
 			}
 		}
 		return returnValue;
 	}
 
-	public void changeTraitForUser(CustomTraits traitObj)
-	{
+	public void changeTraitForUser(CustomTraits traitObj) {
 		List<Traits> definedTraits = traitsRepository
 				.definedTraitAlreadyExists(traitObj.getTraitname().trim().toLowerCase());
-		if(definedTraits.size()>0) {
+		if (definedTraits.size() > 0) {
 			traitsRepository.updateUserTrait(definedTraits.get(0).getTraituniqueid(),
-					authenticationService.getSessionUserId(),
-					traitObj.getTraitgivenfor(),traitObj.getTypeofvote());
-			
-		}
-		else 
-		{
-			 List<String> result =	traitsRepository.customTraitAlreadyExists(traitObj.getTraitname().trim().toLowerCase(), 
-					authenticationService.getSessionUserId(),
+					authenticationService.getSessionUserId(), traitObj.getTraitgivenfor(), traitObj.getTypeofvote());
+
+		} else {
+			List<String> result = traitsRepository.customTraitAlreadyExists(
+					traitObj.getTraitname().trim().toLowerCase(), authenticationService.getSessionUserId(),
 					traitObj.getTraitgivenfor());
 
-			 for(String uniqueid : result) {
-				 traitsRepository.updateCustomTrait(uniqueid, authenticationService.getSessionUserId(),
-					traitObj.getTraitgivenfor(),traitObj.getTypeofvote());
-			 }
-			 
+			for (String uniqueid : result) {
+				traitsRepository.updateCustomTrait(uniqueid, authenticationService.getSessionUserId(),
+						traitObj.getTraitgivenfor(), traitObj.getTypeofvote());
+			}
+
 		}
 	}
+
 	@RequestMapping(value = "/getActiveTraits/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse getActiveTraits() {
@@ -187,34 +179,29 @@ public class TraitsController {
 
 	@RequestMapping(value = "/deleteTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> deleteTrait(@RequestBody UserTrait userTrait) {
+	public Map<String, String> deleteTrait(@RequestBody Long traitId) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		if (userTrait.getTraitgivenfor() == 0) { // Its for self{
-			userTrait.setTraitgivenfor(authenticationService.getSessionUserId());
-		}
-		userTraitsRepository.deleteTrait(userTrait);
+		userTraitsRepository.deleteATrait(traitId);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 
 	@RequestMapping(value = "/hideTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> hideTrait(@RequestBody UserTrait userTrait) {
+	public Map<String, String> hideTrait(@RequestBody Long traitId) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		userTrait.setTraitgivenfor(authenticationService.getSessionUserId());
-		userTraitsRepository.hideTrait(userTrait);
+		userTraitsRepository.hideATrait(traitId);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 
 	@RequestMapping(value = "/unhideTrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
-	public Map<String, String> unHideTrait(@RequestBody UserTrait userTrait) {
+	public Map<String, String> unHideTrait(@RequestBody Long traitId) {
 		Map<String, String> returnValue = new HashMap<String, String>();
-		userTrait.setTraitgivenfor(authenticationService.getSessionUserId());
-		userTraitsRepository.unHideTrait(userTrait);
+		userTraitsRepository.unHideATrait(traitId);
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
-		return returnValue; 
+		return returnValue;
 	}
 
 	@RequestMapping(value = "/traitswiatingforapproval/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -222,9 +209,7 @@ public class TraitsController {
 	public GenericApiResponse<List<UserTraitsResponsePojo>> traitswiatingforapproval() {
 		return traitService.traitsWiatingForApproval(authenticationService.getSessionUserId());
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/approvecustomtrait/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse approveCustomTrait(@RequestBody UserTrait userTrait) {
@@ -242,4 +227,7 @@ public class TraitsController {
 		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
+	
+	
+	
 }

@@ -81,8 +81,8 @@ public class EntityValidation {
 		}
 	}
 
-	public static String isValidPassword(String password) {
-		LengthRule lengthRule = new LengthRule(8, 10);
+	public static	 String isValidPassword(String password) {
+		LengthRule lengthRule = new LengthRule(8, 15);
 		WhitespaceRule whitespaceRule = new WhitespaceRule();
 		CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
 		charRule.getRules().add(new DigitCharacterRule(1));
