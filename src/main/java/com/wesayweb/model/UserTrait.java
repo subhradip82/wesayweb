@@ -92,6 +92,12 @@ public class UserTrait implements Serializable {
 
 	@Getter
 	@Setter
+	@Column(name = "isCountHidden", nullable = false, columnDefinition = "int default 0")
+	private int isCountHidden;
+
+	
+	@Getter
+	@Setter
 	private int typeofvote; // 0 = Positive , 1= Negetive , 2 = Nutral
 
 	@Getter

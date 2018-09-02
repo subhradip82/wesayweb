@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.UserTraitCustomRepository;
+import com.wesayweb.request.model.UserTraitRequest;
 import com.wesayweb.response.model.TraitListResponse;
 import com.wesayweb.response.model.UserTraitsResponsePojo;
 
@@ -162,6 +163,17 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 	public void unHideTrait(UserTrait userTraitObj) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void hideUnHideTraitCount(UserTraitRequest userTraitRequest) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<UserTrait> updateCriteria = cb.createCriteriaUpdate(UserTrait.class);
+		Root<UserTrait> userObj = updateCriteria.from(UserTrait.class);
+		updateCriteria.set(userObj.get("isCountHidden"),userTraitRequest.getHideStatus());
+		updateCriteria.set(userObj.get("updationdate"), new Date());
+		updateCriteria.where(cb.equal(userObj.get("id"), userTraitRequest.getTraitId()));
+		em.createQuery(updateCriteria).executeUpdate();
 	}
 	 
 }

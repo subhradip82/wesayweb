@@ -22,6 +22,7 @@ import com.wesayweb.repository.TraitRepository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
+import com.wesayweb.request.model.UserTraitRequest;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.TraitListResponse;
 import com.wesayweb.response.model.UserTraitsResponsePojo;
@@ -228,6 +229,15 @@ public class TraitsController {
 		return returnValue;
 	}
 	
+
+	@RequestMapping(value = "/traits/count/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public Map<String, String> hideUnhideTraitCount(@RequestBody UserTraitRequest userTraitRequest) {
+		Map<String, String> returnValue = new HashMap<String, String>();
+		userTraitsRepository.hideUnHideTraitCount(userTraitRequest);
+		returnValue.put(WeSayContants.CONST_STATUS, WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
 	
 	
 }

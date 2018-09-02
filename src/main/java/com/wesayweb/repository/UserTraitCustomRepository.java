@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wesayweb.model.CustomTraits;
 import com.wesayweb.model.UserTrait;
+import com.wesayweb.request.model.UserTraitRequest;
 import com.wesayweb.response.model.TraitListResponse;
 import com.wesayweb.response.model.UserTraitsResponsePojo;
 
@@ -109,9 +110,7 @@ public interface UserTraitCustomRepository {
 	List<Object[]> traitsWaitingForApproval(@Param("traitgivenfor") Long traitgivenfor);
 
 	void deleteATrait(Long traitId);
-
 	void hideATrait(Long traitId);
-
- 
 	void unHideATrait(Long traitId);
+	void hideUnHideTraitCount(UserTraitRequest userTraitRequest);
 }
