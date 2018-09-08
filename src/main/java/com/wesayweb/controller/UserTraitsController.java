@@ -76,8 +76,9 @@ public class UserTraitsController {
 		SettingsUtil settingsUtl = new SettingsUtil();
 		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 		for (Object[] object : resultSet) {
-
+				System.err.println(object);
 			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
+			
 			traitsResponseObj.setTraituniqueid((String) object[0]);
 			traitsResponseObj.setTraitname((String) object[1]);
 			traitsResponseObj.setTraiticonpath((String) object[2]);
@@ -87,12 +88,14 @@ public class UserTraitsController {
 					traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
 					traitsResponseObj.setNegetive(Integer.valueOf(object[5].toString()));
 					traitsResponseObj.setNutral(Integer.valueOf(object[6].toString()));
-				} else {
+					
+			} else {
 					traitsResponseObj.setPositive(99999);
 					traitsResponseObj.setNegetive(99999);
 					traitsResponseObj.setNutral(99999);
 				}
 			traitsResponseObj.setIshidden(Integer.valueOf(object[7].toString()));
+			traitsResponseObj.setTraitid(Long.valueOf(object[8].toString()));
 			try {
 				traitsResponseObj.setMytraitcontibution(Integer.valueOf(object[8].toString()));
 				traitsResponseObj.setMypositive(object[9].toString());
@@ -106,6 +109,7 @@ public class UserTraitsController {
 				traitsResponseObj.setMynegetive(String.valueOf("n"));
 				traitsResponseObj.setMyneutral(String.valueOf("n"));
 			}
+			
 			responseList.add(traitsResponseObj);
 		}
 		GenericApiResponse responseObj = GenericApiResponse.builder().build();
