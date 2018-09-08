@@ -72,7 +72,7 @@ public interface UserTraitCustomRepository {
 			+ " a.nutral, a.ishidden ,b.istraitigave , "
 			+ "CASE WHEN b.typeofvote = 0 THEN 'y' ELSE 'n' END  as my_positive_vote, "
 			+ "CASE WHEN b.typeofvote = 1 THEN 'y' ELSE 'n' END  as my_negetive_vote, "
-			+ "CASE WHEN b.typeofvote = 2 THEN 'y' ELSE 'n' END  as my_neutral_vote, id FROM  total_trait "
+			+ "CASE WHEN b.typeofvote = 2 THEN 'y' ELSE 'n' END  as my_neutral_vote, B.id as id FROM  total_trait "
 			+ "a LEFT JOIN TRAIT B ON "
 			+ "CASE WHEN b.istraitigave = 1 THEN  a.traituniqueid = b.traituniqueid  else 1= 2 end"
 			+ "", nativeQuery = true, name = "getMyFriendsTraits")

@@ -142,6 +142,20 @@ public class UserRepositoryImpl implements UserCustomRepository {
 		return returnList;
 	}
 
+	@Override
+	public User getUserById(Long id) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(User.class);
+		crit.add(Restrictions.eq("id",id));
+		List<User> userList = crit.list();
+		if(!userList.isEmpty()) {
+			return userList.get(0);
+		}
+		else
+		{
+			return new User();
+		}
+	}
+
 
 	 
 }

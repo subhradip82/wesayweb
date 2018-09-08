@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class UserController {
 	@Autowired
 	BadgeService badgeService;
 
-	@Autowired
+	@Autowired 
 	EmailService emailService;
 
 	@Autowired
@@ -224,6 +225,24 @@ public class UserController {
 		return userRepository.getUserByEmailAddess(user.getEmailaddress(), 0).size();
 	}
 
+	@RequestMapping(value = "/user/details/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse getUserDetails(@RequestBody User user) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User userObj = new User();
+		if(user.getId()==0) {
+			userObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		}
+		else
+		{
+			userObj = userRepository.getUserById(user.getId());
+		
+		}
+		returnValue.setResponse(userObj);
+		return returnValue;
+	}
+	
 	@RequestMapping(value = "/checkIfCntactIsInWesay/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public List<ContactRequest> checkIfCntactIsInWesay(@RequestBody List<ContactRequest> contactList) {
