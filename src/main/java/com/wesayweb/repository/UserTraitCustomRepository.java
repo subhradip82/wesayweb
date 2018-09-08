@@ -50,7 +50,7 @@ public interface UserTraitCustomRepository {
 			" UNION ALL  " + 
 			" SELECT  A.traitname, 'custom' AS traittype, A.traitdescripion , A.traiticonpath , "
 			+ " A.traituniqueid, "
-			+ " B.typeofvote , B.ishidden, CASE WHEN B.traitgivenby = :traitgivenby THEN 1 ELSE 0 END AS istraitigave, , B.id FROM "
+			+ " B.typeofvote , B.ishidden, CASE WHEN B.traitgivenby = :traitgivenby THEN 1 ELSE 0 END AS istraitigave,  B.id FROM "
 			+ " custom_traits A JOIN user_trait B " + 
 			" ON A.traituniqueid = B.traituniqueid WHERE B.traitgivenfor = :traitgivenfor  AND B.ishidden = 0 "
 			+ "  AND  B.isactive = 1  AND B.iswaitingforapproval = 0    " + 
