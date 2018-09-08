@@ -9,6 +9,7 @@ import com.wesayweb.model.TraitRattings;
 @Repository
 public interface TraitsRattingCustomRespository {
 
-	public List<TraitRattings> getTraitRating(String traitIdentifier, Long userId);
+	public List<TraitRattings> getTraitRating(Long userTraitId, Long userId);
+	public List<TraitRattings> getTraitRating(Long userTraitId);
  	
 }

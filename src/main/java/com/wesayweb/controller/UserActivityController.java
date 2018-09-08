@@ -52,6 +52,7 @@ import com.wesayweb.response.model.UserSettingResponse;
 import com.wesayweb.service.AuthenticationService;
 import com.wesayweb.service.BadgeService;
 import com.wesayweb.service.EmailService;
+import com.wesayweb.util.HelperUtil;
 import com.wesayweb.util.JwtSecurityUtil;
 import com.wesayweb.validation.EntityValidation;
 
@@ -88,7 +89,7 @@ public class UserActivityController {
 
 	@Autowired
 	UploadContactRespository uploadContactRepository;
-	
+
 	@Autowired
 	TraitsRattingRespository traitsRattingRespository;
 
@@ -383,24 +384,41 @@ public class UserActivityController {
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
-	
+
+	public void recalculateRatingForTrait(Long userTraitId) {
+		UserTrait userTraitObj = userTraitsRepository.getOne(userTraitId);
+		List<TraitRattings> traitRattingsList = traitsRattingRespository.getTraitRating(userTraitId);
+		Integer[] ratingArray = new Integer[traitRattingsList.size()];
+		int i = 0; 
+		for (TraitRattings traitRattings : traitRattingsList) {
+			ratingArray[i] = traitRattings.getRating();
+		}
+		userTraitObj.setTotalRatings(HelperUtil.findMedian(ratingArray, ratingArray.length));
+		System.err.println(userTraitObj);
+		userTraitsRepository.save(userTraitObj);
+ 
+	}
+
 	@RequestMapping(value = "/traits/ratings", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public GenericApiResponse<Object> giveRatingsOnTrait(@RequestBody RatingOnTrait ratingOnTrait) {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		
-		List<TraitRattings> traitRattingList =  traitsRattingRespository.getTraitRating(ratingOnTrait.getTraitIdentifier(), logedinUserObj.getId());
-		TraitRattings obj = new TraitRattings();
-		if(!traitRattingList.isEmpty()) {
+
+		List<TraitRattings> traitRattingList = traitsRattingRespository.getTraitRating(ratingOnTrait.getUserTraitId(),
+				logedinUserObj.getId());
+		TraitRattings obj = new TraitRattings(); 
+		if (!traitRattingList.isEmpty()) {
 			obj.setId(traitRattingList.get(0).getId());
 		}
+		obj.setUserTraitId(ratingOnTrait.getUserTraitId());
 		obj.setRating(ratingOnTrait.getRating());
 		obj.setTraitIdentifier(ratingOnTrait.getTraitIdentifier().trim());
 		obj.setUserId(logedinUserObj.getId());
 		traitsRattingRespository.save(obj);
-		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		recalculateRatingForTrait(ratingOnTrait.getUserTraitId());
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS); 
 		return returnValue;
 	}
 
@@ -446,7 +464,7 @@ public class UserActivityController {
 			pojo.setLikeCount(likeCount);
 			responseList.add(pojo);
 		}
- 
+
 		returnValue.setResponse(responseList);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;

@@ -111,8 +111,9 @@ public class UserTrait implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "totalRatings", nullable = false, columnDefinition = "int default 0")
-	private int totalRatings;
+	 
+	@Column(name="totalRatings", columnDefinition="Decimal(10,2) default '0.0'")
+	private Double totalRatings; 
 
 	
 }

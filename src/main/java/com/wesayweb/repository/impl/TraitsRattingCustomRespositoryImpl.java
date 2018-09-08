@@ -18,10 +18,18 @@ public class TraitsRattingCustomRespositoryImpl implements TraitsRattingCustomRe
 	private EntityManager em;
 
 	@Override
-	public List<TraitRattings> getTraitRating(String traitIdentifier, Long userId) {
+	public List<TraitRattings> getTraitRating(Long userTraitId, Long userId) {
 		Criteria crit = em.unwrap(Session.class).createCriteria(TraitRattings.class);
 		crit.add(Restrictions.eq("userId", userId));
-		crit.add(Restrictions.eq("traitIdentifier", traitIdentifier));
+		crit.add(Restrictions.eq("userTraitId", userTraitId));
+		return crit.list();
+	}
+
+	@Override
+	public List<TraitRattings> getTraitRating(Long userTraitId) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(TraitRattings.class);
+
+		crit.add(Restrictions.eq("userTraitId", userTraitId));
 
 		return crit.list();
 	}

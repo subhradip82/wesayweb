@@ -21,6 +21,11 @@ public class RatingOnTrait implements Serializable {
 
 	@Getter
 	@Setter
+	private Long userTraitId;
+
+	
+	@Getter
+	@Setter
 	private int rating;
 
 }
