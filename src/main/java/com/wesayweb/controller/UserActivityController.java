@@ -359,9 +359,11 @@ public class UserActivityController {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		List<Comments> commentsList = commentRepository.getCommentList(comment.getTraitIdentifier());
 		Comments commentObj = new Comments();
 		commentObj.setCommentactivestatus(1);
-		commentObj.setUserTraitId(comment.getTraitId());
+		commentObj.setTraitIdentifier(comment.getTraitIdentifier().trim());
+		commentObj.setUserTraitId(commentsList.get(0).getCommentid());
 		commentObj.setCommentedby(new User(logedinUserObj.getId()));
 		commentObj.setCommentText(comment.getComment());
 		commentObj.setDeletestatus(0);
@@ -375,9 +377,10 @@ public class UserActivityController {
 	public GenericApiResponse<Object> getCommentsOnTrait(@RequestBody CommentOnTrait comment) {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		List<CommentsResponse> responseList = new ArrayList<CommentsResponse>();
-		List<Comments> comments = commentRepository.getCommentList(comment.getTraitId());
+		List<Comments> comments = commentRepository.getCommentList(comment.getTraitIdentifier());
 		for (Comments c : comments) {
 			CommentsResponse pojo = CommentsResponse.builder().build();
+			
 			pojo.setCommentedBy(c.getCommentedby().getFullname());
 			pojo.setCommentedDate(c.getCreationdate().toString());
 			pojo.setCommentsText(c.getCommentText());

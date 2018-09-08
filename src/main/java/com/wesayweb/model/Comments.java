@@ -49,6 +49,10 @@ public class Comments implements Serializable {
 
 	@Getter
 	@Setter
+	private String traitIdentifier;
+	
+	@Getter
+	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	private User commentedby;

@@ -17,11 +17,14 @@ public class CommentOnTrait implements Serializable {
 	@Setter
 	private Long commentId;
 
-	
-	
 	@Getter
 	@Setter
 	private Long traitId;
+
+	
+	@Getter
+	@Setter
+	private String traitIdentifier;
 
 	@Getter
 	@Setter

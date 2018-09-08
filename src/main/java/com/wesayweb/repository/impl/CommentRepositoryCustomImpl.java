@@ -21,9 +21,9 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
 	
 	
 	@Override
-	public List<Comments> getCommentList(Long traitId) {
+	public List<Comments> getCommentList(String traitIdentifier) {
 		Criteria crit = entityManager.unwrap(Session.class).createCriteria(Comments.class);
-		crit.add(Restrictions.eq("userTraitId", traitId));
+		crit.add(Restrictions.eq("traitIdentifier", traitIdentifier));
 		return crit.list();
 	}
 

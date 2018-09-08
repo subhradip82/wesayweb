@@ -9,6 +9,6 @@ import com.wesayweb.model.Comments;
 @Repository
 public interface CommentRepositoryCustom {
 
-	public List<Comments> getCommentList(Long traitId);
+	public List<Comments> getCommentList(String traitIdentifier);
 	
 }
