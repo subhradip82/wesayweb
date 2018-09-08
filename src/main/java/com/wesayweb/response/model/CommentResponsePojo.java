@@ -30,5 +30,5 @@ public class CommentResponsePojo implements Serializable {
 	private int likeCount;
 	private int disLikeCount;
 	private int myLikeDislikeStatus;
-	private List<CommentResponseUserPojo> user;
+	private List<CommentResponseUserPojo> likeDislike;
 }

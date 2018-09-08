@@ -24,7 +24,7 @@ public class CommentResponseUserPojo implements Serializable {
 	private String userName;
 	
 	@JsonFormat(pattern = "dd/MMM/yyyy HH:mm")
-	private Date commentDate;
+	private Date likeDislikeDate;
 	private int likeOrDislike;
 
 }

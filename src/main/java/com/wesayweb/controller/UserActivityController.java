@@ -403,7 +403,7 @@ public class UserActivityController {
 				}
 
 				CommentResponseUserPojo commentResponseUserPojo = CommentResponseUserPojo.builder().build();
-				commentResponseUserPojo.setCommentDate(d.getLastUpdatedOn());
+				commentResponseUserPojo.setLikeDislikeDate(d.getLastUpdatedOn());
 				commentResponseUserPojo.setLikeOrDislike(d.getLikeDislikeStatus());
 				commentResponseUserPojo.setUserName(d.getLikeDislikeBy().getFullname());
 				commentResponseUserList.add(commentResponseUserPojo);
@@ -415,7 +415,7 @@ public class UserActivityController {
 			}
 
 			pojo.setMyLikeDislikeStatus(myLikeDislikeStatus);
-			pojo.setUser(commentResponseUserList);
+			pojo.setLikeDislike(commentResponseUserList);
 			pojo.setDisLikeCount(disLikeCount);
 			pojo.setLikeCount(likeCount);
 			responseList.add(pojo);
