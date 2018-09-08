@@ -109,4 +109,10 @@ public class UserTrait implements Serializable {
 	@Setter
 	private String comment;
 
+	@Getter
+	@Setter
+	@Column(name = "totalRatings", nullable = false, columnDefinition = "int default 0")
+	private int totalRatings;
+
+	
 }

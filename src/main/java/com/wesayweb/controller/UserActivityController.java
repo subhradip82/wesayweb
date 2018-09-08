@@ -24,6 +24,7 @@ import com.wesayweb.model.Comments;
 import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 import com.wesayweb.model.SettingsCategory;
+import com.wesayweb.model.TraitRattings;
 import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
@@ -33,6 +34,7 @@ import com.wesayweb.repository.CommentRepository;
 import com.wesayweb.repository.ContactRepository;
 import com.wesayweb.repository.FriendsRepository;
 import com.wesayweb.repository.SettingsRepository;
+import com.wesayweb.repository.TraitsRattingRespository;
 import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
@@ -40,6 +42,7 @@ import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
+import com.wesayweb.request.model.RatingOnTrait;
 import com.wesayweb.response.model.CommentResponsePojo;
 import com.wesayweb.response.model.CommentResponseUserPojo;
 import com.wesayweb.response.model.FriendsResponse;
@@ -85,6 +88,9 @@ public class UserActivityController {
 
 	@Autowired
 	UploadContactRespository uploadContactRepository;
+	
+	@Autowired
+	TraitsRattingRespository traitsRattingRespository;
 
 	@Autowired
 	UserRepository userRepository;
@@ -377,6 +383,26 @@ public class UserActivityController {
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
+	
+	@RequestMapping(value = "/traits/ratings", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> giveRatingsOnTrait(@RequestBody RatingOnTrait ratingOnTrait) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		
+		List<TraitRattings> traitRattingList =  traitsRattingRespository.getTraitRating(ratingOnTrait.getTraitIdentifier(), logedinUserObj.getId());
+		TraitRattings obj = new TraitRattings();
+		if(!traitRattingList.isEmpty()) {
+			obj.setId(traitRattingList.get(0).getId());
+		}
+		obj.setRating(ratingOnTrait.getRating());
+		obj.setTraitIdentifier(ratingOnTrait.getTraitIdentifier().trim());
+		obj.setUserId(logedinUserObj.getId());
+		traitsRattingRespository.save(obj);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
 
 	@RequestMapping(value = "/traits/comment/list", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
@@ -420,7 +446,7 @@ public class UserActivityController {
 			pojo.setLikeCount(likeCount);
 			responseList.add(pojo);
 		}
-
+ 
 		returnValue.setResponse(responseList);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
