@@ -569,7 +569,7 @@ public class UserActivityController {
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
-
+ 
 	@RequestMapping(value = "/acceptfriendrequest/", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	@ResponseBody
 	public Map<String, String> acceptfriendrequest(@RequestBody List<Friends> requestid) {
