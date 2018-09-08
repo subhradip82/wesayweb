@@ -175,5 +175,14 @@ public class UserTraitRepositoryImpl implements UserTraitCustomRepository {
 		updateCriteria.where(cb.equal(userObj.get("id"), userTraitRequest.getTraitId()));
 		em.createQuery(updateCriteria).executeUpdate();
 	}
+
+	@Override
+	public List<UserTrait> getTraitDetails(String userTraitIdid) {
+		Criteria crit = em.unwrap(Session.class).createCriteria(UserTrait.class);
+		crit.add(Restrictions.eq("traituniqueid", userTraitIdid.toLowerCase().trim()));
+		 
+		return crit.list();
+		 
+	}
 	 
 }

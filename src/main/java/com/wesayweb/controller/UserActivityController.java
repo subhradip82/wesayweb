@@ -27,6 +27,7 @@ import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
+import com.wesayweb.model.UserTrait;
 import com.wesayweb.repository.CommentLikeDislikeRespository;
 import com.wesayweb.repository.CommentRepository;
 import com.wesayweb.repository.ContactRepository;
@@ -35,6 +36,7 @@ import com.wesayweb.repository.SettingsRepository;
 import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
+import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
@@ -59,6 +61,9 @@ public class UserActivityController {
 	@Autowired
 	CommentRepository commentRepository;
 
+	@Autowired
+	UserTraitRepository userTraitsRepository;
+	
 	@Autowired
 	CommentLikeDislikeRespository likeRespository;
 
@@ -359,11 +364,11 @@ public class UserActivityController {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		List<Comments> commentsList = commentRepository.getCommentList(comment.getTraitIdentifier());
+		List<UserTrait> commentsList = userTraitsRepository.getTraitDetails(comment.getTraitIdentifier());
 		Comments commentObj = new Comments();
 		commentObj.setCommentactivestatus(1);
 		commentObj.setTraitIdentifier(comment.getTraitIdentifier().trim());
-		commentObj.setUserTraitId(commentsList.get(0).getCommentid());
+		commentObj.setUserTraitId(commentsList.get(0).getId());
 		commentObj.setCommentedby(new User(logedinUserObj.getId()));
 		commentObj.setCommentText(comment.getComment());
 		commentObj.setDeletestatus(0);

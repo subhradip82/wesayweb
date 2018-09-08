@@ -113,4 +113,5 @@ public interface UserTraitCustomRepository {
 	void hideATrait(Long traitId);
 	void unHideATrait(Long traitId);
 	void hideUnHideTraitCount(UserTraitRequest userTraitRequest);
+	public List<UserTrait>  getTraitDetails(String userTraitIdid);
 }
