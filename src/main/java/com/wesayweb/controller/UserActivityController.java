@@ -25,6 +25,7 @@ import com.wesayweb.model.ContactList;
 import com.wesayweb.model.Friends;
 import com.wesayweb.model.SettingsCategory;
 import com.wesayweb.model.TraitRattings;
+import com.wesayweb.model.TraitsAggreeDisAggree;
 import com.wesayweb.model.UploadContacts;
 import com.wesayweb.model.User;
 import com.wesayweb.model.UserSettingsCategoryMapping;
@@ -39,10 +40,13 @@ import com.wesayweb.repository.UploadContactRespository;
 import com.wesayweb.repository.UserRepository;
 import com.wesayweb.repository.UserSettingRepository;
 import com.wesayweb.repository.UserTraitRepository;
+import com.wesayweb.repository.VoteOnTraitRespository;
 import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
 import com.wesayweb.request.model.RatingOnTrait;
+import com.wesayweb.request.model.VoteOnTrait;
+import com.wesayweb.response.model.AggreeDisAggreeResponsePojo;
 import com.wesayweb.response.model.CommentResponsePojo;
 import com.wesayweb.response.model.CommentResponseUserPojo;
 import com.wesayweb.response.model.FriendsResponse;
@@ -71,6 +75,9 @@ public class UserActivityController {
 
 	@Autowired
 	CommentLikeDislikeRespository likeRespository;
+
+	@Autowired
+	VoteOnTraitRespository voteOnTraitRespository;
 
 	@Autowired
 	FriendsRepository friendsRepositoryService;
@@ -372,11 +379,11 @@ public class UserActivityController {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
-		List<UserTrait> commentsList = userTraitsRepository.getTraitDetails(comment.getTraitIdentifier());
+
 		Comments commentObj = new Comments();
 		commentObj.setCommentactivestatus(1);
 		commentObj.setTraitIdentifier(comment.getTraitIdentifier().trim());
-		commentObj.setUserTraitId(commentsList.get(0).getId());
+		commentObj.setUserTraitId(comment.getTraitId());
 		commentObj.setCommentedby(new User(logedinUserObj.getId()));
 		commentObj.setCommentText(comment.getComment());
 		commentObj.setDeletestatus(0);
@@ -389,14 +396,13 @@ public class UserActivityController {
 		UserTrait userTraitObj = userTraitsRepository.getOne(userTraitId);
 		List<TraitRattings> traitRattingsList = traitsRattingRespository.getTraitRating(userTraitId);
 		Integer[] ratingArray = new Integer[traitRattingsList.size()];
-		int i = 0; 
+		int i = 0;
 		for (TraitRattings traitRattings : traitRattingsList) {
 			ratingArray[i] = traitRattings.getRating();
 		}
 		userTraitObj.setTotalRatings(HelperUtil.findMedian(ratingArray, ratingArray.length));
-		System.err.println(userTraitObj);
 		userTraitsRepository.save(userTraitObj);
- 
+
 	}
 
 	@RequestMapping(value = "/traits/ratings", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -408,7 +414,7 @@ public class UserActivityController {
 
 		List<TraitRattings> traitRattingList = traitsRattingRespository.getTraitRating(ratingOnTrait.getUserTraitId(),
 				logedinUserObj.getId());
-		TraitRattings obj = new TraitRattings(); 
+		TraitRattings obj = new TraitRattings();
 		if (!traitRattingList.isEmpty()) {
 			obj.setId(traitRattingList.get(0).getId());
 		}
@@ -418,7 +424,7 @@ public class UserActivityController {
 		obj.setUserId(logedinUserObj.getId());
 		traitsRattingRespository.save(obj);
 		recalculateRatingForTrait(ratingOnTrait.getUserTraitId());
-		returnValue.setStatus(WeSayContants.CONST_SUCCESS); 
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}
 
@@ -427,7 +433,7 @@ public class UserActivityController {
 	public GenericApiResponse<Object> getCommentsOnTrait(@RequestBody CommentOnTrait comment) {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
 		List<CommentResponsePojo> responseList = new ArrayList<CommentResponsePojo>();
-		List<Comments> comments = commentRepository.getCommentList(comment.getTraitIdentifier());
+		List<Comments> comments = commentRepository.getCommentList(comment.getTraitId());
 		User logedinUserObj = userRepository
 				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
 
@@ -479,6 +485,87 @@ public class UserActivityController {
 		CommentLikeDislike likeObj = likeRespository.giveLikeDislike(logedinUserObj.getId(), comment.getCommentId(),
 				comment.getLike());
 		likeRespository.save(likeObj);
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/traits/votes", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> voteOnTrait(@RequestBody VoteOnTrait vote) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+
+		List<TraitsAggreeDisAggree> likeObj = voteOnTraitRespository.getVoteList(vote.getTraitIdentifier(),
+				vote.getTraitId());
+
+		AggreeDisAggreeResponsePojo returnPojo = AggreeDisAggreeResponsePojo.builder().build();
+		List<CommentResponseUserPojo> aggreeObj = new ArrayList<CommentResponseUserPojo>();
+
+		int aggreeCount = 0;
+		int publicAggreeCount = 0;
+		int annonymousAggreeCount = 0;
+		int disAggreeCount = 0;
+		int publicdisAggreeCount = 0;
+		int annonymousdisAggreeCount = 0;
+
+		for (TraitsAggreeDisAggree trait : likeObj) {
+			CommentResponseUserPojo pojo = CommentResponseUserPojo.builder().build();
+			pojo.setLikeDislikeDate(trait.getLastUpdatedOn());
+			pojo.setLikeOrDislike(trait.getAggreeDisAggreeStatus());
+			if (trait.getAggreeDisAggreeStatus() == 0 && trait.getModeOfVote() == 0) {
+				aggreeCount++;
+				publicAggreeCount++;
+			} else if (trait.getAggreeDisAggreeStatus() == 0 && trait.getModeOfVote() == 1) {
+				aggreeCount++;
+				annonymousAggreeCount++;
+			} else if (trait.getAggreeDisAggreeStatus() == 1 && trait.getModeOfVote() == 0) {
+				disAggreeCount++;
+				publicdisAggreeCount++;
+			} else if (trait.getAggreeDisAggreeStatus() == 1 && trait.getModeOfVote() == 1) {
+				disAggreeCount++;
+				annonymousdisAggreeCount++;
+			}
+
+			if (trait.getModeOfVote() == 0) {
+				pojo.setUserName(trait.getAggreeDisAggreeBy().getFullname());
+			} else {
+				pojo.setUserName("Annonymous user");
+			}
+			aggreeObj.add(pojo);
+		}
+		returnPojo.setAggreeCount(aggreeCount);
+		returnPojo.setAnnonymousAggreeCount(annonymousAggreeCount);
+		returnPojo.setAnnonymousdisAggreeCount(annonymousdisAggreeCount);
+		returnPojo.setDisAggreeCount(disAggreeCount);
+		returnPojo.setPublicAggreeCount(publicAggreeCount);
+		returnPojo.setPublicdisAggreeCount(publicdisAggreeCount);
+		returnPojo.setAggreeDisAggree(aggreeObj);
+		returnValue.setResponse(returnPojo); 
+		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
+		return returnValue;
+	}
+
+	@RequestMapping(value = "/traits/vote/submit", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+	@ResponseBody
+	public GenericApiResponse<Object> giveVoteOnTrait(@RequestBody VoteOnTrait vote) {
+		GenericApiResponse returnValue = GenericApiResponse.builder().build();
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+		List<TraitsAggreeDisAggree> likeObj = voteOnTraitRespository.getMyVoteList(vote.getTraitIdentifier(),
+				vote.getTraitId(), logedinUserObj.getId());
+		TraitsAggreeDisAggree aggreeObj = TraitsAggreeDisAggree.builder().build();
+		if (!likeObj.isEmpty()) {
+			aggreeObj = likeObj.get(0);
+		} else {
+			aggreeObj.setUserId(logedinUserObj.getId());
+			aggreeObj.setTraitUniqueIdentifier(vote.getTraitIdentifier());
+			aggreeObj.setUserTraitId(vote.getTraitId());
+			
+		}
+		aggreeObj.setModeOfVote(vote.getModeOfVote());
+		aggreeObj.setAggreeDisAggreeStatus(vote.getVote());
+		voteOnTraitRespository.save(aggreeObj);
 		returnValue.setStatus(WeSayContants.CONST_SUCCESS);
 		return returnValue;
 	}

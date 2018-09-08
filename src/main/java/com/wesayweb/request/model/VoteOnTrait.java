@@ -11,12 +11,9 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentOnTrait implements Serializable {
+public class VoteOnTrait implements Serializable {
 
-	@Getter
-	@Setter
-	private Long commentId;
-
+	 
 	@Getter
 	@Setter
 	private Long traitId;
@@ -27,14 +24,11 @@ public class CommentOnTrait implements Serializable {
 
 	@Getter
 	@Setter
-	private Long parentCommentId;
+	private int vote;
 
 	@Getter
 	@Setter
-	private String comment;
+	private int modeOfVote;
 
-	@Getter
-	@Setter
-	private int like;
-
+	
 }

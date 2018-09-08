@@ -10,5 +10,6 @@ import com.wesayweb.model.Comments;
 public interface CommentRepositoryCustom {
 
 	public List<Comments> getCommentList(String traitIdentifier);
+	public List<Comments> getCommentList(Long userTraitId);
 	
 }
