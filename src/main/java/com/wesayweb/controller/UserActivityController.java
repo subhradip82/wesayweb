@@ -40,7 +40,8 @@ import com.wesayweb.repository.UserTraitRepository;
 import com.wesayweb.request.model.CommentOnTrait;
 import com.wesayweb.request.model.ContactRequestModel;
 import com.wesayweb.request.model.PhoneNumberModel;
-import com.wesayweb.response.model.CommentsResponse;
+import com.wesayweb.response.model.CommentResponsePojo;
+import com.wesayweb.response.model.CommentResponseUserPojo;
 import com.wesayweb.response.model.FriendsResponse;
 import com.wesayweb.response.model.GenericApiResponse;
 import com.wesayweb.response.model.MyFriendsZoneResponse;
@@ -63,7 +64,7 @@ public class UserActivityController {
 
 	@Autowired
 	UserTraitRepository userTraitsRepository;
-	
+
 	@Autowired
 	CommentLikeDislikeRespository likeRespository;
 
@@ -381,24 +382,40 @@ public class UserActivityController {
 	@ResponseBody
 	public GenericApiResponse<Object> getCommentsOnTrait(@RequestBody CommentOnTrait comment) {
 		GenericApiResponse returnValue = GenericApiResponse.builder().build();
-		List<CommentsResponse> responseList = new ArrayList<CommentsResponse>();
+		List<CommentResponsePojo> responseList = new ArrayList<CommentResponsePojo>();
 		List<Comments> comments = commentRepository.getCommentList(comment.getTraitIdentifier());
+		User logedinUserObj = userRepository
+				.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName().trim().toLowerCase());
+
 		for (Comments c : comments) {
-			CommentsResponse pojo = CommentsResponse.builder().build();
-			
-			pojo.setCommentedBy(c.getCommentedby().getFullname());
-			pojo.setCommentedDate(c.getCreationdate().toString());
-			pojo.setCommentsText(c.getCommentText());
+			CommentResponsePojo pojo = CommentResponsePojo.builder().build();
+			int myLikeDislikeStatus = 2;
+			pojo.setCommentBy(c.getCommentedby().getFullname());
+			pojo.setCommentDate(c.getCreationdate());
+			pojo.setCommentText(c.getCommentText());
 			pojo.setCommentId(c.getCommentid());
 			int likeCount = 0;
 			int disLikeCount = 0;
+			List<CommentResponseUserPojo> commentResponseUserList = new ArrayList<CommentResponseUserPojo>();
 			for (CommentLikeDislike d : c.getLikeDislike()) {
+				if (logedinUserObj.getId() == d.getLikeDislikeBy().getId()) {
+					myLikeDislikeStatus = d.getLikeDislikeStatus();
+				}
+
+				CommentResponseUserPojo commentResponseUserPojo = CommentResponseUserPojo.builder().build();
+				commentResponseUserPojo.setCommentDate(d.getLastUpdatedOn());
+				commentResponseUserPojo.setLikeOrDislike(d.getLikeDislikeStatus());
+				commentResponseUserPojo.setUserName(d.getLikeDislikeBy().getFullname());
+				commentResponseUserList.add(commentResponseUserPojo);
 				if (d.getLikeDislikeStatus() == 1) {
 					likeCount++;
 				} else {
-					disLikeCount++; 
+					disLikeCount++;
 				}
 			}
+
+			pojo.setMyLikeDislikeStatus(myLikeDislikeStatus);
+			pojo.setUser(commentResponseUserList);
 			pojo.setDisLikeCount(disLikeCount);
 			pojo.setLikeCount(likeCount);
 			responseList.add(pojo);

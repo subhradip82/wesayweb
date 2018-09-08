@@ -88,6 +88,6 @@ public class Comments implements Serializable {
 	@Setter
 	@OneToMany(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	@JoinColumn(name = "id", referencedColumnName = "commentId", insertable = false, updatable = false)
-	private List<CommentLikeDislike> likeDislike;
+	@JoinColumn(name = "commentId", referencedColumnName = "commentId", insertable = false, updatable = false)
+	private List<CommentLikeDislike> likeDislike; 
 }
