@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wesayweb.constants.WeSayContants;
 import com.wesayweb.model.User;
 import com.wesayweb.repository.FriendsRepository;
@@ -76,13 +78,23 @@ public class UserTraitsController {
 		SettingsUtil settingsUtl = new SettingsUtil();
 		List<UserTraitsResponsePojo> responseList = new ArrayList<UserTraitsResponsePojo>();
 		for (Object[] object : resultSet) {
-				System.err.println(object);
+				 
 			UserTraitsResponsePojo traitsResponseObj = new UserTraitsResponsePojo();
 			
 			traitsResponseObj.setTraituniqueid((String) object[0]);
 			traitsResponseObj.setTraitname((String) object[1]);
 			traitsResponseObj.setTraiticonpath((String) object[2]);
 			traitsResponseObj.setTraittype((String) object[3]);
+			
+			System.err.println(convertToJsonString(object));
+			
+			
+			if (ismyowntrait ) {
+				traitsResponseObj.setTraitid(Long.valueOf(object[8].toString()));  
+			}
+			else {
+				traitsResponseObj.setTraitid(Long.valueOf(object[12].toString()));
+			}
 			if (ismyowntrait || !settingsUtl.isRuleAppliable(userSettingRepository.getUserSettings(traitsgivenfor),
 					"c25bf9724ef111e89c2dfa7ae01bbebc")) {
 					traitsResponseObj.setPositive(Integer.valueOf(object[4].toString()));
@@ -93,13 +105,15 @@ public class UserTraitsController {
 					traitsResponseObj.setPositive(99999);
 					traitsResponseObj.setNegetive(99999);
 					traitsResponseObj.setNutral(99999);
+ 
 				}
 			traitsResponseObj.setIshidden(Integer.valueOf(object[7].toString()));
-			traitsResponseObj.setTraitid(Long.valueOf(object[8].toString()));
+			
 			try {
-				traitsResponseObj.setMytraitcontibution(Integer.valueOf(object[8].toString()));
+				
+				
 				traitsResponseObj.setMypositive(object[9].toString());
-				traitsResponseObj.setMynegetive(object[10].toString());
+				traitsResponseObj.setMynegetive(object[10].toString()); 
 				traitsResponseObj.setMyneutral(object[11].toString());
 			}
 			catch(Exception e)
@@ -118,4 +132,14 @@ public class UserTraitsController {
 		return responseObj;
 	}
 
+	public static String convertToJsonString(Object anyObject) {
+		String returnValue = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			returnValue = mapper.writeValueAsString(anyObject);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return returnValue; 
+	}
 }
